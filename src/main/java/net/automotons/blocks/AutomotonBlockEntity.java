@@ -59,12 +59,27 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				toExecute.execute(this);
 		}
 		moduleTime++;
-		if(moduleTime >= 20 || toExecute == null){
+		// spend 1 tick on blank ones
+		// execution is suppressed by redstone
+		// moving through blank slots is *not*
+		if(moduleTime >= 20 && !world.isReceivingRedstonePower(pos)){
 			moduleTime = 0;
 			// move to next instruction
-			// skip empty ones
-			// set to 0 if empty
 			module++;
+		}
+		toExecute = atIndex(module);
+		if(toExecute == null){
+			moduleTime = 0;
+			// move to next instruction
+			// look for next module
+			if(inventory.subList(0, 12).stream().allMatch(ItemStack::isEmpty))
+				module = 0;
+			else
+				while(atIndex(module) == null){
+					module++;
+					if(module >= 12)
+						module = 0;
+				}
 		}
 		if(module >= 12)
 			module = 0;
