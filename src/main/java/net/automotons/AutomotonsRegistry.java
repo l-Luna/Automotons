@@ -35,10 +35,10 @@ public class AutomotonsRegistry{
 	public static Block AUTOMOTON = new AutomotonBlock(FabricBlockSettings.of(Material.METAL).breakByHand(true).strength(6f).nonOpaque().solidBlock((state, world, pos) -> false));
 	
 	// Items
-	public static Item STICKY_HEAD = new HeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
+	public static Item STICKY_HEAD = new HeadItem<>(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static Item BLADE_HEAD = new BladeHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
-	public static Item DRILL_HEAD = new HeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
-	public static Item REDSTONE_HEAD = new HeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
+	public static Item DRILL_HEAD = new HeadItem<>(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
+	public static Item REDSTONE_HEAD = new HeadItem<>(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	
 	public static Item BLANK_MODULE = new Item(new Item.Settings().group(Automotons.ITEMS));
 	
@@ -54,7 +54,7 @@ public class AutomotonsRegistry{
 		return true;
 	});
 	public static Item RAND_TURN_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
-		if(entity.getWorld().random.nextBoolean())
+		if(entity.getWorld() != null && entity.getWorld().random.nextBoolean())
 			return entity.turnCw();
 		else
 			return entity.turnCcw();

@@ -20,6 +20,7 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 
+@SuppressWarnings("unchecked")
 public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable{
 	
 	// Facing a specific direction
@@ -35,6 +36,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	// Used for animations and errors
 	public Direction lastFacing = null;
 	public boolean lastEngaged = false;
+	// Extra data for head
+	public Object data;
 	
 	public AutomotonBlockEntity(){
 		super(AutomotonsRegistry.AUTOMOTON_BE);
@@ -89,24 +92,24 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	}
 	
 	public boolean turnCw(){
-		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYClockwise()), pos.offset(facing))){
+		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYClockwise()), pos.offset(facing), data)){
 			lastFacing = facing;
 			facing = facing.rotateYClockwise();
 			// rotate into
 			if(getHead() != null)
-				getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing));
+				getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 			return true;
 		}else
 			return false;
 	}
 	
 	public boolean turnCcw(){
-		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYCounterclockwise()), pos.offset(facing))){
+		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYCounterclockwise()), pos.offset(facing), data)){
 			lastFacing = facing;
 			facing = facing.rotateYCounterclockwise();
 			// rotate into
 			if(getHead() != null)
-				getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing));
+				getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 			return true;
 		}else
 			return false;
@@ -125,7 +128,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		nbt.putInt("instructionTime", moduleTime);
 		Inventories.toTag(tag, inventory);
 		if(getHead() != null)
-			nbt.put("headData", getHead().getExtraData());
+			nbt.put("headData", getHead().getExtraData(data));
 		return nbt;
 	}
 	
@@ -139,8 +142,9 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		inventory.clear();
 		Inventories.fromTag(tag, inventory);
 		
+		data = null;
 		if(getHead() != null)
-			getHead().readExtraData(tag.getCompound("headData"));
+			data = getHead().readExtraData(tag.getCompound("headData"));
 	}
 	
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory){

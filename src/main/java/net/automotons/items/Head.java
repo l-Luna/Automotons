@@ -4,29 +4,31 @@ import net.automotons.blocks.AutomotonBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 
-public interface Head{
+public interface Head<Data>{
 	
-	default float getEngageOffset(AutomotonBlockEntity automoton){
+	default float getEngageOffset(AutomotonBlockEntity automoton, Data data){
 		return 3.5f;
 	}
 	
-	default CompoundTag getExtraData(){
+	default CompoundTag getExtraData(Data data){
 		return new CompoundTag();
 	}
 	
-	default void readExtraData(CompoundTag tag){}
+	default Data readExtraData(CompoundTag tag){
+		return null;
+	}
 	
-	default boolean canRotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from){
+	default boolean canRotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Data data){
 		return true;
 	}
 	
-	default void engageInto(AutomotonBlockEntity automoton, BlockPos to){
-		moveInto(automoton, to);
+	default void engageInto(AutomotonBlockEntity automoton, BlockPos to, Data data){
+		moveInto(automoton, to, data);
 	}
 	
-	default void rotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from){
-		moveInto(automoton, to);
+	default void rotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Data data){
+		moveInto(automoton, to, data);
 	}
 	
-	default void moveInto(AutomotonBlockEntity automoton, BlockPos to){}
+	default void moveInto(AutomotonBlockEntity automoton, BlockPos to, Data data){}
 }

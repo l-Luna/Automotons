@@ -24,6 +24,7 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 		itemRenderer = renderer;
 	}
 	
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void render(AutomotonBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay){
 		ItemStack headStack = entity.getStack(12);
 		if(!headStack.isEmpty() && headStack.getItem() instanceof Head){
@@ -35,7 +36,7 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 				engageProgress = 1 - min(entity.moduleTime / 10f, 1);
 			else if(!entity.lastEngaged && entity.engaged && entity.moduleTime > 0)
 				engageProgress = min(entity.moduleTime / 10f, 1);
-			float offset = (head.getEngageOffset(entity) / 16f) * engageProgress;
+			float offset = (head.getEngageOffset(entity, entity.data) / 16f) * engageProgress;
 			// move to proper position (on automoton)
 			matrices.translate(.5, 14 / 16f, .5);
 			// rotate to facing
