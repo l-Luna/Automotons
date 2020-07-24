@@ -10,7 +10,7 @@ import net.minecraft.util.math.Box;
 
 import java.util.List;
 
-public class BladeHeadItem extends HeadItem{
+public class BladeHeadItem extends HeadItem<Object>{
 	
 	public static float BLADE_DAMAGE = 4.5f;
 	
@@ -18,7 +18,7 @@ public class BladeHeadItem extends HeadItem{
 		super(settings);
 	}
 	
-	public void moveInto(AutomotonBlockEntity automoton, BlockPos to){
+	public void moveInto(AutomotonBlockEntity automoton, BlockPos to, Object noop){
 		// get all entities and  h u r t
 		if(automoton.getWorld() != null){
 			List<Entity> entities = automoton.getWorld().getEntities(null, new Box(to));
