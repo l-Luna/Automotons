@@ -4,6 +4,7 @@ import net.automotons.blocks.AutomotonBlock;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
+import net.automotons.items.heads.BladeHeadItem;
 import net.automotons.screens.AutomotonScreen;
 import net.automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
@@ -35,21 +36,15 @@ public class AutomotonsRegistry{
 	
 	// Items
 	public static Item STICKY_HEAD = new HeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
-	public static Item BLADE_HEAD = new HeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
+	public static Item BLADE_HEAD = new BladeHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static Item DRILL_HEAD = new HeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static Item REDSTONE_HEAD = new HeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	
 	public static Item BLANK_MODULE = new Item(new Item.Settings().group(Automotons.ITEMS));
 	
 	public static Item NOOP_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> true);
-	public static Item CW_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
-		entity.turnCw();
-		return true;
-	});
-	public static Item CCW_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
-		entity.turnCcw();
-		return true;
-	});
+	public static Item CW_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::turnCw);
+	public static Item CCW_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::turnCcw);
 	public static Item ENGAGE_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
 		entity.setEngaged(true);
 		return true;
@@ -60,10 +55,9 @@ public class AutomotonsRegistry{
 	});
 	public static Item RAND_TURN_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
 		if(entity.getWorld().random.nextBoolean())
-			entity.turnCw();
+			return entity.turnCw();
 		else
-			entity.turnCcw();
-		return true;
+			return entity.turnCcw();
 	});
 	
 	// Block Entity Types

@@ -1,6 +1,7 @@
 package net.automotons.blocks;
 
 import net.automotons.AutomotonsRegistry;
+import net.automotons.items.Head;
 import net.automotons.items.Module;
 import net.automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
@@ -9,6 +10,7 @@ import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.ScreenHandler;
@@ -54,7 +56,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				toExecute.execute(this);
 		}
 		moduleTime++;
-		if(moduleTime >= 30 || toExecute == null){
+		if(moduleTime >= 20 || toExecute == null){
 			moduleTime = 0;
 			// move to next instruction
 			// skip empty ones
@@ -63,6 +65,15 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		}
 		if(module >= 12)
 			module = 0;
+	}
+	
+	public ItemStack getHeadStack(){
+		return getStack(12);
+	}
+	
+	public Head getHead(){
+		Item item = getHeadStack().getItem();
+		return item instanceof Head ? (Head)item : null;
 	}
 	
 	public Module atIndex(int index){
@@ -77,14 +88,28 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		return null;
 	}
 	
-	public void turnCw(){
-		lastFacing = facing;
-		facing = facing.rotateYClockwise();
+	public boolean turnCw(){
+		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYClockwise()), pos.offset(facing))){
+			lastFacing = facing;
+			facing = facing.rotateYClockwise();
+			// rotate into
+			if(getHead() != null)
+				getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing));
+			return true;
+		}else
+			return false;
 	}
 	
-	public void turnCcw(){
-		lastFacing = facing;
-		facing = facing.rotateYCounterclockwise();
+	public boolean turnCcw(){
+		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYCounterclockwise()), pos.offset(facing))){
+			lastFacing = facing;
+			facing = facing.rotateYCounterclockwise();
+			// rotate into
+			if(getHead() != null)
+				getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing));
+			return true;
+		}else
+			return false;
 	}
 	
 	public void setEngaged(boolean engaged){
@@ -99,6 +124,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		nbt.putInt("instruction", module);
 		nbt.putInt("instructionTime", moduleTime);
 		Inventories.toTag(tag, inventory);
+		if(getHead() != null)
+			nbt.put("headData", getHead().getExtraData());
 		return nbt;
 	}
 	
@@ -111,6 +138,9 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		
 		inventory.clear();
 		Inventories.fromTag(tag, inventory);
+		
+		if(getHead() != null)
+			getHead().readExtraData(tag.getCompound("headData"));
 	}
 	
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory){
