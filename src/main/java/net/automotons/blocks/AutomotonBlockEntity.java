@@ -48,10 +48,18 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		Module toExecute = atIndex(module);
 		if(moduleTime == 0){
 			// finish last instruction
-			if(lastEngaged != engaged)
+			if(lastEngaged != engaged){
+				// engage (happens after)
+				if(engaged && getHead() != null)
+					getHead().engageInto(this, pos.offset(facing), data);
 				lastEngaged = engaged;
-			if(lastFacing != facing)
+			}
+			if(lastFacing != facing){
+				// rotate into (happens after)
+				if(getHead() != null)
+					getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 				lastFacing = facing;
+			}
 			// run instruction
 			// get module slot
 			// first six are in order, second six are reversed
@@ -62,7 +70,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		// spend 1 tick on blank ones
 		// execution is suppressed by redstone
 		// moving through blank slots is *not*
-		if(moduleTime >= 20 && !world.isReceivingRedstonePower(pos)){
+		if(moduleTime >= 10 && !world.isReceivingRedstonePower(pos)){
 			moduleTime = 0;
 			// move to next instruction
 			module++;
@@ -112,9 +120,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYClockwise()), pos.offset(facing), data)){
 			lastFacing = facing;
 			facing = facing.rotateYClockwise();
-			// rotate into
-			if(getHead() != null)
-				getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 			return true;
 		}else
 			return false;
@@ -124,9 +129,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYCounterclockwise()), pos.offset(facing), data)){
 			lastFacing = facing;
 			facing = facing.rotateYCounterclockwise();
-			// rotate into
-			if(getHead() != null)
-				getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 			return true;
 		}else
 			return false;
@@ -135,8 +137,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public void setEngaged(boolean engaged){
 		lastEngaged = this.engaged;
 		this.engaged = engaged;
-		if(engaged && getHead() != null)
-			getHead().engageInto(this, pos.offset(facing), data);
 	}
 	
 	public CompoundTag toTag(CompoundTag tag){

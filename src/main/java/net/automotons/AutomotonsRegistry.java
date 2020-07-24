@@ -5,6 +5,7 @@ import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
 import net.automotons.items.heads.BladeHeadItem;
+import net.automotons.items.heads.StickyHeadItem;
 import net.automotons.screens.AutomotonScreen;
 import net.automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
@@ -35,7 +36,7 @@ public class AutomotonsRegistry{
 	public static Block AUTOMOTON = new AutomotonBlock(FabricBlockSettings.of(Material.METAL).breakByHand(true).strength(6f).nonOpaque().solidBlock((state, world, pos) -> false));
 	
 	// Items
-	public static Item STICKY_HEAD = new HeadItem<>(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
+	public static Item STICKY_HEAD = new StickyHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static Item BLADE_HEAD = new BladeHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static Item DRILL_HEAD = new HeadItem<>(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static Item REDSTONE_HEAD = new HeadItem<>(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
