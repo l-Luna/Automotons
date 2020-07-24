@@ -1,0 +1,180 @@
+package net.automotons.blocks;
+
+import net.automotons.AutomotonsRegistry;
+import net.automotons.items.Module;
+import net.automotons.screens.AutomotonScreenHandler;
+import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.LockableContainerBlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Tickable;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.Direction;
+
+public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable{
+	
+	// Facing a specific direction
+	public Direction facing = Direction.NORTH;
+	// Whether the head is forward
+	public boolean engaged = false;
+	// The module currently being processed
+	public int module = 0;
+	// The number of ticks already spent processing the module
+	public int moduleTime = 0;
+	// Modules (0-11), head (12), and store slot (13) inventory
+	private DefaultedList<ItemStack> inventory;
+	// Used for animations and errors
+	public Direction lastFacing = null;
+	public boolean lastEngaged = false;
+	
+	public AutomotonBlockEntity(){
+		super(AutomotonsRegistry.AUTOMOTON_BE);
+		inventory = DefaultedList.ofSize(14, ItemStack.EMPTY);
+	}
+	
+	public void tick(){
+		Module toExecute = atIndex(module);
+		if(moduleTime == 0){
+			// finish last instruction
+			if(lastEngaged != engaged)
+				lastEngaged = engaged;
+			if(lastFacing != facing)
+				lastFacing = facing;
+			// run instruction
+			// get module slot
+			// first six are in order, second six are reversed
+			if(toExecute != null)
+				toExecute.execute(this);
+		}
+		moduleTime++;
+		if(moduleTime >= 30 || toExecute == null){
+			moduleTime = 0;
+			// move to next instruction
+			// skip empty ones
+			// set to 0 if empty
+			module++;
+		}
+		if(module >= 12)
+			module = 0;
+	}
+	
+	public Module atIndex(int index){
+		if(index < 6){
+			if(!getStack(index).isEmpty() && getStack(index).getItem() instanceof Module)
+				return (Module)getStack(index).getItem();
+		}else if(index < 12){
+			int revIndex = 11 - (index - 6);
+			if(!getStack(revIndex).isEmpty() && getStack(revIndex).getItem() instanceof Module)
+				return (Module)getStack(revIndex).getItem();
+		}
+		return null;
+	}
+	
+	public void turnCw(){
+		lastFacing = facing;
+		facing = facing.rotateYClockwise();
+	}
+	
+	public void turnCcw(){
+		lastFacing = facing;
+		facing = facing.rotateYCounterclockwise();
+	}
+	
+	public void setEngaged(boolean engaged){
+		lastEngaged = this.engaged;
+		this.engaged = engaged;
+	}
+	
+	public CompoundTag toTag(CompoundTag tag){
+		CompoundTag nbt = super.toTag(tag);
+		nbt.putInt("facing", facing.getId());
+		nbt.putBoolean("engaged", engaged);
+		nbt.putInt("instruction", module);
+		nbt.putInt("instructionTime", moduleTime);
+		Inventories.toTag(tag, inventory);
+		return nbt;
+	}
+	
+	public void fromTag(BlockState state, CompoundTag tag){
+		super.fromTag(state, tag);
+		facing = Direction.byId(tag.getInt("facing"));
+		engaged = tag.getBoolean("engaged");
+		module = tag.getInt("instruction");
+		moduleTime = tag.getInt("instructionTime");
+		
+		inventory.clear();
+		Inventories.fromTag(tag, inventory);
+	}
+	
+	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory){
+		return new AutomotonScreenHandler(syncId, this, playerInventory);
+	}
+	
+	protected Text getContainerName(){
+		return new TranslatableText("container.automoton");
+	}
+	
+	public int size(){
+		return 14;
+	}
+	
+	public boolean isEmpty(){
+		return inventory.stream().allMatch(ItemStack::isEmpty);
+	}
+	
+	public ItemStack getStack(int slot){
+		return inventory.get(slot);
+	}
+	
+	public ItemStack removeStack(int slot, int amount){
+		ItemStack itemStack = Inventories.splitStack(inventory, slot, amount);
+		if(!itemStack.isEmpty()){
+			markDirty();
+			sync();
+		}
+		return itemStack;
+	}
+	
+	public ItemStack removeStack(int slot){
+		ItemStack stack = Inventories.removeStack(inventory, slot);
+		sync();
+		return stack;
+	}
+	
+	public void setStack(int slot, ItemStack stack){
+		inventory.set(slot, stack);
+		if(stack.getCount() > getMaxCountPerStack())
+			stack.setCount(getMaxCountPerStack());
+		
+		markDirty();
+		sync();
+	}
+	
+	public boolean canPlayerUse(PlayerEntity player){
+		if(world == null)
+			return false;
+		if(world.getBlockEntity(pos) != this)
+			return false;
+		return player.squaredDistanceTo(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5) <= 64;
+	}
+	
+	public void clear(){
+		inventory.clear();
+		sync();
+	}
+	
+	public void fromClientTag(CompoundTag tag){
+		fromTag(world != null ? world.getBlockState(pos) : null, tag);
+	}
+	
+	public CompoundTag toClientTag(CompoundTag tag){
+		return toTag(tag);
+	}
+}

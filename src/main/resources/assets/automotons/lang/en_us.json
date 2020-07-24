@@ -1,0 +1,20 @@
+{
+  "itemGroup.automotons.items": "Automotons",
+
+  "item.automotons.blade_head": "Iron Blade",
+  "item.automotons.drill_head": "Diamond Drill",
+  "item.automotons.sticky_head": "Sticky Head",
+  "item.automotons.redstone_head": "Redstone Panel",
+
+  "item.automotons.blank_module": "Empty Module",
+  "item.automotons.noop_module": "Wait Module",
+  "item.automotons.cw_module": "Clockwise Turn Module",
+  "item.automotons.ccw_module": "Counter-Clockwise Turn Module",
+  "item.automotons.engage_module": "Engage Module",
+  "item.automotons.disengage_module": "Disengage Module",
+  "item.automotons.rand_turn_module": "Random Turn Module",
+
+  "block.automotons.automoton": "Automoton",
+
+  "container.automoton": "Automoton"
+}

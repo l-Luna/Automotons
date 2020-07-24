@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "automotons",
+  "version": "0.1.0",
+
+  "name": "Automotons",
+  "description": "smol robots.",
+  "authors": [
+    "(Me.)"
+  ],
+
+  "license": "CC0-1.0",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.automotons.Automotons"
+    ],
+    "client": [
+      "net.automotons.client.AutomotonsClient"
+    ]
+  },
+  "mixins": [
+    "automotons.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.8",
+    "fabric": "*",
+    "minecraft": "1.16.1"
+  }
+}
