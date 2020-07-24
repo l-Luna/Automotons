@@ -31,4 +31,6 @@ public interface Head<Data>{
 	}
 	
 	default void moveInto(AutomotonBlockEntity automoton, BlockPos to, Data data){}
+	
+	default void tick(AutomotonBlockEntity automoton, BlockPos facing, Data data){}
 }

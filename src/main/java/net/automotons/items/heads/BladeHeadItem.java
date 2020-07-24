@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -18,10 +19,19 @@ public class BladeHeadItem extends HeadItem<Object>{
 		super(settings);
 	}
 	
-	public void moveInto(AutomotonBlockEntity automoton, BlockPos to, Object noop){
+	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, Object noop){
+		hurtAt(to, automoton.getWorld());
+	}
+	
+	public void rotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Object o){
+		hurtAt(from, automoton.getWorld());
+		hurtAt(to, automoton.getWorld());
+	}
+	
+	private void hurtAt(BlockPos pos, World world){
 		// get all entities and  h u r t
-		if(automoton.getWorld() != null){
-			List<Entity> entities = automoton.getWorld().getEntities(null, new Box(to));
+		if(world != null){
+			List<Entity> entities = world.getEntities(null, new Box(pos));
 			for(Entity entity : entities)
 				if(entity instanceof LivingEntity){
 					LivingEntity living = (LivingEntity)entity;

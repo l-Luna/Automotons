@@ -20,7 +20,7 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable{
 	
 	// Facing a specific direction
@@ -68,6 +68,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		}
 		if(module >= 12)
 			module = 0;
+		if(getHead() != null)
+			getHead().tick(this, pos.offset(facing), data);
 	}
 	
 	public ItemStack getHeadStack(){
@@ -118,6 +120,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public void setEngaged(boolean engaged){
 		lastEngaged = this.engaged;
 		this.engaged = engaged;
+		if(engaged && getHead() != null)
+			getHead().engageInto(this, pos.offset(facing), data);
 	}
 	
 	public CompoundTag toTag(CompoundTag tag){
