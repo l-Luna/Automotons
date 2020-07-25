@@ -8,40 +8,41 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 // Extra data is breaking progress
-public class DrillHeadItem extends HeadItem<Integer>{
+public class DrillHeadItem extends HeadItem<Float>{
 	
 	public DrillHeadItem(Settings settings){
 		super(settings);
 	}
 	
-	public void tick(AutomotonBlockEntity automoton, BlockPos facing, Integer breakingTime){
+	public void tick(AutomotonBlockEntity automoton, BlockPos facing, Float breakingTime){
 		World world = automoton.getWorld();
 		if(automoton.engaged && world != null){
 			BlockState state = world.getBlockState(facing);
-			if(!state.isAir() && state.getHardness(world, facing) != -1){
-				// Is -1 possible for a player to have?
+			float hardness = state.getHardness(world, facing);
+			if(!state.isAir() && hardness != -1){
 				if(breakingTime == null)
-					breakingTime = 0;
-				if(breakingTime < 10)
-					world.setBlockBreakingInfo(-1, facing, breakingTime);
+					breakingTime = 0f;
+				if(breakingTime < 9)
+					// Is -1 possible for a player to have?
+					world.setBlockBreakingInfo(-1, facing, (int)Math.ceil(breakingTime));
 				else{
 					if(!world.isClient())
 						world.breakBlock(facing, true);
-					world.setBlockBreakingInfo(-1, facing, -1);
+					world.setBlockBreakingInfo(-1, facing, 10);
 				}
+				automoton.setData(breakingTime + 1.5f / hardness);
 			}else
-				breakingTime = 0;
-			automoton.setData(breakingTime + 1);
+				automoton.setData(0f);
 		}
 	}
 	
-	public CompoundTag getExtraData(Integer breakingTime){
+	public CompoundTag getExtraData(Float breakingTime){
 		CompoundTag tag = new CompoundTag();
-		tag.putInt("breakingTime", breakingTime != null ? breakingTime : 0);
+		tag.putFloat("breakingTime", breakingTime != null ? breakingTime : 0);
 		return tag;
 	}
 	
-	public Integer readExtraData(CompoundTag tag){
-		return tag.getInt("breakingTime");
+	public Float readExtraData(CompoundTag tag){
+		return tag.getFloat("breakingTime");
 	}
 }
