@@ -11,5 +11,6 @@ public class AutomotonsClient implements ClientModInitializer{
 	public void onInitializeClient(){
 		// TERs
 		BlockEntityRendererRegistry.INSTANCE.register(AutomotonsRegistry.AUTOMOTON_BE, dispatcher -> new AutomotonBlockEntityRenderer(dispatcher, MinecraftClient.getInstance().getItemRenderer()));
+		HeadRenderer.init();
 	}
 }

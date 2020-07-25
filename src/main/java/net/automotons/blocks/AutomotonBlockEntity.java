@@ -34,7 +34,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	// Modules (0-11), head (12), and store slot (13) inventory
 	private DefaultedList<ItemStack> inventory;
 	// Used for animations and errors
-	public Direction lastFacing = null;
+	public Direction lastFacing = Direction.NORTH;
 	public boolean lastEngaged = false;
 	// Extra data for head
 	public Object data;
@@ -67,9 +67,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				toExecute.execute(this);
 		}
 		moduleTime++;
-		// spend 1 tick on blank ones
-		// execution is suppressed by redstone
-		// moving through blank slots is *not*
 		if(moduleTime >= 10 && !world.isReceivingRedstonePower(pos)){
 			moduleTime = 0;
 			// move to next instruction
@@ -148,6 +145,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public CompoundTag toTag(CompoundTag tag){
 		CompoundTag nbt = super.toTag(tag);
 		nbt.putInt("facing", facing.getId());
+		nbt.putInt("lastFacing", lastFacing.getId());
 		nbt.putBoolean("engaged", engaged);
 		nbt.putInt("instruction", module);
 		nbt.putInt("instructionTime", moduleTime);
@@ -160,6 +158,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public void fromTag(BlockState state, CompoundTag tag){
 		super.fromTag(state, tag);
 		facing = Direction.byId(tag.getInt("facing"));
+		lastFacing = Direction.byId(tag.getInt("lastFacing"));
 		engaged = tag.getBoolean("engaged");
 		module = tag.getInt("instruction");
 		moduleTime = tag.getInt("instructionTime");

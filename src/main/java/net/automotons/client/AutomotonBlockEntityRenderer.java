@@ -29,34 +29,39 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 		ItemStack headStack = entity.getStack(12);
 		if(!headStack.isEmpty() && headStack.getItem() instanceof Head){
 			Head head = (Head)headStack.getItem();
-			matrices.push();
-			// transition between engaged/disengaged
-			float engageProgress = entity.engaged ? 1 : 0;
-			if(entity.lastEngaged && !entity.engaged && entity.moduleTime > 0)
-				engageProgress = 1 - min(entity.moduleTime / 10f, 1);
-			else if(!entity.lastEngaged && entity.engaged && entity.moduleTime > 0)
-				engageProgress = min(entity.moduleTime / 10f, 1);
-			float offset = (head.getEngageOffset(entity, entity.data) / 16f) * engageProgress;
-			// move to proper position (on automoton)
-			matrices.translate(.5, 14 / 16f, .5);
-			// rotate to facing
-			float rotationOffset = 0f;
-			if(entity.lastFacing != null && entity.lastFacing != entity.facing && entity.moduleTime > 0){
-				if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing))
-					rotationOffset = min(entity.moduleTime / 10f, 1) - 1;
-				else
-					rotationOffset = 1 - min(entity.moduleTime / 10f, 1);
+			HeadRenderer renderer = HeadRenderer.RENDERERS.get(head);
+			if(renderer == null || renderer.doNormalRender(entity, entity.data)){
+				matrices.push();
+				// transition between engaged/disengaged
+				float engageProgress = entity.engaged ? 1 : 0;
+				if(entity.lastEngaged && !entity.engaged && entity.moduleTime > 0)
+					engageProgress = 1 - min(entity.moduleTime / 10f, 1);
+				else if(!entity.lastEngaged && entity.engaged && entity.moduleTime > 0)
+					engageProgress = min(entity.moduleTime / 10f, 1);
+				float offset = (head.getEngageOffset(entity, entity.data) / 16f) * engageProgress;
+				// move to proper position (on automoton)
+				matrices.translate(.5, 14 / 16f, .5);
+				// rotate to facing
+				float rotationOffset = 0f;
+				if(entity.lastFacing != null && entity.lastFacing != entity.facing && entity.moduleTime > 0){
+					if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing))
+						rotationOffset = min(entity.moduleTime / 10f, 1) - 1;
+					else
+						rotationOffset = 1 - min(entity.moduleTime / 10f, 1);
+				}
+				matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
+				// make the item flat
+				matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90));
+				// apply engaged/disengaged transformation
+				matrices.translate(-offset * 2, 0, 0);
+				// more facing
+				matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(45));
+				// render item
+				itemRenderer.renderItem(headStack, ModelTransformation.Mode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers);
+				matrices.pop();
 			}
-			matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
-			// make the item flat
-			matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90));
-			// apply engaged/disengaged transformation
-			matrices.translate(-offset * 2, 0, 0);
-			// more facing
-			matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(45));
-			// render item
-			itemRenderer.renderItem(headStack, ModelTransformation.Mode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers);
-			matrices.pop();
+			if(renderer != null)
+				renderer.render(entity, matrices, vertexConsumers, entity.data, light, overlay);
 		}
 	}
 }
