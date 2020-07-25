@@ -200,6 +200,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		if(!itemStack.isEmpty()){
 			markDirty();
 			sync();
+			if(slot == 12)
+				data = null;
 		}
 		return itemStack;
 	}
@@ -207,6 +209,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public ItemStack removeStack(int slot){
 		ItemStack stack = Inventories.removeStack(inventory, slot);
 		sync();
+		if(slot == 12)
+			data = null;
 		return stack;
 	}
 	
@@ -214,6 +218,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		inventory.set(slot, stack);
 		if(stack.getCount() > getMaxCountPerStack())
 			stack.setCount(getMaxCountPerStack());
+		if(slot == 12)
+			data = null;
 		
 		markDirty();
 		sync();
