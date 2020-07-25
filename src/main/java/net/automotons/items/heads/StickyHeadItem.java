@@ -47,6 +47,7 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 			if(!fromState.isAir() && !(fromState.getBlock() instanceof BlockEntityProvider)){
 				automoton.setData(fromState);
 				world.setBlockState(from, Blocks.AIR.getDefaultState());
+				automoton.sync();
 			}
 		}
 	}
@@ -63,6 +64,7 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 			world.setBlockState(to, state.rotate(rotation));
 			// stop storing it
 			automoton.setData(null);
+			automoton.sync();
 		}
 	}
 	

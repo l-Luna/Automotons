@@ -24,7 +24,6 @@ public class BladeHeadItem extends HeadItem<Object>{
 	}
 	
 	public void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Object o){
-		hurtAt(from, automoton.getWorld());
 		hurtAt(to, automoton.getWorld());
 	}
 	
