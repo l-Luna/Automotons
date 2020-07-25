@@ -54,10 +54,10 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 					getHead().engageInto(this, pos.offset(facing), data);
 				lastEngaged = engaged;
 			}
-			if(lastFacing != facing){
+			if(lastFacing != null && lastFacing != facing){
 				// rotate into (happens after)
 				if(getHead() != null)
-					getHead().rotateInto(this, pos.offset(facing), pos.offset(lastFacing), data);
+					getHead().endRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 				lastFacing = facing;
 			}
 			// run instruction
@@ -120,6 +120,9 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYClockwise()), pos.offset(facing), data)){
 			lastFacing = facing;
 			facing = facing.rotateYClockwise();
+			// start rotate into (happens before)
+			if(getHead() != null)
+				getHead().startRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 			return true;
 		}else
 			return false;
@@ -129,6 +132,9 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYCounterclockwise()), pos.offset(facing), data)){
 			lastFacing = facing;
 			facing = facing.rotateYCounterclockwise();
+			// start rotate into (happens before)
+			if(getHead() != null)
+				getHead().startRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 			return true;
 		}else
 			return false;
@@ -164,6 +170,10 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		data = null;
 		if(getHead() != null)
 			data = getHead().readExtraData(tag.getCompound("headData"));
+	}
+	
+	public void setData(Object data){
+		this.data = data;
 	}
 	
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory){

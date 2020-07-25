@@ -26,7 +26,9 @@ public interface Head<Data>{
 		moveInto(automoton, to, data);
 	}
 	
-	default void rotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Data data){
+	default void startRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Data data){}
+	
+	default void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Data data){
 		moveInto(automoton, to, data);
 	}
 	

@@ -1,5 +1,6 @@
 package net.automotons.client;
 
+import net.automotons.Automotons;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.Head;
 import net.minecraft.client.render.OverlayTexture;
@@ -11,7 +12,6 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Direction;
 
 import static java.lang.Math.min;
 
@@ -41,11 +41,12 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 			matrices.translate(.5, 14 / 16f, .5);
 			// rotate to facing
 			float rotationOffset = 0f;
-			if(entity.lastFacing != null && entity.lastFacing != entity.facing && entity.moduleTime > 0)
-				if((entity.lastFacing.getHorizontal() < entity.facing.getHorizontal() || entity.lastFacing == Direction.EAST && entity.facing == Direction.SOUTH) && !(entity.lastFacing == Direction.SOUTH && entity.facing == Direction.EAST))
+			if(entity.lastFacing != null && entity.lastFacing != entity.facing && entity.moduleTime > 0){
+				if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing))
 					rotationOffset = min(entity.moduleTime / 10f, 1) - 1;
 				else
 					rotationOffset = 1 - min(entity.moduleTime / 10f, 1);
+			}
 			matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
 			// make the item flat
 			matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90));

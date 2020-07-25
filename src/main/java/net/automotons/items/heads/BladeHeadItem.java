@@ -23,7 +23,7 @@ public class BladeHeadItem extends HeadItem<Object>{
 		hurtAt(to, automoton.getWorld());
 	}
 	
-	public void rotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Object o){
+	public void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Object o){
 		hurtAt(from, automoton.getWorld());
 		hurtAt(to, automoton.getWorld());
 	}
