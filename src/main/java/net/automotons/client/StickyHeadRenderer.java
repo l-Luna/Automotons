@@ -7,14 +7,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.block.BlockModelRenderer;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.math.Direction;
 
-import java.util.Optional;
 import java.util.Random;
 
 import static java.lang.Math.min;
@@ -26,6 +25,7 @@ public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 		if(state != null && !state.isAir()){
 			float rotationOffset;
 			if(entity.lastFacing != null && entity.lastFacing != entity.facing && entity.moduleTime > 0){
+				BlockModelRenderer.enableBrightnessCache();
 				matrices.push();
 				// FIXME: state rotation
 				BlockRotation rotation = BlockRotation.COUNTERCLOCKWISE_90;
@@ -40,15 +40,18 @@ public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 				matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset + 1)));
 				// offset
 				matrices.translate(.5, 0, -.5);
-				BakedModel model = MinecraftClient.getInstance().getBlockRenderManager().getModel(state);
+				BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
+				BlockState rotated = state.rotate(rotation);
+				BakedModel model = manager.getModel(rotated);
 				VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
-				MatrixStack.Entry peek = matrices.peek();
-				for(Direction value : Direction.values())
+				manager.getModelRenderer().render(entity.getWorld(), model, rotated, entity.getPos(), matrices, buffer, true, new Random(), rotated.getRenderingSeed(entity.getPos()), overlay);
+				/*for(Direction value : Direction.values())
 					for(BakedQuad quad : model.getQuads(state.rotate(rotation), value, new Random()))
 						buffer.quad(peek, quad, 1f, 1f, 1f, light, overlay);
 				for(BakedQuad quad : model.getQuads(state.rotate(rotation), null, new Random()))
-					buffer.quad(peek, quad, 1f, 1f, 1f, light, overlay);
+					buffer.quad(peek, quad, 1f, 1f, 1f, light, overlay);*/
 				matrices.pop();
+				BlockModelRenderer.disableBrightnessCache();
 			}
 		}
 	}
