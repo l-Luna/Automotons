@@ -15,6 +15,7 @@ public interface HeadRenderer<Data>{
 	
 	static void init(){
 		RENDERERS.put(AutomotonsRegistry.STICKY_HEAD, new StickyHeadRenderer());
+		RENDERERS.put(AutomotonsRegistry.DRILL_HEAD, new DrillHeadRenderer());
 	}
 	
 	default void render(AutomotonBlockEntity automoton, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Data data, int light, int overlay){}

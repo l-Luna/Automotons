@@ -22,10 +22,10 @@ public class DrillHeadItem extends HeadItem<Float>{
 			if(!state.isAir() && hardness != -1){
 				if(breakingTime == null)
 					breakingTime = 0f;
-				if(breakingTime < 9)
+				if(breakingTime < 9){
 					// Is -1 possible for a player to have?
 					world.setBlockBreakingInfo(-1, facing, (int)Math.ceil(breakingTime));
-				else{
+				}else{
 					if(!world.isClient())
 						world.breakBlock(facing, true);
 					world.setBlockBreakingInfo(-1, facing, 10);

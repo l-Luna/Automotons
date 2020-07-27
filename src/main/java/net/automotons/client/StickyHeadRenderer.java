@@ -44,12 +44,7 @@ public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 				BlockState rotated = state.rotate(rotation);
 				BakedModel model = manager.getModel(rotated);
 				VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
-				manager.getModelRenderer().render(entity.getWorld(), model, rotated, entity.getPos(), matrices, buffer, true, new Random(), rotated.getRenderingSeed(entity.getPos()), overlay);
-				/*for(Direction value : Direction.values())
-					for(BakedQuad quad : model.getQuads(state.rotate(rotation), value, new Random()))
-						buffer.quad(peek, quad, 1f, 1f, 1f, light, overlay);
-				for(BakedQuad quad : model.getQuads(state.rotate(rotation), null, new Random()))
-					buffer.quad(peek, quad, 1f, 1f, 1f, light, overlay);*/
+				manager.getModelRenderer().render(entity.getWorld(), model, rotated, entity.getPos(), matrices, buffer, false, new Random(), rotated.getRenderingSeed(entity.getPos()), overlay);
 				matrices.pop();
 				BlockModelRenderer.disableBrightnessCache();
 			}
