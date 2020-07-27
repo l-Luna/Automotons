@@ -6,6 +6,7 @@ import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
 import net.automotons.items.heads.BladeHeadItem;
 import net.automotons.items.heads.DrillHeadItem;
+import net.automotons.items.heads.RedstoneHeadItem;
 import net.automotons.items.heads.StickyHeadItem;
 import net.automotons.screens.AutomotonScreen;
 import net.automotons.screens.AutomotonScreenHandler;
@@ -40,7 +41,7 @@ public class AutomotonsRegistry{
 	public static HeadItem<?> STICKY_HEAD = new StickyHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static HeadItem<?> BLADE_HEAD = new BladeHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static HeadItem<?> DRILL_HEAD = new DrillHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
-	public static HeadItem<?> REDSTONE_HEAD = new HeadItem<>(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
+	public static HeadItem<?> REDSTONE_HEAD = new RedstoneHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	
 	public static Item BLANK_MODULE = new Item(new Item.Settings().group(Automotons.ITEMS));
 	

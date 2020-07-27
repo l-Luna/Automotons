@@ -68,9 +68,10 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			// first six are in order, second six are reversed
 			if(toExecute != null)
 				toExecute.execute(this);
+			getWorld().updateNeighbors(pos, getWorld().getBlockState(pos).getBlock());
 		}
 		moduleTime++;
-		if(moduleTime >= 10 && !world.isReceivingRedstonePower(pos)){
+		if(moduleTime >= 10 && !(getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null))){
 			moduleTime = 0;
 			// move to next instruction
 			module++;

@@ -10,6 +10,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -44,5 +45,31 @@ public class AutomotonBlock extends Block implements BlockEntityProvider{
 			player.openHandledScreen((AutomotonBlockEntity)blockEntity);
 		
 		return ActionResult.CONSUME;
+	}
+	
+	public boolean emitsRedstonePower(BlockState state){
+		return true;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public int getStrongRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction){
+		BlockEntity blockEntity = world.getBlockEntity(pos);
+		if(blockEntity instanceof AutomotonBlockEntity){
+			AutomotonBlockEntity entity = (AutomotonBlockEntity)blockEntity;
+			if(entity.getHead() != null)
+				return entity.getHead().getStrongPowerTo(entity, direction, entity.data);
+		}
+		return super.getStrongRedstonePower(state, world, pos, direction);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction){
+		BlockEntity blockEntity = world.getBlockEntity(pos);
+		if(blockEntity instanceof AutomotonBlockEntity){
+			AutomotonBlockEntity entity = (AutomotonBlockEntity)blockEntity;
+			if(entity.getHead() != null)
+				return entity.getHead().getWeakPowerTo(entity, direction, entity.data);
+		}
+		return super.getStrongRedstonePower(state, world, pos, direction);
 	}
 }

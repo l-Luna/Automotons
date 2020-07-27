@@ -3,6 +3,7 @@ package net.automotons.items;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 public interface Head<Data>{
 	
@@ -35,4 +36,12 @@ public interface Head<Data>{
 	default void moveInto(AutomotonBlockEntity automoton, BlockPos to, Data data){}
 	
 	default void tick(AutomotonBlockEntity automoton, BlockPos facing, Data data){}
+	
+	default int getStrongPowerTo(AutomotonBlockEntity automoton, Direction direction, Data data){
+		return 0;
+	}
+	
+	default int getWeakPowerTo(AutomotonBlockEntity automoton, Direction direction, Data data){
+		return 0;
+	}
 }
