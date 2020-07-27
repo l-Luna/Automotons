@@ -47,6 +47,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		inventory = DefaultedList.ofSize(14, ItemStack.EMPTY);
 	}
 	
+	@SuppressWarnings("ConstantConditions")
 	public void tick(){
 		Module toExecute = atIndex(module);
 		if(moduleTime == 0){
