@@ -44,6 +44,7 @@ public class AutomotonsRegistry{
 	public static HeadItem<?> REDSTONE_HEAD = new RedstoneHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	
 	public static Item BLANK_MODULE = new Item(new Item.Settings().group(Automotons.ITEMS));
+	public static Item IRON_GEAR = new Item(new Item.Settings().group(Automotons.ITEMS));
 	
 	public static Item NOOP_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> true);
 	public static Item CW_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::turnCw);
@@ -80,6 +81,7 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("redstone_head"), REDSTONE_HEAD);
 		
 		register(Registry.ITEM, autoId("blank_module"), BLANK_MODULE);
+		register(Registry.ITEM, autoId("iron_gear"), IRON_GEAR);
 		register(Registry.ITEM, autoId("noop_module"), NOOP_MODULE);
 		register(Registry.ITEM, autoId("cw_module"), CW_MODULE);
 		register(Registry.ITEM, autoId("ccw_module"), CCW_MODULE);

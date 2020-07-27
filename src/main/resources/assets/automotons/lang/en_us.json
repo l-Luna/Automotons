@@ -7,6 +7,7 @@
   "item.automotons.redstone_head": "Redstone Panel",
 
   "item.automotons.blank_module": "Empty Module",
+  "item.automotons.iron_gear": "Iron Gear",
   "item.automotons.noop_module": "Wait Module",
   "item.automotons.cw_module": "Clockwise Turn Module",
   "item.automotons.ccw_module": "Counter-Clockwise Turn Module",

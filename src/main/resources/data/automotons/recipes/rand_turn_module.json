@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "automotons:cw_module"
+    },
+    {
+      "item": "automotons:ccw_module"
+    }
+  ],
+  "result": {
+    "item": "automotons:rand_turn_module"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p",
+    "g",
+    "i"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    },
+    "p": {
+      "item": "minecraft:sticky_piston"
+    }
+  },
+  "result": {
+    "item": "automotons:sticky_head"
+  }
+}
