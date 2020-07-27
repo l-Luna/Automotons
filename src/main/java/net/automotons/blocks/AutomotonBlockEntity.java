@@ -5,6 +5,7 @@ import net.automotons.items.Head;
 import net.automotons.items.Module;
 import net.automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +14,9 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Tickable;
@@ -21,7 +24,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable{
+public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable, ExtendedScreenHandlerFactory{
 	
 	// Facing a specific direction
 	public Direction facing = Direction.NORTH;
@@ -77,7 +80,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			moduleTime = 0;
 			// move to next instruction
 			// look for next module
-			if(inventory.subList(0, 12).stream().allMatch(ItemStack::isEmpty))
+			if(hasNoModules())
 				module = 0;
 			else
 				while(atIndex(module) == null){
@@ -90,6 +93,10 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			module = 0;
 		if(getHead() != null)
 			getHead().tick(this, pos.offset(facing), data);
+	}
+	
+	public boolean hasNoModules(){
+		return inventory.subList(0, 12).stream().allMatch(ItemStack::isEmpty);
 	}
 	
 	public ItemStack getHeadStack(){
@@ -177,6 +184,11 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory){
 		return new AutomotonScreenHandler(syncId, this, playerInventory);
+	}
+	
+	public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf){
+		// Write our location to buffer
+		buf.writeBlockPos(getPos());
 	}
 	
 	protected Text getContainerName(){

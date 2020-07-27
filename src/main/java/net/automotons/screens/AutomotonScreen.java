@@ -26,9 +26,18 @@ public class AutomotonScreen extends HandledScreen<AutomotonScreenHandler>{
 	protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY){
 		RenderSystem.color4f(1, 1, 1, 1);
 		client.getTextureManager().bindTexture(TEXTURE);
-		int i = (width - backgroundWidth) / 2;
-		int j = (height - backgroundHeight) / 2;
-		drawTexture(matrices, i, j, 0, 0, backgroundWidth, backgroundHeight);
+		int x = (width - backgroundWidth) / 2;
+		int y = (height - backgroundHeight) / 2;
+		drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
+		if(handler.automoton != null && !handler.automoton.hasNoModules()){
+			int module = handler.automoton.module;
+			if(module >= 6){
+				module = 11 - (module - 6);
+			}
+			int modX = (module % 6) * 18 + 52 + x;
+			int modY = (module / 6) * 20 + 24 + y;
+			drawTexture(matrices, modX, modY, 0, 166, 18, 18);
+		}
 	}
 	
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta){

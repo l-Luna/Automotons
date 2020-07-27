@@ -66,7 +66,7 @@ public class AutomotonsRegistry{
 	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder.create(AutomotonBlockEntity::new, AUTOMOTON).build(null);
 	
 	// Screens and Screen Handler Types
-	public static final ScreenHandlerType<AutomotonScreenHandler> AUTOMOTON_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(autoId("automoton"), AutomotonScreenHandler::new);
+	public static final ScreenHandlerType<AutomotonScreenHandler> AUTOMOTON_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(autoId("automoton"), AutomotonScreenHandler::new);
 	
 	public static void registerObjects(){
 		// Blocks

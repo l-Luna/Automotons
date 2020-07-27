@@ -4,17 +4,20 @@ import net.automotons.AutomotonsRegistry;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.math.BlockPos;
 
 public class AutomotonScreenHandler extends ScreenHandler{
 	
-	private final AutomotonBlockEntity automoton;
+	public final AutomotonBlockEntity automoton;
 	private final Inventory inventory;
 	private final PlayerInventory playerInventory;
 	
@@ -27,9 +30,14 @@ public class AutomotonScreenHandler extends ScreenHandler{
 		addSlots();
 	}
 	
-	public AutomotonScreenHandler(int syncId, PlayerInventory playerInventory){
+	public AutomotonScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf){
 		super(AutomotonsRegistry.AUTOMOTON_SCREEN_HANDLER, syncId);
-		automoton = null;
+		BlockPos autoPosition = buf.readBlockPos();
+		BlockEntity entity = playerInventory.player.world.getBlockEntity(autoPosition);
+		if(entity instanceof AutomotonBlockEntity)
+			automoton = (AutomotonBlockEntity)entity;
+		else
+			automoton = null;
 		inventory = new SimpleInventory(14);
 		this.playerInventory = playerInventory;
 		
@@ -85,7 +93,7 @@ public class AutomotonScreenHandler extends ScreenHandler{
 			slot.onTakeItem(player, itemStack2);
 		}
 		
-		if(automoton != null)
+		if(automoton != null && !automoton.getWorld().isClient)
 			automoton.sync();
 		
 		return itemStack;
