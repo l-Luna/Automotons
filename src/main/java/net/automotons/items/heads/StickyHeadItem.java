@@ -21,9 +21,9 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	
 	public boolean canRotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
 		BlockState fromState = automoton.getWorld().getBlockState(from);
-		if(automoton.engaged && !fromState.isAir()){
+		if(automoton.engaged && canMove(fromState, automoton.getWorld(), from)){
 			PistonBehavior behavior = automoton.getWorld().getBlockState(to).getPistonBehavior();
-			return automoton.getWorld().getBlockState(to).isAir() || behavior == PistonBehavior.DESTROY || behavior == PistonBehavior.IGNORE;
+			return automoton.getWorld().getBlockState(to).isAir() || behavior == PistonBehavior.DESTROY;
 		}
 		return true;
 	}
@@ -44,7 +44,7 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 			World world = automoton.getWorld();
 			BlockState fromState = world.getBlockState(from);
 			// cut block
-			if(!fromState.isAir() && !(fromState.getBlock() instanceof BlockEntityProvider)){
+			if(canMove(fromState, world, from)){
 				automoton.setData(fromState);
 				world.setBlockState(from, Blocks.AIR.getDefaultState());
 				if(!world.isClient())
@@ -55,12 +55,15 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	
 	public void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
 		BlockState toState = automoton.getWorld().getBlockState(to);
-		if(automoton.engaged && state != null && !state.isAir() && toState.isAir()){
+		if(automoton.engaged && state != null && !state.isAir() && (toState.isAir() || toState.getPistonBehavior() == PistonBehavior.DESTROY)){
 			// paste block
 			World world = automoton.getWorld();
 			BlockRotation rotation = BlockRotation.COUNTERCLOCKWISE_90;
 			if(Automotons.isClockwiseRotation(automoton.lastFacing, automoton.facing))
 				rotation = BlockRotation.CLOCKWISE_90;
+			
+			if(!toState.isAir())
+				world.breakBlock(to, true);
 			
 			world.setBlockState(to, state.rotate(rotation));
 			// stop storing it
@@ -68,6 +71,10 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 			if(!world.isClient())
 				automoton.sync();
 		}
+	}
+	
+	public static boolean canMove(BlockState state, World world, BlockPos pos){
+		return !state.isAir() && !(state.getBlock() instanceof BlockEntityProvider || state.getHardness(world, pos) == -1) && state.getPistonBehavior() == PistonBehavior.NORMAL;
 	}
 	
 	public float getEngageOffset(AutomotonBlockEntity automoton, BlockState state){
