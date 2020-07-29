@@ -41,6 +41,11 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public boolean lastEngaged = false;
 	// Extra data for head
 	public Object data;
+	// Whether the current module threw an error
+	// Updated after the next module executes, allowing them to act on it
+	public boolean errored = false;
+	// Whether execution should be paused when an error is thrown
+	public boolean stopOnError = false;
 	
 	public AutomotonBlockEntity(){
 		super(AutomotonsRegistry.AUTOMOTON_BE);
@@ -68,10 +73,11 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			// get module slot
 			// first six are in order, second six are reversed
 			if(toExecute != null)
-				toExecute.execute(this);
+				errored = !toExecute.execute(this);
 			getWorld().updateNeighbors(pos, getWorld().getBlockState(pos).getBlock());
 		}
-		moduleTime++;
+		if(!stopOnError || !errored)
+			moduleTime++;
 		if(moduleTime >= 10 && !(getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null))){
 			moduleTime = 0;
 			// move to next instruction
@@ -158,6 +164,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		nbt.putBoolean("engaged", engaged);
 		nbt.putInt("instruction", module);
 		nbt.putInt("instructionTime", moduleTime);
+		nbt.putBoolean("errored", errored);
+		nbt.putBoolean("stopOnError", stopOnError);
 		Inventories.toTag(tag, inventory);
 		if(getHead() != null)
 			nbt.put("headData", getHead().getExtraData(data));
@@ -171,6 +179,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		engaged = tag.getBoolean("engaged");
 		module = tag.getInt("instruction");
 		moduleTime = tag.getInt("instructionTime");
+		errored = tag.getBoolean("errored");
+		stopOnError = tag.getBoolean("stopOnError");
 		
 		inventory.clear();
 		Inventories.fromTag(tag, inventory);
@@ -237,6 +247,10 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		
 		markDirty();
 		sync();
+	}
+	
+	public void setStopOnError(boolean stopOnError){
+		this.stopOnError = stopOnError;
 	}
 	
 	public boolean canPlayerUse(PlayerEntity player){

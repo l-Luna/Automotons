@@ -31,12 +31,11 @@ public class AutomotonScreen extends HandledScreen<AutomotonScreenHandler>{
 		drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
 		if(handler.automoton != null && !handler.automoton.hasNoModules()){
 			int module = handler.automoton.module;
-			if(module >= 6){
+			if(module >= 6)
 				module = 11 - (module - 6);
-			}
 			int modX = (module % 6) * 18 + 52 + x;
 			int modY = (module / 6) * 20 + 24 + y;
-			drawTexture(matrices, modX, modY, 0, 166, 18, 18);
+			drawTexture(matrices, modX, modY, handler.automoton.errored ? 18 : 0, 166, 18, 18);
 		}
 	}
 	

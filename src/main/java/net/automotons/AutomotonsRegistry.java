@@ -63,6 +63,21 @@ public class AutomotonsRegistry{
 		else
 			return entity.turnCcw();
 	});
+	public static Item THROW_ERRORS_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
+		entity.setStopOnError(true);
+		return true;
+	});
+	public static Item SUPPRESS_ERRORS_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
+		entity.setStopOnError(false);
+		return true;
+	});
+	public static Item REPEAT_ON_SUCCESS_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
+		if(entity.errored)
+			return false;
+		entity.module = 0;
+		entity.moduleTime = 0;
+		return true;
+	});
 	
 	// Block Entity Types
 	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder.create(AutomotonBlockEntity::new, AUTOMOTON).build(null);
@@ -88,6 +103,9 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("engage_module"), ENGAGE_MODULE);
 		register(Registry.ITEM, autoId("disengage_module"), DISENGAGE_MODULE);
 		register(Registry.ITEM, autoId("rand_turn_module"), RAND_TURN_MODULE);
+		register(Registry.ITEM, autoId("throw_errors_module"), THROW_ERRORS_MODULE);
+		register(Registry.ITEM, autoId("suppress_errors_module"), SUPPRESS_ERRORS_MODULE);
+		register(Registry.ITEM, autoId("repeat_on_success_module"), REPEAT_ON_SUCCESS_MODULE);
 		
 		for(Pair<Identifier, Block> item : WITH_ITEMS){
 			register(Registry.BLOCK, item.getLeft(), item.getRight());
