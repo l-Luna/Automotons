@@ -18,6 +18,10 @@
   "item.automotons.suppress_errors_module": "Suppress Errors Module",
   "item.automotons.repeat_on_success_module": "Repeat on Success Module",
   "item.automotons.repeat_second_row_module": "Repeat Second Row Module",
+  "item.automotons.move_forward_module": "Move Forward Module",
+  "item.automotons.move_left_module": "Move Left Module",
+  "item.automotons.move_right_module": "Move Right Module",
+  "item.automotons.move_back_module": "Move Back Module",
 
   "block.automotons.automoton": "Automoton",
 

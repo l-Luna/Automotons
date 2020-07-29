@@ -7,7 +7,9 @@ import net.automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
@@ -21,7 +23,11 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable, ExtendedScreenHandlerFactory{
@@ -39,6 +45,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	// Used for animations and errors
 	public Direction lastFacing = Direction.NORTH;
 	public boolean lastEngaged = false;
+	public BlockPos lastPos = null;
 	// Extra data for head
 	public Object data;
 	// Whether the current module threw an error
@@ -46,6 +53,11 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public boolean errored = false;
 	// Whether execution should be paused when an error is thrown
 	public boolean stopOnError = false;
+	// Which direction to move at the end of this tick (if any)
+	public Direction scheduledMove = null;
+	// When moving, screens start following the wrong automoton. All screen handlers in this list are corrected.
+	// Not serialized or saved (doesn't need to be).
+	public List<AutomotonScreenHandler> notifying = new ArrayList<>();
 	
 	public AutomotonBlockEntity(){
 		super(AutomotonsRegistry.AUTOMOTON_BE);
@@ -68,6 +80,13 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				if(getHead() != null)
 					getHead().endRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 				lastFacing = facing;
+			}
+			if(lastPos != null && !lastPos.equals(pos)){
+				// move into (happens after)
+				// TODO: lastPos
+				if(getHead() != null)
+					getHead().endRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
+				lastPos = pos;
 			}
 			// run instruction
 			// get module slot
@@ -101,6 +120,23 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			module = 0;
 		if(getHead() != null)
 			getHead().tick(this, pos.offset(facing), data);
+		if(scheduledMove != null){
+			// we should move now
+			BlockPos to = pos.offset(scheduledMove);
+			// remove this automoton block and add a new one in the new position
+			if(world.setBlockState(pos, Blocks.AIR.getDefaultState())){
+				BlockState state = AutomotonsRegistry.AUTOMOTON.getDefaultState();
+				world.setBlockState(to, state);
+				// we've already been removed, and a new one already exists
+				// set all our data (w/ serialization methods), but set scheduledMove to null and set lastPos
+				AutomotonBlockEntity moved = (AutomotonBlockEntity)world.getBlockEntity(to);
+				moved.fromTag(state, addSharedData(moved.toTag(new CompoundTag())));
+				moved.lastPos = pos;
+				for(AutomotonScreenHandler handler : notifying)
+					handler.inventory = handler.automoton = moved;
+				moved.notifying = notifying;
+			}
+		}
 	}
 	
 	public boolean hasNoModules(){
@@ -152,6 +188,32 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			return false;
 	}
 	
+	public boolean moveForward(){
+		return move(facing);
+	}
+	
+	public boolean moveLeft(){
+		return move(facing.rotateYCounterclockwise());
+	}
+	
+	public boolean moveRight(){
+		return move(facing.rotateYClockwise());
+	}
+	
+	public boolean moveBack(){
+		return move(facing.getOpposite());
+	}
+	
+	public boolean move(Direction direction){
+		BlockPos to = pos.offset(direction);
+		BlockState state = world.getBlockState(to);
+		if(state.isAir() || state.getPistonBehavior() == PistonBehavior.DESTROY){
+			scheduledMove = direction;
+			return true;
+		}
+		return false;
+	}
+	
 	public void setEngaged(boolean engaged){
 		lastEngaged = this.engaged;
 		this.engaged = engaged;
@@ -159,6 +221,10 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public CompoundTag toTag(CompoundTag tag){
 		CompoundTag nbt = super.toTag(tag);
+		return addSharedData(nbt);
+	}
+	
+	public CompoundTag addSharedData(CompoundTag nbt){
 		nbt.putInt("facing", facing.getId());
 		nbt.putInt("lastFacing", lastFacing.getId());
 		nbt.putBoolean("engaged", engaged);
@@ -166,9 +232,16 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		nbt.putInt("instructionTime", moduleTime);
 		nbt.putBoolean("errored", errored);
 		nbt.putBoolean("stopOnError", stopOnError);
-		Inventories.toTag(tag, inventory);
+		Inventories.toTag(nbt, inventory);
 		if(getHead() != null)
 			nbt.put("headData", getHead().getExtraData(data));
+		boolean hasLastPos = lastPos != null;
+		nbt.putBoolean("hasLastPos", hasLastPos);
+		if(hasLastPos){
+			nbt.putInt("lastX", lastPos.getX());
+			nbt.putInt("lastY", lastPos.getY());
+			nbt.putInt("lastZ", lastPos.getZ());
+		}
 		return nbt;
 	}
 	
@@ -181,6 +254,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		moduleTime = tag.getInt("instructionTime");
 		errored = tag.getBoolean("errored");
 		stopOnError = tag.getBoolean("stopOnError");
+		if(tag.getBoolean("hasLastPos"))
+			lastPos = new BlockPos(tag.getInt("lastX"), tag.getInt("lastY"), tag.getInt("lastZ"));
 		
 		inventory.clear();
 		Inventories.fromTag(tag, inventory);

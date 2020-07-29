@@ -85,6 +85,10 @@ public class AutomotonsRegistry{
 		entity.moduleTime = 0;
 		return true;
 	});
+	public static Item MOVE_FORWARD_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::moveForward);
+	public static Item MOVE_LEFT_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::moveLeft);
+	public static Item MOVE_RIGHT_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::moveRight);
+	public static Item MOVE_BACK_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::moveBack);
 	
 	// Block Entity Types
 	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder.create(AutomotonBlockEntity::new, AUTOMOTON).build(null);
@@ -95,6 +99,11 @@ public class AutomotonsRegistry{
 	public static void registerObjects(){
 		// Blocks
 		WITH_ITEMS.add(new Pair<>(autoId("automoton"), AUTOMOTON));
+		
+		for(Pair<Identifier, Block> item : WITH_ITEMS){
+			register(Registry.BLOCK, item.getLeft(), item.getRight());
+			register(Registry.ITEM, item.getLeft(), new BlockItem(item.getRight(), new Item.Settings().group(Automotons.ITEMS)));
+		}
 		
 		// Items
 		register(Registry.ITEM, autoId("sticky_head"), STICKY_HEAD);
@@ -114,11 +123,10 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("suppress_errors_module"), SUPPRESS_ERRORS_MODULE);
 		register(Registry.ITEM, autoId("repeat_on_success_module"), REPEAT_ON_SUCCESS_MODULE);
 		register(Registry.ITEM, autoId("repeat_second_row_module"), REPEAT_SECOND_ROW_MODULE);
-		
-		for(Pair<Identifier, Block> item : WITH_ITEMS){
-			register(Registry.BLOCK, item.getLeft(), item.getRight());
-			register(Registry.ITEM, item.getLeft(), new BlockItem(item.getRight(), new Item.Settings().group(Automotons.ITEMS)));
-		}
+		register(Registry.ITEM, autoId("move_forward_module"), MOVE_FORWARD_MODULE);
+		register(Registry.ITEM, autoId("move_left_module"), MOVE_LEFT_MODULE);
+		register(Registry.ITEM, autoId("move_right_module"), MOVE_RIGHT_MODULE);
+		register(Registry.ITEM, autoId("move_back_module"), MOVE_BACK_MODULE);
 		
 		// Block Entity Types
 		register(Registry.BLOCK_ENTITY_TYPE, autoId("automoton"), AUTOMOTON_BE);

@@ -17,13 +17,14 @@ import net.minecraft.util.math.BlockPos;
 
 public class AutomotonScreenHandler extends ScreenHandler{
 	
-	public final AutomotonBlockEntity automoton;
-	private final Inventory inventory;
+	public AutomotonBlockEntity automoton;
+	public Inventory inventory;
 	private final PlayerInventory playerInventory;
 	
 	public AutomotonScreenHandler(int syncId, AutomotonBlockEntity automoton, PlayerInventory playerInventory){
 		super(AutomotonsRegistry.AUTOMOTON_SCREEN_HANDLER, syncId);
 		this.automoton = automoton;
+		automoton.notifying.add(this);
 		inventory = automoton;
 		this.playerInventory = playerInventory;
 		
