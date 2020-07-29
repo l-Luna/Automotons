@@ -17,6 +17,7 @@
   "item.automotons.throw_errors_module": "Throw Errors Module",
   "item.automotons.suppress_errors_module": "Suppress Errors Module",
   "item.automotons.repeat_on_success_module": "Repeat on Success Module",
+  "item.automotons.repeat_second_row_module": "Repeat Second Row Module",
 
   "block.automotons.automoton": "Automoton",
 

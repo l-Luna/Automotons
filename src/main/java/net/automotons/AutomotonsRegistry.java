@@ -78,6 +78,13 @@ public class AutomotonsRegistry{
 		entity.moduleTime = 0;
 		return true;
 	});
+	public static Item REPEAT_SECOND_ROW_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
+		if(entity.errored)
+			return false;
+		entity.module = 6;
+		entity.moduleTime = 0;
+		return true;
+	});
 	
 	// Block Entity Types
 	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder.create(AutomotonBlockEntity::new, AUTOMOTON).build(null);
@@ -106,6 +113,7 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("throw_errors_module"), THROW_ERRORS_MODULE);
 		register(Registry.ITEM, autoId("suppress_errors_module"), SUPPRESS_ERRORS_MODULE);
 		register(Registry.ITEM, autoId("repeat_on_success_module"), REPEAT_ON_SUCCESS_MODULE);
+		register(Registry.ITEM, autoId("repeat_second_row_module"), REPEAT_SECOND_ROW_MODULE);
 		
 		for(Pair<Identifier, Block> item : WITH_ITEMS){
 			register(Registry.BLOCK, item.getLeft(), item.getRight());
