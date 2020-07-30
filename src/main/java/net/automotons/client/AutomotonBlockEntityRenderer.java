@@ -3,15 +3,24 @@ package net.automotons.client;
 import net.automotons.Automotons;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.Head;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.TexturedRenderLayers;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.block.BlockModelRenderer;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
+
+import java.util.Random;
 
 import static java.lang.Math.min;
 
@@ -26,6 +35,25 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void render(AutomotonBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay){
+		matrices.push();
+		
+		// render block
+		BlockModelRenderer.enableBrightnessCache();
+		if(entity.lastPos != null && !entity.lastPos.equals(entity.getPos()) && entity.moduleTime > 0){
+			float progress = 1 - min(entity.moduleTime / 10f, 1);
+			float xProgress = (entity.getPos().getX() - entity.lastPos.getX()) * progress * -1;
+			float yProgress = (entity.getPos().getY() - entity.lastPos.getY()) * progress * -1;
+			float zProgress = (entity.getPos().getZ() - entity.lastPos.getZ()) * progress * -1;
+			matrices.translate(xProgress, yProgress, zProgress);
+		}
+		
+		BlockState state = entity.getWorld().getBlockState(entity.getPos());
+		BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
+		BakedModel model = manager.getModel(state);
+		VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
+		manager.getModelRenderer().render(entity.getWorld(), model, state, entity.getPos(), matrices, buffer, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+		BlockModelRenderer.disableBrightnessCache();
+		
 		ItemStack headStack = entity.getStack(12);
 		if(!headStack.isEmpty() && headStack.getItem() instanceof Head){
 			Head head = (Head)headStack.getItem();
@@ -63,5 +91,6 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 			if(renderer != null)
 				renderer.render(entity, matrices, vertexConsumers, entity.data, light, overlay);
 		}
+		matrices.pop();
 	}
 }

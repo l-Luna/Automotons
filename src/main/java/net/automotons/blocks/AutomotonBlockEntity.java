@@ -132,9 +132,13 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				AutomotonBlockEntity moved = (AutomotonBlockEntity)world.getBlockEntity(to);
 				moved.fromTag(state, addSharedData(moved.toTag(new CompoundTag())));
 				moved.lastPos = pos;
-				for(AutomotonScreenHandler handler : notifying)
-					handler.inventory = handler.automoton = moved;
+				for(AutomotonScreenHandler handler : notifying){
+					handler.inventory = moved;
+					handler.automoton = moved;
+				}
 				moved.notifying = notifying;
+				if(!world.isClient())
+					moved.sync();
 			}
 		}
 	}
@@ -228,6 +232,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		nbt.putInt("facing", facing.getId());
 		nbt.putInt("lastFacing", lastFacing.getId());
 		nbt.putBoolean("engaged", engaged);
+		nbt.putBoolean("lastEngaged", lastEngaged);
 		nbt.putInt("instruction", module);
 		nbt.putInt("instructionTime", moduleTime);
 		nbt.putBoolean("errored", errored);
@@ -250,6 +255,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		facing = Direction.byId(tag.getInt("facing"));
 		lastFacing = Direction.byId(tag.getInt("lastFacing"));
 		engaged = tag.getBoolean("engaged");
+		lastEngaged = tag.getBoolean("lastEngaged");
 		module = tag.getInt("instruction");
 		moduleTime = tag.getInt("instructionTime");
 		errored = tag.getBoolean("errored");

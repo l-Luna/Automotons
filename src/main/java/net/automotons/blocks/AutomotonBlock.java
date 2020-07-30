@@ -1,9 +1,6 @@
 package net.automotons.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -71,5 +68,9 @@ public class AutomotonBlock extends Block implements BlockEntityProvider{
 				return entity.getHead().getWeakPowerTo(entity, direction, entity.data);
 		}
 		return super.getStrongRedstonePower(state, world, pos, direction);
+	}
+	
+	public BlockRenderType getRenderType(BlockState state){
+		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 }
