@@ -73,6 +73,36 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 		}
 	}
 	
+	public void startAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockPos prevFacing, BlockPos facing, BlockState state){
+		if(automoton.engaged){
+			World world = automoton.getWorld();
+			BlockState fromState = world.getBlockState(prevFacing);
+			// cut block
+			if(canMove(fromState, world, prevFacing)){
+				automoton.setData(fromState);
+				world.setBlockState(prevFacing, Blocks.AIR.getDefaultState());
+				if(!world.isClient())
+					automoton.sync();
+			}
+		}
+	}
+	
+	public void endAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockPos prevFacing, BlockPos facing, BlockState state){
+		BlockState toState = automoton.getWorld().getBlockState(facing);
+		if(automoton.engaged && state != null && !state.isAir() && (toState.isAir() || toState.getPistonBehavior() == PistonBehavior.DESTROY)){
+			// paste block
+			World world = automoton.getWorld();
+			if(!toState.isAir())
+				world.breakBlock(facing, true);
+			
+			world.setBlockState(facing, state);
+			// stop storing it
+			automoton.setData(null);
+			if(!world.isClient())
+				automoton.sync();
+		}
+	}
+	
 	public static boolean canMove(BlockState state, World world, BlockPos pos){
 		return !state.isAir() && !(state.getBlock() instanceof BlockEntityProvider || state.getHardness(world, pos) == -1) && state.getPistonBehavior() == PistonBehavior.NORMAL;
 	}

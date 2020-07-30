@@ -33,6 +33,16 @@ public interface Head<Data>{
 		moveInto(automoton, to, data);
 	}
 	
+	default boolean canAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Data data){
+		return true;
+	}
+	
+	default void startAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockPos prevFacing, BlockPos facing, Data data){}
+	
+	default void endAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockPos prevFacing, BlockPos facing, Data data){
+		moveInto(automoton, facing, data);
+	}
+	
 	default void moveInto(AutomotonBlockEntity automoton, BlockPos to, Data data){}
 	
 	default void tick(AutomotonBlockEntity automoton, BlockPos facing, Data data){}

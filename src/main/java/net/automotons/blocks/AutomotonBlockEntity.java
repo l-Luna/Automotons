@@ -83,9 +83,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			}
 			if(lastPos != null && !lastPos.equals(pos)){
 				// move into (happens after)
-				// TODO: lastPos
 				if(getHead() != null)
-					getHead().endRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
+					getHead().endAutomotonMoveInto(this, pos, lastPos, lastPos.offset(facing), pos.offset(facing), data);
 				lastPos = pos;
 			}
 			// run instruction
@@ -211,10 +210,14 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public boolean move(Direction direction){
 		BlockPos to = pos.offset(direction);
-		BlockState state = world.getBlockState(to);
-		if(state.isAir() || state.getPistonBehavior() == PistonBehavior.DESTROY){
-			scheduledMove = direction;
-			return true;
+		if(getHead() == null || getHead().canAutomotonMoveInto(this, to, getPos(), data)){
+			BlockState state = world.getBlockState(to);
+			if(state.isAir() || state.getPistonBehavior() == PistonBehavior.DESTROY){
+				scheduledMove = direction;
+				if(getHead() != null)
+					getHead().startAutomotonMoveInto(this, to, getPos(), getPos().offset(facing), to.offset(facing), data);
+				return true;
+			}
 		}
 		return false;
 	}

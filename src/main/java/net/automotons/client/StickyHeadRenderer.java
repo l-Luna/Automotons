@@ -23,17 +23,23 @@ public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 	public void render(AutomotonBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, BlockState state, int light, int overlay){
 		// if we're rotating, display block
 		if(state != null && !state.isAir()){
-			float rotationOffset;
-			if(entity.lastFacing != null && entity.lastFacing != entity.facing && entity.moduleTime > 0){
+			float rotationOffset = 0;
+			if(((entity.lastFacing != null && entity.lastFacing != entity.facing) || (entity.lastPos != null && !entity.lastPos.equals(entity.getPos()))) && entity.moduleTime > 0){
 				BlockModelRenderer.enableBrightnessCache();
 				matrices.push();
-				// FIXME: state rotation
-				BlockRotation rotation = BlockRotation.COUNTERCLOCKWISE_90;
-				if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing)){
-					rotationOffset = min(entity.moduleTime / 10f, 1) - 1;
-					rotation = BlockRotation.CLOCKWISE_90;
-				}else
-					rotationOffset = 1 - min(entity.moduleTime / 10f, 1);
+				BlockState rotated = state;
+				if(entity.lastFacing != null && entity.lastFacing != entity.facing){
+					BlockRotation rotation;
+					// FIXME: state rotation
+					if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing)){
+						rotationOffset = min(entity.moduleTime / 10f, 1) - 1;
+						rotation = BlockRotation.CLOCKWISE_90;
+					}else{
+						rotation = BlockRotation.COUNTERCLOCKWISE_90;
+						rotationOffset = 1 - min(entity.moduleTime / 10f, 1);
+					}
+					rotated = rotated.rotate(rotation);
+				}
 				// only display if rotating
 				// point of rotation
 				matrices.translate(.5, 0, .5);
@@ -41,7 +47,6 @@ public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 				// offset
 				matrices.translate(.5, 0, -.5);
 				BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
-				BlockState rotated = state.rotate(rotation);
 				BakedModel model = manager.getModel(rotated);
 				VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
 				manager.getModelRenderer().render(entity.getWorld(), model, rotated, entity.getPos(), matrices, buffer, false, new Random(), rotated.getRenderingSeed(entity.getPos()), overlay);
