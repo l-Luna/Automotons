@@ -126,6 +126,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			// remove this automoton block and add a new one in the new position
 			if(world.setBlockState(pos, Blocks.AIR.getDefaultState())){
 				BlockState state = AutomotonsRegistry.AUTOMOTON.getDefaultState();
+				world.breakBlock(to, true);
 				world.setBlockState(to, state);
 				// we've already been removed, and a new one already exists
 				// set all our data (w/ serialization methods), but set scheduledMove to null and set lastPos
