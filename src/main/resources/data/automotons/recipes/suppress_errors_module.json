@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    "gwg"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "w": {
+      "tag": "minecraft:wool"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    }
+  },
+  "result": {
+    "item": "automotons:suppress_errors_module",
+    "count": 4
+  }
+}

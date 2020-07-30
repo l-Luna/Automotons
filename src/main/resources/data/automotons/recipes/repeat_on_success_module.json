@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    "gng"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "n": {
+      "item": "minecraft:repeater"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    }
+  },
+  "result": {
+    "item": "automotons:repeat_on_success_module",
+    "count": 4
+  }
+}

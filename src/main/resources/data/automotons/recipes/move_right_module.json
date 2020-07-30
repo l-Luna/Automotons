@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "g g",
+    "ni ",
+    "g g"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "n": {
+      "item": "minecraft:redstone"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    }
+  },
+  "result": {
+    "item": "automotons:move_right_module",
+    "count": 6
+  }
+}
