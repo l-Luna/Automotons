@@ -8,6 +8,7 @@ import net.automotons.items.heads.BladeHeadItem;
 import net.automotons.items.heads.DrillHeadItem;
 import net.automotons.items.heads.RedstoneHeadItem;
 import net.automotons.items.heads.StickyHeadItem;
+import net.automotons.loot.BlockEntityInventoryEntry;
 import net.automotons.screens.AutomotonScreen;
 import net.automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
@@ -18,6 +19,7 @@ import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.loot.entry.LootPoolEntryType;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -96,6 +98,9 @@ public class AutomotonsRegistry{
 	// Screens and Screen Handler Types
 	public static final ScreenHandlerType<AutomotonScreenHandler> AUTOMOTON_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(autoId("automoton"), AutomotonScreenHandler::new);
 	
+	// Loot Pool Entry Types
+	public static final LootPoolEntryType BLOCK_ENTITY_INVENTORY = new LootPoolEntryType(new BlockEntityInventoryEntry.Serializer());
+	
 	public static void registerObjects(){
 		// Blocks
 		WITH_ITEMS.add(new Pair<>(autoId("automoton"), AUTOMOTON));
@@ -133,5 +138,8 @@ public class AutomotonsRegistry{
 		
 		// Screens and Screen Handler Types
 		ScreenRegistry.register(AUTOMOTON_SCREEN_HANDLER, AutomotonScreen::new);
+		
+		// Loot Pool Entry Types
+		register(Registry.LOOT_POOL_ENTRY_TYPE, autoId("block_entity_inventory"), BLOCK_ENTITY_INVENTORY);
 	}
 }

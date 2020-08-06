@@ -55,6 +55,10 @@ public class AutomotonScreenHandler extends ScreenHandler{
 					public boolean canInsert(ItemStack stack){
 						return super.canInsert(stack) && stack.getItem() instanceof ModuleItem;
 					}
+					
+					public int getMaxStackAmount() {
+						return 1;
+					}
 				});
 		// head slot
 		addSlot(new Slot(inventory, 12, 16, 25){

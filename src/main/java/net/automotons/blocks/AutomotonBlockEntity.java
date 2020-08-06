@@ -13,6 +13,7 @@ import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable, ExtendedScreenHandlerFactory{
+public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable, ExtendedScreenHandlerFactory, SidedInventory{
 	
 	// Facing a specific direction
 	public Direction facing = Direction.NORTH;
@@ -58,6 +59,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	// When moving, screens start following the wrong automoton. All screen handlers in this list are corrected.
 	// Not serialized or saved (doesn't need to be).
 	public List<AutomotonScreenHandler> notifying = new ArrayList<>();
+	// Only slot that's exposed to hoppers.
+	private int[] STORE_SLOT = new int[]{13};
 	
 	public AutomotonBlockEntity(){
 		super(AutomotonsRegistry.AUTOMOTON_BE);
@@ -88,8 +91,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				lastPos = pos;
 			}
 			// run instruction
-			// get module slot
-			// first six are in order, second six are reversed
 			if(toExecute != null)
 				errored = !toExecute.execute(this);
 			getWorld().updateNeighbors(pos, getWorld().getBlockState(pos).getBlock());
@@ -357,5 +358,17 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public CompoundTag toClientTag(CompoundTag tag){
 		return toTag(tag);
+	}
+	
+	public int[] getAvailableSlots(Direction side){
+		return STORE_SLOT;
+	}
+	
+	public boolean canInsert(int slot, ItemStack stack, Direction dir){
+		return true;
+	}
+	
+	public boolean canExtract(int slot, ItemStack stack, Direction dir){
+		return true;
 	}
 }
