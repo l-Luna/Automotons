@@ -4,10 +4,7 @@ import net.automotons.blocks.AutomotonBlock;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
-import net.automotons.items.heads.BladeHeadItem;
-import net.automotons.items.heads.DrillHeadItem;
-import net.automotons.items.heads.RedstoneHeadItem;
-import net.automotons.items.heads.StickyHeadItem;
+import net.automotons.items.heads.*;
 import net.automotons.loot.BlockEntityInventoryEntry;
 import net.automotons.screens.AutomotonScreen;
 import net.automotons.screens.AutomotonScreenHandler;
@@ -44,6 +41,7 @@ public class AutomotonsRegistry{
 	public static HeadItem<?> BLADE_HEAD = new BladeHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static HeadItem<?> DRILL_HEAD = new DrillHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	public static HeadItem<?> REDSTONE_HEAD = new RedstoneHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
+	public static HeadItem<?> DISPENSER_ON_A_STICK = new DispenserStickHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
 	
 	public static Item BLANK_MODULE = new Item(new Item.Settings().group(Automotons.ITEMS));
 	public static Item IRON_GEAR = new Item(new Item.Settings().group(Automotons.ITEMS));
@@ -115,6 +113,7 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("blade_head"), BLADE_HEAD);
 		register(Registry.ITEM, autoId("drill_head"), DRILL_HEAD);
 		register(Registry.ITEM, autoId("redstone_head"), REDSTONE_HEAD);
+		register(Registry.ITEM, autoId("dispenser_on_a_stick"), DISPENSER_ON_A_STICK);
 		
 		register(Registry.ITEM, autoId("blank_module"), BLANK_MODULE);
 		register(Registry.ITEM, autoId("iron_gear"), IRON_GEAR);

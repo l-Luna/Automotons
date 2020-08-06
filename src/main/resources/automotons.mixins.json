@@ -4,6 +4,8 @@
   "package": "net.automotons.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "DispenserBlockAccessor",
+    "StateAccessor"
   ],
   "client": [
   ],
