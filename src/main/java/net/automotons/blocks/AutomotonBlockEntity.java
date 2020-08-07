@@ -76,6 +76,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				// engage (happens after)
 				if(engaged && getHead() != null)
 					getHead().engageInto(this, pos.offset(facing), data);
+				if(!engaged && getHead() != null)
+					getHead().retractFrom(this, pos.offset(facing), data);
 				lastEngaged = engaged;
 			}
 			if(lastFacing != null && lastFacing != facing){

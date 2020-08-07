@@ -20,7 +20,7 @@ public class DispenserStickHeadItem extends HeadItem<Object>{
 		super(settings);
 	}
 	
-	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, Object o){
+	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, Object unused){
 		// get the dispenser behaviour
 		ItemStack stack = automoton.getStack(13);
 		DispenserBehavior behavior = ((DispenserBlockAccessor)Blocks.DISPENSER).callGetBehaviorForItem(stack);

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "n",
+    "g",
+    "i"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    },
+    "n": {
+      "item": "minecraft:note_block"
+    }
+  },
+  "result": {
+    "item": "automotons:note_block_on_a_stick"
+  }
+}
