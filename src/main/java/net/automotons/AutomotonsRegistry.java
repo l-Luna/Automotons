@@ -137,9 +137,6 @@ public class AutomotonsRegistry{
 		// Block Entity Types
 		register(Registry.BLOCK_ENTITY_TYPE, autoId("automoton"), AUTOMOTON_BE);
 		
-		// Screens and Screen Handler Types
-		ScreenRegistry.register(AUTOMOTON_SCREEN_HANDLER, AutomotonScreen::new);
-		
 		// Loot Pool Entry Types
 		register(Registry.LOOT_POOL_ENTRY_TYPE, autoId("block_entity_inventory"), BLOCK_ENTITY_INVENTORY);
 	}
