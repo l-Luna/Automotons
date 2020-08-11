@@ -8,4 +8,4 @@ More are planned.
 
 Automotons is still in a buggy state. Testing (and PRs!) are appreciated. Expect to encounter issues. All items are craftable.
 
-The mod depends on Patchouli, but doesn't yet contain documentation. Documentation is planned for 0.2.
+The mod depends on Patchouli, but doesn't yet contain documentation. Documentation is planned for 1.0.
