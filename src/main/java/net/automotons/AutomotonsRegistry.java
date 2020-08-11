@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.automotons.Automotons.autoId;
+import static net.automotons.items.ModuleItem.fromConsumer;
 import static net.minecraft.util.registry.Registry.register;
 
 public class AutomotonsRegistry{
@@ -34,66 +35,70 @@ public class AutomotonsRegistry{
 	// Blocks
 	public static Block AUTOMOTON = new AutomotonBlock(FabricBlockSettings.of(Material.METAL).breakByHand(true).strength(6f).nonOpaque().solidBlock((state, world, pos) -> false));
 	
+	// Item Settings
+	private static final Item.Settings TABBED = new Item.Settings().group(Automotons.ITEMS);
+	private static final Item.Settings SINGLE_TABBED = new Item.Settings().group(Automotons.ITEMS).maxCount(1);
+	
 	// Items
-	public static HeadItem<?> STICKY_HEAD = new StickyHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
-	public static HeadItem<?> BLADE_HEAD = new BladeHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
-	public static HeadItem<?> DRILL_HEAD = new DrillHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
-	public static HeadItem<?> REDSTONE_HEAD = new RedstoneHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
-	public static HeadItem<?> DISPENSER_ON_A_STICK = new DispenserStickHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
-	public static HeadItem<?> NOTE_BLOCK_ON_A_STICK = new NoteBlockStickHeadItem(new Item.Settings().maxCount(1).group(Automotons.ITEMS));
+	// Heads
+	public static HeadItem<?> STICKY_HEAD = new StickyHeadItem(SINGLE_TABBED);
+	public static HeadItem<?> BLADE_HEAD = new BladeHeadItem(SINGLE_TABBED);
+	public static HeadItem<?> DRILL_HEAD = new DrillHeadItem(SINGLE_TABBED);
+	public static HeadItem<?> REDSTONE_HEAD = new RedstoneHeadItem(SINGLE_TABBED);
+	public static HeadItem<?> DISPENSER_ON_A_STICK = new DispenserStickHeadItem(SINGLE_TABBED);
+	public static HeadItem<?> NOTE_BLOCK_ON_A_STICK = new NoteBlockStickHeadItem(SINGLE_TABBED);
 	
-	public static Item BLANK_MODULE = new Item(new Item.Settings().group(Automotons.ITEMS));
-	public static Item IRON_GEAR = new Item(new Item.Settings().group(Automotons.ITEMS));
+	// Materials
+	public static Item BLANK_MODULE = new Item(TABBED);
+	public static Item IRON_GEAR = new Item(TABBED);
 	
-	public static Item NOOP_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> true);
-	public static Item CW_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::turnCw);
-	public static Item CCW_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::turnCcw);
-	public static Item ENGAGE_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
-		entity.setEngaged(true);
-		return true;
-	});
-	public static Item DISENGAGE_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
-		entity.setEngaged(false);
-		return true;
-	});
-	public static Item RAND_TURN_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
+	// Turn & engage
+	public static Item NOOP_MODULE = new ModuleItem(TABBED, entity -> true);
+	public static Item CW_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::turnCw);
+	public static Item CCW_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::turnCcw);
+	public static Item ENGAGE_MODULE = fromConsumer(TABBED, entity -> entity.setEngaged(true));
+	public static Item DISENGAGE_MODULE = fromConsumer(TABBED, entity -> entity.setEngaged(false));
+	public static Item RAND_TURN_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.getWorld() != null && entity.getWorld().random.nextBoolean())
 			return entity.turnCw();
 		else
 			return entity.turnCcw();
 	});
-	public static Item THROW_ERRORS_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
-		entity.setStopOnError(true);
-		return true;
-	});
-	public static Item SUPPRESS_ERRORS_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
-		entity.setStopOnError(false);
-		return true;
-	});
-	public static Item REPEAT_ON_SUCCESS_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
+	
+	// Error handling
+	public static Item THROW_ERRORS_MODULE = fromConsumer(TABBED, entity -> entity.setStopOnError(true));
+	public static Item SUPPRESS_ERRORS_MODULE = fromConsumer(TABBED, entity -> entity.setStopOnError(false));
+	
+	// Repetition
+	public static Item REPEAT_ON_SUCCESS_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.errored)
 			return false;
 		entity.module = 0;
 		entity.moduleTime = 0;
 		return true;
 	});
-	public static Item REPEAT_SECOND_ROW_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), entity -> {
+	public static Item REPEAT_SECOND_ROW_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.errored)
 			return false;
 		entity.module = 6;
 		entity.moduleTime = 0;
 		return true;
 	});
-	public static Item MOVE_FORWARD_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::moveForward);
-	public static Item MOVE_LEFT_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::moveLeft);
-	public static Item MOVE_RIGHT_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::moveRight);
-	public static Item MOVE_BACK_MODULE = new ModuleItem(new Item.Settings().group(Automotons.ITEMS), AutomotonBlockEntity::moveBack);
+	
+	// Movement
+	public static Item MOVE_FORWARD_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveForward);
+	public static Item MOVE_LEFT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveLeft);
+	public static Item MOVE_RIGHT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveRight);
+	public static Item MOVE_BACK_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveBack);
 	
 	// Block Entity Types
-	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder.create(AutomotonBlockEntity::new, AUTOMOTON).build(null);
+	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder
+			.create(AutomotonBlockEntity::new, AUTOMOTON)
+			.build(null);
 	
 	// Screens and Screen Handler Types
-	public static final ScreenHandlerType<AutomotonScreenHandler> AUTOMOTON_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(autoId("automoton"), AutomotonScreenHandler::new);
+	public static final ScreenHandlerType<AutomotonScreenHandler> AUTOMOTON_SCREEN_HANDLER =ScreenHandlerRegistry
+			.registerExtended(autoId("automoton"), AutomotonScreenHandler::new);
 	
 	// Loot Pool Entry Types
 	public static final LootPoolEntryType BLOCK_ENTITY_INVENTORY = new LootPoolEntryType(new BlockEntityInventoryEntry.Serializer());
