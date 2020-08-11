@@ -18,24 +18,22 @@ public class NoteBlockStickHeadItem extends HeadItem<Object>{
 		super(settings);
 	}
 	
-	// TODO: music discs
-	// playing music discs works. stopping them when retracting doesn't.
 	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, Object unused){
 		ItemStack stack = automoton.getStack(13);
 		World world = automoton.getWorld();
-		/*if(stack.isEmpty() || !(stack.getItem() instanceof MusicDiscItem)){*/
+		if(stack.isEmpty() || !(stack.getItem() instanceof MusicDiscItem)){
 			Instrument instrument = (!stack.isEmpty() && stack.getItem() instanceof BlockItem) ? Instrument.fromBlockState(((BlockItem)stack.getItem()).getBlock().getDefaultState()) : Instrument.HARP;
 			// 0-23
 			float pitchRaw = Math.min(23, stack.getCount());
 			float pitch = (float)Math.pow(2, (double)(pitchRaw - 12) / 12.0D);
 			world.playSound(null, automoton.getPos(), instrument.getSound(), SoundCategory.RECORDS, 3, pitch);
 			world.addParticle(ParticleTypes.NOTE, automoton.getPos().getX() + .5 + automoton.facing.getOffsetX() * .5, automoton.getPos().getY() + 1, automoton.getPos().getZ() + .5 + automoton.facing.getOffsetZ() * .5, pitchRaw / 24, 0, 0);
-		/*}else
-			world.syncWorldEvent(1010, automoton.getPos(), Registry.ITEM.getRawId(stack.getItem()));*/
+		}else
+			world.syncWorldEvent(1010, automoton.getPos(), Registry.ITEM.getRawId(stack.getItem()));
 	}
 	
-	/*public void retractFrom(AutomotonBlockEntity automoton, BlockPos from, Object o){
+	public void retractFrom(AutomotonBlockEntity automoton, BlockPos from, Object unused){
 		World world = automoton.getWorld();
 		world.syncWorldEvent(1010, automoton.getPos(), 0);
-	}*/
+	}
 }
