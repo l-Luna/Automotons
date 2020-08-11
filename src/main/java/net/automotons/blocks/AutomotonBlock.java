@@ -3,11 +3,13 @@ package net.automotons.blocks;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -72,5 +74,19 @@ public class AutomotonBlock extends Block implements BlockEntityProvider{
 	
 	public BlockRenderType getRenderType(BlockState state){
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
+	}
+	
+	public boolean hasComparatorOutput(BlockState state) {
+		return true;
+	}
+	
+	public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+		BlockEntity entity = world.getBlockEntity(pos);
+		if(entity instanceof AutomotonBlockEntity){
+			AutomotonBlockEntity te = (AutomotonBlockEntity)entity;
+			ItemStack stack = te.getStack(13);
+			return MathHelper.floor((float)stack.getCount() / (float)Math.min(te.getMaxCountPerStack(), stack.getMaxCount()) * 14.0F) + (stack.isEmpty() ? 1 : 0);
+		}
+		return 0;
 	}
 }
