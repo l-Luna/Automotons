@@ -1,0 +1,6 @@
+{
+  "name": "Heads",
+  "description": "The items attachable to automotons to enable interesting behaviour.",
+  "icon": "automotons:sticky_head",
+  "sortnum": 1
+}

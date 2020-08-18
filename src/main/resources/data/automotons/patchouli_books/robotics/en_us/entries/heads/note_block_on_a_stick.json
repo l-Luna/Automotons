@@ -1,0 +1,19 @@
+{
+  "name": "Note Block on a Stick",
+  "icon": "automotons:note_block_on_a_stick",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "An automoton holding a Note Block on a Stick will make a sound when engaged. If a music disc is placed in the automoton's item slot, it will play the song when engaged, and stop playing when disengaged."
+    },
+    {
+      "type": "text",
+      "text": "Otherwise, the automoton will act like a note block. The pitch of the note is based on the number of items held by the automoton, up to 23. If the item inside is a block that would modify a note block's instrument, that instrument will be used."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:note_block_on_a_stick"
+    }
+  ]
+}

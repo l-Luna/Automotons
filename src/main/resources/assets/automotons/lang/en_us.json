@@ -1,6 +1,8 @@
 {
   "itemGroup.automotons.items": "Automotons",
 
+  "item.automotons.robotics_book": "Robotics 101",
+
   "item.automotons.blade_head": "Iron Blade",
   "item.automotons.drill_head": "Diamond Drill",
   "item.automotons.sticky_head": "Sticky Head",

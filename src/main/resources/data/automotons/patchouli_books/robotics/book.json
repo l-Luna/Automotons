@@ -1,0 +1,10 @@
+{
+  "name": "Robotics 101",
+  "landing_text": "The comprehensive guide to building and programming robots.",
+  "version": 1,
+  "book_texture": "patchouli:textures/gui/book_brown.png",
+  "model": "automotons:robotics_book",
+  "creative_tab": "automotons.items",
+  "dont_generate_book": true,
+  "custom_book_item": "automotons:robotics_book"
+}

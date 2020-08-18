@@ -1,0 +1,16 @@
+{
+  "name": "Using Heads",
+  "icon": "automotons:redstone_head",
+  "category": "automotons:concepts",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Heads provide extra functionality, by causing effects when the automoton moves, rotates, or engages. Usually, heads will do nothing when not engaged. The engage and disengage modules causes a head to be engaged or disengaged. Swapping or removing heads will not change engagement."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:engage_module",
+      "recipe2": "automotons:disengage_module"
+    }
+  ]
+}

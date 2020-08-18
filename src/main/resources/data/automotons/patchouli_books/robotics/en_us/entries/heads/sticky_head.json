@@ -1,0 +1,19 @@
+{
+  "name": "Sticky Head",
+  "icon": "automotons:sticky_head",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "An automoton holding a Sticky Head will carry the block in front when it rotates or moves, while engaged. If a full block is present where the block would be moved, the rotation or movement module will throw an error."
+    },
+    {
+      "type": "text",
+      "text": "If a block is placed while the automoton is moving or rotating, the carried block will move past the placed block, rather than stop in place or turn back."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:sticky_head"
+    }
+  ]
+}

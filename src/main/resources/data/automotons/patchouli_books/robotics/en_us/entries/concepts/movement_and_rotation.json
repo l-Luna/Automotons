@@ -1,0 +1,34 @@
+{
+  "name": "Movement and Rotation",
+  "icon": "automotons:move_forward_module",
+  "category": "automotons:concepts",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Automotons can move in four horizontal directions, relative to the direction they face, using the move forward, move left, move right, and move back modules."
+    },
+    {
+      "type": "text",
+      "text": "Automotons can turn left or right, using the turn clockwise or turn counterclockwise modules. An automoton can also turn randomly using the random turn module."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:move_forward_module",
+      "recipe2": "automotons:move_left_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:move_back_module",
+      "recipe2": "automotons:move_right_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:cw_module",
+      "recipe2": "automotons:ccw_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:rand_turn_module"
+    }
+  ]
+}

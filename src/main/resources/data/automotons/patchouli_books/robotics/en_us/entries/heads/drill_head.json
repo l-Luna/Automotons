@@ -1,0 +1,19 @@
+{
+  "name": "Diamond Drill",
+  "icon": "automotons:drill_head",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "An automoton holding a Diamond Drill will mine the block in front of it while engaged. It will drop an item, but it *not* pick up the dropped item. Unbreakable blocks cannot be broken, but the drill otherwise ignores mining tiers."
+    },
+    {
+      "type": "text",
+      "text": "The drill doesn't take damage, but it also cannot be enchanted with fortune or silk touch."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:drill_head"
+    }
+  ]
+}

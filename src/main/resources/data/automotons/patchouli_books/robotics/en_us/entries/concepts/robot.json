@@ -1,0 +1,21 @@
+{
+  "name": "Automotons",
+  "icon": "automotons:automoton",
+  "category": "automotons:concepts",
+  "priority": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "An Automoton is a kind of robot, capable of executing instructions, carrying a head, holding items, rotating, and moving.$(br2)Twelve slots are reserved for instructions in the form of items called modules, which are executed in a loop."
+    },
+    {
+      "type": "text",
+      "text": "A head can be placed in them, which modifies its behaviour, as detailed in their own entries. Hoppers and players can interact with its extra slot."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:automoton",
+      "recipe2": "automotons:iron_gear"
+    }
+  ]
+}

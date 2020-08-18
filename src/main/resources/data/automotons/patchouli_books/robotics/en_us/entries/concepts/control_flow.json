@@ -1,0 +1,37 @@
+{
+  "name": "Control Flow",
+  "icon": "automotons:repeat_on_success_module",
+  "category": "automotons:concepts",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Twelve instructions can be placed in an automoton, which are executed in a loop. Empty slots are skipped entirely; if only one instruction is present, it will be executed repeatedly. Every instruction takes 10 ticks to complete."
+    },
+    {
+      "type": "text",
+      "text": "If an instruction cannot be executed, for whatever reason, it may throw an error. For example, a move module will fail when trying to move into a solid block. By default, automotons will skip over errored instructions, but this can be changed using suppress errors and throw errors modules. A suppress errors module causes errors to be ignored, as normal. A throw errors module causes the automoton to stop execution entirely when encountering an error."
+    },
+    {
+      "type": "text",
+      "text": "An automoton can be made to conditionally repeat at an arbitrary point using the repeat on success and repeat second row modules. If the previous module was successful, the automoton will immediately restart execution, at either the first row or second row depending on the module."
+    },
+    {
+      "type": "text",
+      "text": "A redstone signal will stop an automoton from continuing execution. However, if the first instruction is removed, or another instruction is added to the start, they will be immediately executed.$(br2)A wait module does nothing. You can place a wait module at the start to safely modify an automoton, or to time actions."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:suppress_errors_module",
+      "recipe2": "automotons:throw_errors_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:noop_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:repeat_on_success_module",
+      "recipe2": "automotons:repeat_second_row_module"
+    }
+  ]
+}

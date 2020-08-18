@@ -1,0 +1,15 @@
+{
+  "name": "Iron Blade",
+  "icon": "automotons:blade_head",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "An automoton holding an Iron Blade will deal 4.5 damage to any entity in front of it when moving or rotating into a space, while engaged. An entity walking in front of an automoton with an Iron Blade will *not* passively take damage; the automoton must move into that space to deal damage."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:blade_head"
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import net.automotons.blocks.AutomotonBlock;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
+import net.automotons.items.RoboticsBookItem;
 import net.automotons.items.heads.*;
 import net.automotons.loot.BlockEntityInventoryEntry;
 import net.automotons.screens.AutomotonScreenHandler;
@@ -40,6 +41,8 @@ public class AutomotonsRegistry{
 	private static final Item.Settings SINGLE_TABBED = new Item.Settings().group(Automotons.ITEMS).maxCount(1);
 	
 	// Items
+	public static Item ROBOTICS_BOOK = new RoboticsBookItem(TABBED);
+	
 	// Heads
 	public static HeadItem<?> STICKY_HEAD = new StickyHeadItem(SINGLE_TABBED);
 	public static HeadItem<?> BLADE_HEAD = new BladeHeadItem(SINGLE_TABBED);
@@ -113,6 +116,8 @@ public class AutomotonsRegistry{
 		}
 		
 		// Items
+		register(Registry.ITEM, autoId("robotics_book"), ROBOTICS_BOOK);
+		
 		register(Registry.ITEM, autoId("sticky_head"), STICKY_HEAD);
 		register(Registry.ITEM, autoId("blade_head"), BLADE_HEAD);
 		register(Registry.ITEM, autoId("drill_head"), DRILL_HEAD);
