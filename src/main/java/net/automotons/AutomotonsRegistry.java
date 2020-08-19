@@ -77,14 +77,14 @@ public class AutomotonsRegistry{
 		if(entity.errored)
 			return false;
 		entity.module = 0;
-		entity.moduleTime = 0;
+		entity.moduleTime = -1;
 		return true;
 	});
 	public static Item REPEAT_SECOND_ROW_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.errored)
 			return false;
 		entity.module = 6;
-		entity.moduleTime = 0;
+		entity.moduleTime = -1;
 		return true;
 	});
 	

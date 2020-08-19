@@ -133,15 +133,18 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				// we've already been removed, and a new one already exists
 				// set all our data (w/ serialization methods), but set scheduledMove to null and set lastPos
 				AutomotonBlockEntity moved = (AutomotonBlockEntity)world.getBlockEntity(to);
-				moved.fromTag(state, addSharedData(moved.toTag(new CompoundTag())));
-				moved.lastPos = pos;
-				for(AutomotonScreenHandler handler : notifying){
-					handler.inventory = moved;
-					handler.automoton = moved;
+				// FIXME: this shouldn't happen... and it causes item loss?
+				if(moved != null){
+					moved.fromTag(state, addSharedData(moved.toTag(new CompoundTag())));
+					moved.lastPos = pos;
+					for(AutomotonScreenHandler handler : notifying){
+						handler.inventory = moved;
+						handler.automoton = moved;
+					}
+					moved.notifying = notifying;
+					if(!world.isClient())
+						moved.sync();
 				}
-				moved.notifying = notifying;
-				if(!world.isClient())
-					moved.sync();
 			}
 		}
 	}
