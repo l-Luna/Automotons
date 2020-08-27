@@ -70,6 +70,13 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	@SuppressWarnings("ConstantConditions")
 	public void tick(){
 		Module toExecute = atIndex(module);
+		if(!stopOnError || !errored)
+			moduleTime++;
+		if(moduleTime >= 10 && !(getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null))){
+			moduleTime = 0;
+			// move to next instruction
+			module++;
+		}
 		if(moduleTime == 0){
 			// finish last instruction
 			if(lastEngaged != engaged){
@@ -98,13 +105,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				sync();
 			}
 			getWorld().updateNeighbors(pos, getWorld().getBlockState(pos).getBlock());
-		}
-		if(!stopOnError || !errored)
-			moduleTime++;
-		if(moduleTime >= 10 && !(getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null))){
-			moduleTime = 0;
-			// move to next instruction
-			module++;
 		}
 		toExecute = atIndex(module);
 		if(toExecute == null){
