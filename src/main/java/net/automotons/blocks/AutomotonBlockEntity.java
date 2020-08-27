@@ -93,8 +93,10 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				lastPos = pos;
 			}
 			// run instruction
-			if(toExecute != null)
+			if(toExecute != null && !world.isClient()){
 				errored = !toExecute.execute(this);
+				sync();
+			}
 			getWorld().updateNeighbors(pos, getWorld().getBlockState(pos).getBlock());
 		}
 		if(!stopOnError || !errored)
