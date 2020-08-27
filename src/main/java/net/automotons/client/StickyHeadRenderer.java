@@ -20,11 +20,11 @@ import static java.lang.Math.min;
 
 public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 	
-	public void render(AutomotonBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, BlockState state, int light, int overlay){
+	public void render(AutomotonBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, BlockState state, int light, int overlay, float tickDelta){
 		// if we're rotating, display block
 		if(state != null && !state.isAir()){
 			float rotationOffset = 0;
-			if(((entity.lastFacing != null && entity.lastFacing != entity.facing) || (entity.lastPos != null && !entity.lastPos.equals(entity.getPos()))) && entity.moduleTime > 0){
+			if(((entity.lastFacing != null && entity.lastFacing != entity.facing) || (entity.lastPos != null && !entity.lastPos.equals(entity.getPos())))){
 				BlockModelRenderer.enableBrightnessCache();
 				matrices.push();
 				BlockState rotated = state;
@@ -32,11 +32,11 @@ public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 					BlockRotation rotation;
 					// FIXME: state rotation
 					if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing)){
-						rotationOffset = min(entity.moduleTime / 10f, 1) - 1;
+						rotationOffset = min((entity.moduleTime + tickDelta) / 10f, 1) - 1;
 						rotation = BlockRotation.CLOCKWISE_90;
 					}else{
 						rotation = BlockRotation.COUNTERCLOCKWISE_90;
-						rotationOffset = 1 - min(entity.moduleTime / 10f, 1);
+						rotationOffset = 1 - min((entity.moduleTime + tickDelta) / 10f, 1);
 					}
 					rotated = rotated.rotate(rotation);
 				}

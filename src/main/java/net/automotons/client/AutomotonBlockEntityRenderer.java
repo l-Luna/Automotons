@@ -39,7 +39,7 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 		
 		// render block
 		BlockModelRenderer.enableBrightnessCache();
-		if(entity.lastPos != null && !entity.lastPos.equals(entity.getPos()) /*&& entity.moduleTime > 0*/){
+		if(entity.lastPos != null && !entity.lastPos.equals(entity.getPos())){
 			float progress = 1 - min((entity.moduleTime + tickDelta) / 10f, 1);
 			float xProgress = (entity.getPos().getX() - entity.lastPos.getX()) * progress * -1;
 			float yProgress = (entity.getPos().getY() - entity.lastPos.getY()) * progress * -1;
@@ -62,20 +62,20 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 				matrices.push();
 				// transition between engaged/disengaged
 				float engageProgress = entity.engaged ? 1 : 0;
-				if(entity.lastEngaged && !entity.engaged /*&& entity.moduleTime > 0*/)
-					engageProgress = 1 - min(entity.moduleTime / 10f, 1);
-				else if(!entity.lastEngaged && entity.engaged /*&& entity.moduleTime > 0*/)
-					engageProgress = min(entity.moduleTime / 10f, 1);
+				if(entity.lastEngaged && !entity.engaged)
+					engageProgress = 1 - min((entity.moduleTime + tickDelta) / 10f, 1);
+				else if(!entity.lastEngaged && entity.engaged)
+					engageProgress = min((entity.moduleTime + tickDelta) / 10f, 1);
 				float offset = (head.getEngageOffset(entity, entity.data) / 16f) * engageProgress;
 				// move to proper position (on automoton)
 				matrices.translate(.5, 14 / 16f, .5);
 				// rotate to facing
 				float rotationOffset = 0f;
-				if(entity.lastFacing != null && entity.lastFacing != entity.facing /*&& entity.moduleTime > 0*/){
+				if(entity.lastFacing != null && entity.lastFacing != entity.facing){
 					if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing))
-						rotationOffset = min(entity.moduleTime / 10f, 1) - 1;
+						rotationOffset = min((entity.moduleTime + tickDelta) / 10f, 1) - 1;
 					else
-						rotationOffset = 1 - min(entity.moduleTime / 10f, 1);
+						rotationOffset = 1 - min((entity.moduleTime + tickDelta) / 10f, 1);
 				}
 				matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
 				// make the item flat
@@ -89,7 +89,7 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 				matrices.pop();
 			}
 			if(renderer != null)
-				renderer.render(entity, matrices, vertexConsumers, entity.data, light, overlay);
+				renderer.render(entity, matrices, vertexConsumers, entity.data, light, overlay, tickDelta);
 		}
 		matrices.pop();
 	}

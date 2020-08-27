@@ -18,7 +18,7 @@ public interface HeadRenderer<Data>{
 		RENDERERS.put(AutomotonsRegistry.DRILL_HEAD, new DrillHeadRenderer());
 	}
 	
-	default void render(AutomotonBlockEntity automoton, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Data data, int light, int overlay){}
+	default void render(AutomotonBlockEntity automoton, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Data data, int light, int overlay, float tickDelta){}
 	
 	default boolean doNormalRender(AutomotonBlockEntity automoton, Data data){
 		return true;

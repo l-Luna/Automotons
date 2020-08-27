@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 public class DrillHeadRenderer implements HeadRenderer<Float>{
 	
-	public void render(AutomotonBlockEntity automoton, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Float breakingTime, int light, int overlay){
+	public void render(AutomotonBlockEntity automoton, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Float breakingTime, int light, int overlay, float tickDelta){
 		// add block breaking particles
 		World world = automoton.getWorld();
 		BlockPos facing = automoton.getPos().offset(automoton.facing);
