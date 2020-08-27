@@ -1,0 +1,12 @@
+{
+  "name": "Maze Solver",
+  "icon": "minecraft:magenta_glazed_terracotta",
+  "category": "automotons:challenges",
+  "pages": [
+    {
+      "type": "quest",
+      "title": "Maze Solver",
+      "text": "Program an automoton to solve a maze. The automoton starts at any arbitrary position, and eventually reached a set end point that borders a wall within a closed maze."
+    }
+  ]
+}
