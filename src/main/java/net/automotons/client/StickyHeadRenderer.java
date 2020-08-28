@@ -32,11 +32,11 @@ public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 					BlockRotation rotation;
 					// FIXME: state rotation
 					if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing)){
-						rotationOffset = min((entity.moduleTime + tickDelta) / 10f, 1) - 1;
+						rotationOffset = min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1) - 1;
 						rotation = BlockRotation.CLOCKWISE_90;
 					}else{
 						rotation = BlockRotation.COUNTERCLOCKWISE_90;
-						rotationOffset = 1 - min((entity.moduleTime + tickDelta) / 10f, 1);
+						rotationOffset = 1 - min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1);
 					}
 					rotated = rotated.rotate(rotation);
 				}

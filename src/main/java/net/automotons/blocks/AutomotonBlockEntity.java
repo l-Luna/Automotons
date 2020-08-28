@@ -41,7 +41,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public int module = 0;
 	// The number of ticks already spent processing the module
 	public int moduleTime = 0;
-	// Modules (0-11), head (12), and store slot (13) inventory
+	// Modules (n -> 0 to n-1), head (n), and store slot (n + 1) inventory
 	private DefaultedList<ItemStack> inventory;
 	// Used for animations and errors
 	public Direction lastFacing = Direction.NORTH;
@@ -60,11 +60,12 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	// Not serialized or saved (doesn't need to be).
 	public List<AutomotonScreenHandler> notifying = new ArrayList<>();
 	// Only slot that's exposed to hoppers.
-	private int[] STORE_SLOT = new int[]{13};
+	private int[] STORE_SLOT;
 	
 	public AutomotonBlockEntity(){
 		super(AutomotonsRegistry.AUTOMOTON_BE);
-		inventory = DefaultedList.ofSize(14, ItemStack.EMPTY);
+		inventory = DefaultedList.ofSize(moduleNum() + 2, ItemStack.EMPTY);
+		STORE_SLOT = new int[]{moduleNum() + 1};
 	}
 	
 	@SuppressWarnings("ConstantConditions")
@@ -72,7 +73,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		Module toExecute = atIndex(module);
 		if(!stopOnError || !errored)
 			moduleTime++;
-		if(moduleTime >= 10 && !(getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null))){
+		if(moduleTime >= moduleSpeed() && !(getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null))){
 			moduleTime = 0;
 			// move to next instruction
 			module++;
@@ -116,11 +117,11 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			else
 				while(atIndex(module) == null){
 					module++;
-					if(module >= 12)
+					if(module >= moduleNum())
 						module = 0;
 				}
 		}
-		if(module >= 12)
+		if(module >= moduleNum())
 			module = 0;
 		if(getHead() != null)
 			getHead().tick(this, pos.offset(facing), data);
@@ -156,7 +157,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	}
 	
 	public ItemStack getHeadStack(){
-		return getStack(12);
+		return getStack(moduleNum());
 	}
 	
 	public Head getHead(){
@@ -165,11 +166,11 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	}
 	
 	public Module atIndex(int index){
-		if(index < 6){
+		if(index < moduleNum() / 2){
 			if(!getStack(index).isEmpty() && getStack(index).getItem() instanceof Module)
 				return (Module)getStack(index).getItem();
-		}else if(index < 12){
-			int revIndex = 11 - (index - 6);
+		}else if(index < moduleNum()){
+			int revIndex = (moduleNum() - 1) - (index - (moduleNum() / 2));
 			if(!getStack(revIndex).isEmpty() && getStack(revIndex).getItem() instanceof Module)
 				return (Module)getStack(revIndex).getItem();
 		}
@@ -301,7 +302,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	}
 	
 	public int size(){
-		return 14;
+		return moduleNum() + 2;
 	}
 	
 	public boolean isEmpty(){
@@ -317,7 +318,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		if(!itemStack.isEmpty()){
 			markDirty();
 			sync();
-			if(slot == 12)
+			if(slot == moduleNum())
 				data = null;
 		}
 		return itemStack;
@@ -326,7 +327,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public ItemStack removeStack(int slot){
 		ItemStack stack = Inventories.removeStack(inventory, slot);
 		sync();
-		if(slot == 12)
+		if(slot == moduleNum())
 			data = null;
 		return stack;
 	}
@@ -335,7 +336,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		inventory.set(slot, stack);
 		if(stack.getCount() > getMaxCountPerStack())
 			stack.setCount(getMaxCountPerStack());
-		if(slot == 12)
+		if(slot == moduleNum())
 			data = null;
 		
 		markDirty();
@@ -377,5 +378,13 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public boolean canExtract(int slot, ItemStack stack, Direction dir){
 		return true;
+	}
+	
+	public int moduleNum(){
+		return 12;
+	}
+	
+	public int moduleSpeed(){
+		return 10;
 	}
 }
