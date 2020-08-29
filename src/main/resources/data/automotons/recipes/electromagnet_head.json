@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RlI",
+    " g ",
+    " i "
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    },
+    "l": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    }
+  },
+  "result": {
+    "item": "automotons:electromagnet_head"
+  }
+}

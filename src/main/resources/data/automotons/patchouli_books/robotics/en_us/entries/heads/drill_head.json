@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "An automoton holding a Diamond Drill will mine the block in front of it while engaged. It will drop an item, but it *not* pick up the dropped item. Unbreakable blocks cannot be broken, but the drill otherwise ignores mining tiers."
+      "text": "An unpowered, engaged automoton holding a Diamond Drill will mine the block in front. It will drop an item, but it *not* pick up the dropped item. Unbreakable blocks and blocks that cannot be broken with a diamond pickaxe are unaffected."
     },
     {
       "type": "text",

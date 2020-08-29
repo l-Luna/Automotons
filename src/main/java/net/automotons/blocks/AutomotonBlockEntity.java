@@ -160,6 +160,10 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		return getStack(moduleNum());
 	}
 	
+	public ItemStack getStoreStack(){
+		return getStack(moduleNum() + 1);
+	}
+	
 	public Head getHead(){
 		Item item = getHeadStack().getItem();
 		return item instanceof Head ? (Head)item : null;

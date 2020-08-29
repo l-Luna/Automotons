@@ -7,11 +7,13 @@
   "item.automotons.drill_head": "Diamond Drill",
   "item.automotons.sticky_head": "Sticky Head",
   "item.automotons.redstone_head": "Redstone Panel",
+  "item.automotons.electromagnet_head": "Electromagnet Head",
   "item.automotons.dispenser_on_a_stick": "Dispenser on a Stick",
   "item.automotons.note_block_on_a_stick": "Note Block on a Stick",
 
   "item.automotons.blank_module": "Empty Module",
   "item.automotons.iron_gear": "Iron Gear",
+
   "item.automotons.noop_module": "Wait Module",
   "item.automotons.cw_module": "Clockwise Turn Module",
   "item.automotons.ccw_module": "Counter-Clockwise Turn Module",

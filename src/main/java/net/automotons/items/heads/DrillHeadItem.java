@@ -21,7 +21,7 @@ public class DrillHeadItem extends HeadItem<Float>{
 	
 	public void tick(AutomotonBlockEntity automoton, BlockPos facing, Float breakingTime){
 		World world = automoton.getWorld();
-		if(automoton.engaged && world != null){
+		if(automoton.engaged && world != null && !world.isReceivingRedstonePower(automoton.getPos())){
 			BlockState state = world.getBlockState(facing);
 			float hardness = state.getHardness(world, facing);
 			if(!state.isAir() && hardness != -1 && (!state.isToolRequired() || ToolManager.handleIsEffectiveOn(state, DIAMOND_PICK_REF, null))){
