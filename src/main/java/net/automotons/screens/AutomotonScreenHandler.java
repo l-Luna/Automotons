@@ -84,10 +84,11 @@ public class AutomotonScreenHandler extends ScreenHandler{
 		if(slot != null && slot.hasStack()){
 			ItemStack itemStack2 = slot.getStack();
 			itemStack = itemStack2.copy();
-			if(index < 14){
-				if(!this.insertItem(itemStack2, 9, 45, true))
+			int num = automoton.moduleNum() + 2;
+			if(index < num){
+				if(!this.insertItem(itemStack2, num, num + 36, true))
 					return ItemStack.EMPTY;
-			}else if(!this.insertItem(itemStack2, 0, 9, false))
+			}else if(!this.insertItem(itemStack2, 0, num, false))
 				return ItemStack.EMPTY;
 			if(itemStack2.isEmpty())
 				slot.setStack(ItemStack.EMPTY);
@@ -98,9 +99,6 @@ public class AutomotonScreenHandler extends ScreenHandler{
 			
 			slot.onTakeItem(player, itemStack2);
 		}
-		
-		if(automoton != null && !automoton.getWorld().isClient)
-			automoton.sync();
 		
 		return itemStack;
 	}
