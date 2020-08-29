@@ -6,7 +6,7 @@
     {
       "type": "quest",
       "title": "Maze Solver",
-      "text": "Program an automoton to solve a maze. The automoton starts at any arbitrary position, and eventually reached a set end point that borders a wall within a closed maze."
+      "text": "Program an automoton to solve a maze. Given an enclosed space, with pathways one block wide, the automoton must reach any arbitrary end point given any arbitrary starting point. You might want to place a redstone block below the end point to mark it."
     }
   ]
 }
