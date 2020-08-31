@@ -4,6 +4,7 @@ import net.automotons.AutomotonsRegistry;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
+import net.automotons.mixin.SlotAccessor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -48,6 +49,7 @@ public class AutomotonScreenHandler extends ScreenHandler{
 	
 	protected void addSlots(){
 		int y, x;
+		
 		// module slots
 		for(y = 0; y < 2; ++y)
 			for(x = 0; x < 6; ++x)
@@ -68,6 +70,7 @@ public class AutomotonScreenHandler extends ScreenHandler{
 		});
 		// storage slot
 		addSlot(new Slot(inventory, 13, 16, 50));
+		// first 14 are automoton slots
 		
 		// player slots
 		for(y = 0; y < 3; ++y)
@@ -111,5 +114,12 @@ public class AutomotonScreenHandler extends ScreenHandler{
 	
 	public boolean canUse(PlayerEntity player){
 		return inventory.canPlayerUse(player);
+	}
+	
+	public void switchAutomoton(AutomotonBlockEntity automoton){
+		inventory = automoton;
+		this.automoton = automoton;
+		for(int i = 0; i < 14; i++)
+			((SlotAccessor)getSlot(i)).setInventory(automoton);
 	}
 }

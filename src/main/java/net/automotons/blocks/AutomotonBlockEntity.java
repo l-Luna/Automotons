@@ -112,9 +112,12 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			moduleTime = 0;
 			// move to next instruction
 			// look for next module
-			if(hasNoModules())
+			if(hasNoModules()){
 				module = 0;
-			else
+				lastEngaged = engaged;
+				lastFacing = facing;
+				lastPos = pos;
+			}else
 				while(atIndex(module) == null){
 					module++;
 					if(module >= moduleNum())
@@ -140,10 +143,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				if(moved != null){
 					moved.fromTag(state, addSharedData(moved.toTag(new CompoundTag())));
 					moved.lastPos = pos;
-					for(AutomotonScreenHandler handler : notifying){
-						handler.inventory = moved;
-						handler.automoton = moved;
-					}
+					for(AutomotonScreenHandler handler : notifying)
+						handler.switchAutomoton(moved);
 					moved.notifying = notifying;
 					if(!world.isClient())
 						moved.sync();
