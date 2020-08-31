@@ -13,6 +13,10 @@
       "text": "A head can be placed in them, which modifies its behaviour, as detailed in their own entries. Hoppers and players can interact with its extra slot."
     },
     {
+      "type": "text",
+      "text": "The automoton GUI shows the direction that the automoton is facing, whether it's currently engaged, and how it handles errors. Engagement and error handling is described in other entries in this category."
+    },
+    {
       "type": "crafting",
       "recipe": "automotons:automoton",
       "recipe2": "automotons:iron_gear"
