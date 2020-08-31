@@ -31,5 +31,13 @@
 
   "block.automotons.automoton": "Automoton",
 
-  "container.automoton": "Automoton"
+  "container.automoton": "Automoton",
+  "gui.automoton.engaged": "Engaged",
+  "gui.automoton.disengaged": "Disengaged",
+  "gui.automoton.throws": "Throws",
+  "gui.automoton.suppresses": "Suppress",
+  "gui.automoton.north": "North",
+  "gui.automoton.south": "South",
+  "gui.automoton.east": "East",
+  "gui.automoton.west": "West"
 }

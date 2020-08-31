@@ -75,10 +75,10 @@ public class AutomotonScreenHandler extends ScreenHandler{
 		// player slots
 		for(y = 0; y < 3; ++y)
 			for(x = 0; x < 9; ++x)
-				addSlot(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
+				addSlot(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 104 + y * 18));
 		
 		for(y = 0; y < 9; ++y)
-			addSlot(new Slot(playerInventory, y, 8 + y * 18, 142));
+			addSlot(new Slot(playerInventory, y, 8 + y * 18, 162));
 	}
 	
 	public ItemStack transferSlot(PlayerEntity player, int index){
