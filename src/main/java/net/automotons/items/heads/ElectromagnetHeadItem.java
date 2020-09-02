@@ -32,14 +32,16 @@ public class ElectromagnetHeadItem extends HeadItem<Object>{
 			if((push = (stack.getItem() == Items.REDSTONE)) || stack.getItem() == Items.IRON_INGOT){
 				Direction direction = automoton.facing;
 				BlockPos pos = automoton.getPos();
-				for(ItemEntity entity : automoton.getWorld().getEntities(EntityType.ITEM, new Box(pos.offset(direction)).expand(dist * direction.getOffsetX(), dist * direction.getOffsetY(), dist * direction.getOffsetZ()), __ -> true)){
+				for(ItemEntity entity : automoton.getWorld().getEntities(EntityType.ITEM, new Box(pos.offset(direction)).expand(0, .5, 0).union(new Box(pos.offset(direction, dist))), __ -> true)){
 					Vec3d movement;
 					if(push)
 						movement = Vec3d.of(direction.getVector()).multiply(.2);
 					else
 						movement = Vec3d.of(direction.getVector()).multiply(-.2);
 					entity.move(MovementType.SHULKER, movement);
-					entity.setVelocity(entity.getVelocity().multiply(.6));
+					if(!entity.verticalCollision)
+						entity.setVelocity(entity.getVelocity().multiply(1, .6, 1));
+					entity.setVelocity(entity.getVelocity().multiply(.6, 1, .6));
 					for(int i = 0; i < 4; i++)
 						entity.world.addParticle(push ? REDSTONE : IRON, entity.getX() + RANDOM.nextGaussian() / 7, entity.getY() + RANDOM.nextGaussian() / 7 + .25, entity.getZ() + RANDOM.nextGaussian() / 7, movement.getX() * -3, movement.getY() * -3, movement.getZ() * -3);
 				}

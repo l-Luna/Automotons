@@ -24,7 +24,8 @@ public class AutomotonScreen extends HandledScreen<AutomotonScreenHandler>{
 	protected void init(){
 		super.init();
 		titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
-		playerInventoryTitleY = -20;
+		// oh well
+		playerInventoryTitleY = -200000;
 	}
 	
 	@SuppressWarnings("deprecation")
