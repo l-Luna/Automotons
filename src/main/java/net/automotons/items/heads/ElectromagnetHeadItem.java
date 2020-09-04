@@ -3,6 +3,7 @@ package net.automotons.items.heads;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.MovementType;
@@ -14,6 +15,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ElectromagnetHeadItem extends HeadItem<Object>{
 	
@@ -32,7 +36,11 @@ public class ElectromagnetHeadItem extends HeadItem<Object>{
 			if((push = (stack.getItem() == Items.REDSTONE)) || stack.getItem() == Items.IRON_INGOT){
 				Direction direction = automoton.facing;
 				BlockPos pos = automoton.getPos();
-				for(ItemEntity entity : automoton.getWorld().getEntities(EntityType.ITEM, new Box(pos.offset(direction)).expand(0, .5, 0).union(new Box(pos.offset(direction, dist))), __ -> true)){
+				Box affects = new Box(pos.offset(direction)).expand(0, .5, 0).union(new Box(pos.offset(direction, dist)));
+				List<Entity> affected = new ArrayList<>();
+				affected.addAll(automoton.getWorld().getEntitiesByType(EntityType.ITEM, affects, __ -> true));
+				affected.addAll(automoton.getWorld().getEntitiesByType(EntityType.EXPERIENCE_ORB, affects, __ -> true));
+				for(Entity entity : affected){
 					Vec3d movement;
 					if(push)
 						movement = Vec3d.of(direction.getVector()).multiply(.2);

@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "An unpowered, engaged automoton holding an Electromagnet Head will move items in front of it. The distance, in blocks, at which it affects items is equal to the size of its held stack, up to 16. It will pull items if the held item is iron ingots, and will push if the held item is redstone dust. If it's holding any other item, nothing will happen."
+      "text": "An unpowered, engaged automoton holding an Electromagnet Head will move items or XP orbs in front of it. The distance, in blocks, at which it affects these is equal to the size of its held stack, up to 16. It will pull items or orbs if the held item is iron ingots, and will push if the held item is redstone dust. If it's holding any other item, nothing will happen."
     },
     {
       "type": "crafting",

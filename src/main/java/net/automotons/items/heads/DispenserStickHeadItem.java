@@ -9,6 +9,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPointerImpl;
 import net.minecraft.util.math.BlockPos;
@@ -25,14 +26,14 @@ public class DispenserStickHeadItem extends HeadItem<Object>{
 		ItemStack stack = automoton.getStack(13);
 		DispenserBehavior behavior = ((DispenserBlockAccessor)Blocks.DISPENSER).callGetBehaviorForItem(stack);
 		World world = automoton.getWorld();
-		if(world != null && !world.isClient())
-			behavior.dispense(new DirectionReplacingBlockPointer(world, automoton.getPos()), stack);
+		if(world instanceof ServerWorld && !world.isClient())
+			behavior.dispense(new DirectionReplacingBlockPointer((ServerWorld)world, automoton.getPos()), stack);
 	}
 	
 	protected static class DirectionReplacingBlockPointer extends BlockPointerImpl{
 		
-		public DirectionReplacingBlockPointer(World world, BlockPos pos){
-			super(world, pos);
+		public DirectionReplacingBlockPointer(ServerWorld serverWorld, BlockPos pos){
+			super(serverWorld, pos);
 		}
 		
 		public BlockState getBlockState(){
@@ -47,7 +48,7 @@ public class DispenserStickHeadItem extends HeadItem<Object>{
 		
 		@SuppressWarnings({"rawtypes", "unchecked"})
 		public DirectionReplacingBlockState(BlockState deferred, AutomotonBlockEntity entity){
-			super(deferred.getBlock(), deferred.getEntries(), ((StateAccessor)deferred).getField_24740());
+			super(deferred.getBlock(), deferred.getEntries(), ((StateAccessor)deferred).getCodec());
 			this.deferred = deferred;
 			this.entity = entity;
 		}

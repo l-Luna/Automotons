@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface StateAccessor<S>{
 	
 	@Accessor
-	MapCodec<S> getField_24740();
+	MapCodec<S> getCodec();
 }

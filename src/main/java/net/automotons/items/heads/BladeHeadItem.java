@@ -30,7 +30,7 @@ public class BladeHeadItem extends HeadItem<Object>{
 	private void hurtAt(BlockPos pos, World world){
 		// get all entities and  h u r t
 		if(world != null){
-			List<Entity> entities = world.getEntities(null, new Box(pos));
+			List<Entity> entities = world.getOtherEntities(null, new Box(pos));
 			for(Entity entity : entities)
 				if(entity instanceof LivingEntity){
 					LivingEntity living = (LivingEntity)entity;
