@@ -1,0 +1,23 @@
+{
+  "name": "Steel Hammer",
+  "icon": "automotons:steel_hammer",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The Steel Hammer head allows for the automation of the anvil and smithing table, able to rename, repair, and enchant items. When an engaged automoton holding a Steel Hammer rotates into a space with exactly two items, it will attempt to combine them - first checking smithing recipes, then trying to combine them as an anvil would."
+    },
+    {
+      "type": "text",
+      "text": "Anvil recipes cost XP, which is consumed in the form of XP orbs; all nearby XP orbs are pulled when the automoton begins to rotate, and any XP orbs in front of it when performing a recipe are consumed."
+    },
+    {
+      "type": "text",
+      "text": "If the automoton is holding a renamed piece of paper, or a name tag, it will also rename items in front of it, free of charge. If the held item's name begins with '++', it will append the rest of the name. If the name begins with '~~' followed by a positive integer, it will remove that number of letters from the end of the name. Otherwise, it will set the dropped items' names to the name of the held item. Items named this way have a minimum length of one character, and a maximum length of 40."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:steel_hammer"
+    }
+  ]
+}

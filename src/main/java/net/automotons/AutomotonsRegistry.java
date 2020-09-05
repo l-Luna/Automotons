@@ -51,6 +51,7 @@ public class AutomotonsRegistry{
 	public static HeadItem<?> ELECTROMAGNET_HEAD = new ElectromagnetHeadItem(SINGLE_TABBED);
 	public static HeadItem<?> DISPENSER_ON_A_STICK = new DispenserStickHeadItem(SINGLE_TABBED);
 	public static HeadItem<?> NOTE_BLOCK_ON_A_STICK = new NoteBlockStickHeadItem(SINGLE_TABBED);
+	public static HeadItem<?> STEEL_HAMMER = new SteelHammerHeadItem(SINGLE_TABBED);
 	
 	// Materials
 	public static Item BLANK_MODULE = new Item(TABBED);
@@ -126,6 +127,7 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("electromagnet_head"), ELECTROMAGNET_HEAD);
 		register(Registry.ITEM, autoId("dispenser_on_a_stick"), DISPENSER_ON_A_STICK);
 		register(Registry.ITEM, autoId("note_block_on_a_stick"), NOTE_BLOCK_ON_A_STICK);
+		register(Registry.ITEM, autoId("steel_hammer"), STEEL_HAMMER);
 		
 		register(Registry.ITEM, autoId("blank_module"), BLANK_MODULE);
 		register(Registry.ITEM, autoId("iron_gear"), IRON_GEAR);
