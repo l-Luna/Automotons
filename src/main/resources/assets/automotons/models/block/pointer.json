@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "up": "automotons:blocks/pointer_top",
+    "down": "automotons:blocks/pointer_bottom",
+    "east": "automotons:blocks/pointer_side",
+    "west": "automotons:blocks/pointer_side",
+    "north": "automotons:blocks/pointer_point",
+    "south": "automotons:blocks/pointer_back",
+    "particle": "automotons:blocks/pointer_back"
+  }
+}

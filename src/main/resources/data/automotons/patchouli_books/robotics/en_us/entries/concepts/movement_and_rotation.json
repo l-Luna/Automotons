@@ -9,7 +9,7 @@
     },
     {
       "type": "text",
-      "text": "Automotons can turn left or right, using the turn clockwise or turn counterclockwise modules. An automoton can also turn randomly using the random turn module."
+      "text": "Automotons can turn left or right, using the turn clockwise or turn counterclockwise modules. An automoton can also turn randomly using the random turn module.$(br2)Finally, automotons can follow the block below them. The scan module instructs an automoton to move in the direction pointed by the block below it - typically a pointer block (but any tagged, directional block is acceptable)."
     },
     {
       "type": "crafting",
@@ -29,6 +29,11 @@
     {
       "type": "crafting",
       "recipe": "automotons:rand_turn_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:scan_module",
+      "recipe2": "automotons:pointer"
     }
   ]
 }

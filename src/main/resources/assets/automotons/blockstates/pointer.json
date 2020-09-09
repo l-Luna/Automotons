@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "automotons:block/pointer",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "automotons:block/pointer"
+    },
+    "facing=south": {
+      "model": "automotons:block/pointer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "automotons:block/pointer",
+      "y": 270
+    }
+  }
+}

@@ -2,6 +2,7 @@ package net.automotons;
 
 import net.automotons.blocks.AutomotonBlock;
 import net.automotons.blocks.AutomotonBlockEntity;
+import net.automotons.blocks.PointerBlock;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
 import net.automotons.items.RoboticsBookItem;
@@ -10,13 +11,17 @@ import net.automotons.loot.BlockEntityInventoryEntry;
 import net.automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.loot.entry.LootPoolEntryType;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
@@ -32,9 +37,12 @@ public class AutomotonsRegistry{
 	
 	// For BlockItems
 	private static final List<Pair<Identifier, Block>> WITH_ITEMS = new ArrayList<>();
+	// For scanning module
+	private static final Tag<Block> SCANNABLE = TagRegistry.block(autoId("automoton_scannable"));
 	
 	// Blocks
 	public static Block AUTOMOTON = new AutomotonBlock(FabricBlockSettings.of(Material.METAL).breakByHand(true).strength(6f).nonOpaque().solidBlock((state, world, pos) -> false));
+	public static Block POINTER = new PointerBlock(FabricBlockSettings.of(Material.METAL).breakByHand(true).breakInstantly());
 	
 	// Item Settings
 	private static final Item.Settings TABBED = new Item.Settings().group(Automotons.ITEMS);
@@ -95,6 +103,12 @@ public class AutomotonsRegistry{
 	public static Item MOVE_LEFT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveLeft);
 	public static Item MOVE_RIGHT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveRight);
 	public static Item MOVE_BACK_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveBack);
+	public static Item SCAN_MODULE = new ModuleItem(TABBED, entity -> {
+		BlockState below = entity.getWorld().getBlockState(entity.getPos().down());
+		if(below.isIn(SCANNABLE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
+			return entity.move(below.get(HorizontalFacingBlock.FACING));
+		return false;
+	});
 	
 	// Block Entity Types
 	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder
@@ -111,6 +125,7 @@ public class AutomotonsRegistry{
 	public static void registerObjects(){
 		// Blocks
 		WITH_ITEMS.add(new Pair<>(autoId("automoton"), AUTOMOTON));
+		WITH_ITEMS.add(new Pair<>(autoId("pointer"), POINTER));
 		
 		for(Pair<Identifier, Block> item : WITH_ITEMS){
 			register(Registry.BLOCK, item.getLeft(), item.getRight());
@@ -146,6 +161,7 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("move_left_module"), MOVE_LEFT_MODULE);
 		register(Registry.ITEM, autoId("move_right_module"), MOVE_RIGHT_MODULE);
 		register(Registry.ITEM, autoId("move_back_module"), MOVE_BACK_MODULE);
+		register(Registry.ITEM, autoId("scan_module"), SCAN_MODULE);
 		
 		// Block Entity Types
 		register(Registry.BLOCK_ENTITY_TYPE, autoId("automoton"), AUTOMOTON_BE);
