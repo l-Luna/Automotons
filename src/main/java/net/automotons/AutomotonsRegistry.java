@@ -104,13 +104,23 @@ public class AutomotonsRegistry{
 	public static Item MOVE_LEFT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveLeft);
 	public static Item MOVE_RIGHT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveRight);
 	public static Item MOVE_BACK_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveBack);
-	public static Item SCAN_MODULE = new ModuleItem(TABBED, entity -> {
+	public static Item SCAN_AND_MOVE_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.getWorld() != null){
 			BlockState below = entity.getWorld().getBlockState(entity.getPos().down());
 			if(below.isIn(SCANNABLE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
 				return entity.move(below.get(HorizontalFacingBlock.FACING));
 			if(below.isIn(SCANNABLE_REVERSE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
 				return entity.move(below.get(HorizontalFacingBlock.FACING).getOpposite());
+		}
+		return false;
+	});
+	public static Item SCAN_AND_ROTATE_MODULE = new ModuleItem(TABBED, entity -> {
+		if(entity.getWorld() != null){
+			BlockState below = entity.getWorld().getBlockState(entity.getPos().down());
+			if(below.isIn(SCANNABLE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
+				return entity.turnTo(below.get(HorizontalFacingBlock.FACING));
+			if(below.isIn(SCANNABLE_REVERSE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
+				return entity.turnTo(below.get(HorizontalFacingBlock.FACING).getOpposite());
 		}
 		return false;
 	});
@@ -166,7 +176,8 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("move_left_module"), MOVE_LEFT_MODULE);
 		register(Registry.ITEM, autoId("move_right_module"), MOVE_RIGHT_MODULE);
 		register(Registry.ITEM, autoId("move_back_module"), MOVE_BACK_MODULE);
-		register(Registry.ITEM, autoId("scan_module"), SCAN_MODULE);
+		register(Registry.ITEM, autoId("scan_and_move_module"), SCAN_AND_MOVE_MODULE);
+		register(Registry.ITEM, autoId("scan_and_rotate_module"), SCAN_AND_ROTATE_MODULE);
 		
 		// Block Entity Types
 		register(Registry.BLOCK_ENTITY_TYPE, autoId("automoton"), AUTOMOTON_BE);

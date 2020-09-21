@@ -29,7 +29,8 @@
   "item.automotons.move_left_module": "Move Left Module",
   "item.automotons.move_right_module": "Move Right Module",
   "item.automotons.move_back_module": "Move Back Module",
-  "item.automotons.scan_module": "Scan Module",
+  "item.automotons.scan_and_move_module": "Scan & Move Module",
+  "item.automotons.scan_and_rotate_module": "Scan & Rotate Module",
 
   "block.automotons.automoton": "Automoton",
   "block.automotons.pointer": "Pointer",

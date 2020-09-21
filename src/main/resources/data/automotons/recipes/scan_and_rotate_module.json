@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "grg",
+    " i ",
+    "geg"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "e": {
+      "item": "minecraft:spider_eye"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "automotons:scan_and_rotate_module",
+    "count": 4
+  }
+}

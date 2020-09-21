@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "automotons:item/scan_module"
+    "layer0": "automotons:item/scan_and_rotate_module"
   }
 }

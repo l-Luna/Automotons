@@ -183,7 +183,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	}
 	
 	public boolean turnCw(){
-		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYClockwise()), pos.offset(facing), data)){
+		/*if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYClockwise()), pos.offset(facing), data)){
 			lastFacing = facing;
 			facing = facing.rotateYClockwise();
 			// start rotate into (happens before)
@@ -191,13 +191,27 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				getHead().startRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
 			return true;
 		}else
-			return false;
+			return false;*/
+		return turnTo(facing.rotateYClockwise());
 	}
 	
 	public boolean turnCcw(){
-		if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYCounterclockwise()), pos.offset(facing), data)){
+		/*if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYCounterclockwise()), pos.offset(facing), data)){
 			lastFacing = facing;
 			facing = facing.rotateYCounterclockwise();
+			// start rotate into (happens before)
+			if(getHead() != null)
+				getHead().startRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
+			return true;
+		}else
+			return false;*/
+		return turnTo(facing.rotateYCounterclockwise());
+	}
+	
+	public boolean turnTo(Direction to){
+		if(getHead() == null || getHead().canRotateInto(this, pos.offset(to), pos.offset(facing), data)){
+			lastFacing = facing;
+			facing = to;
 			// start rotate into (happens before)
 			if(getHead() != null)
 				getHead().startRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
