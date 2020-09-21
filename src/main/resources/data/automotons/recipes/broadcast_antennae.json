@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RlR",
+    " g ",
+    " i "
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    },
+    "l": {
+      "item": "minecraft:iron_nugget"
+    },
+    "R": {
+      "item": "minecraft:end_rod"
+    }
+  },
+  "result": {
+    "item": "automotons:broadcast_antennae"
+  }
+}

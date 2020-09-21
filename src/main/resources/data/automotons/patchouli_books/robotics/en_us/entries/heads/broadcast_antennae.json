@@ -1,0 +1,29 @@
+{
+  "name": "Broadcast Antennae",
+  "icon": "automotons:broadcast_antennae",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The Broadcast Antennae head allows for sending instructions to other automotons. An engaged automoton holding a Broadcast Antennae will transmit its instructions while a broadcast is active. Broadcasts are started with the Start Broadcast module, and stopped by an End Broadcast module. Another automoton end the nearest broadcast using the Kill Broadcast module."
+    },
+    {
+      "type": "text",
+      "text": "The Receive Module will execute the current instruction of the nearest broadcasting automoton. Usually, the instruction will be executed at the receiver, but the Scan modules consider the block below the sender. Additionally, Repeat modules may interfere with syncing."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:broadcast_antennae"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:start_broadcast_module",
+      "recipe2": "automotons:end_broadcast_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:receive_broadcast_module",
+      "recipe2": "automotons:kill_broadcast_module"
+    }
+  ]
+}

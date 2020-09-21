@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    "gng"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "n": {
+      "tag": "minecraft:wool"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    }
+  },
+  "result": {
+    "item": "automotons:end_broadcast_module",
+    "count": 4
+  }
+}

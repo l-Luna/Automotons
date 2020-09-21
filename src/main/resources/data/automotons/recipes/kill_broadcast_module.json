@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "grg",
+    " i ",
+    "geg"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "e": {
+      "item": "minecraft:end_rod"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "automotons:kill_broadcast_module",
+    "count": 4
+  }
+}
