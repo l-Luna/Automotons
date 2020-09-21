@@ -3,6 +3,8 @@ package net.automotons;
 import net.automotons.blocks.AutomotonBlock;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.blocks.PointerBlock;
+import net.automotons.broadcast.Broadcast;
+import net.automotons.broadcast.Broadcasts;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
 import net.automotons.items.RoboticsBookItem;
@@ -16,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.Material;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -61,6 +64,7 @@ public class AutomotonsRegistry{
 	public static HeadItem<?> DISPENSER_ON_A_STICK = new DispenserStickHeadItem(SINGLE_TABBED);
 	public static HeadItem<?> NOTE_BLOCK_ON_A_STICK = new NoteBlockStickHeadItem(SINGLE_TABBED);
 	public static HeadItem<?> STEEL_HAMMER = new SteelHammerHeadItem(SINGLE_TABBED);
+	public static HeadItem<?> BROADCAST_ANTENNAE = new BroadcastAntennaeHead(SINGLE_TABBED);
 	
 	// Materials
 	public static Item BLANK_MODULE = new Item(TABBED);
@@ -113,7 +117,18 @@ public class AutomotonsRegistry{
 				return entity.move(below.get(HorizontalFacingBlock.FACING).getOpposite());
 		}
 		return false;
+	}).withBroadcastExecution((blockEntity, broadcast) -> {
+		BlockEntity entity = broadcast.getSource();
+		if(blockEntity.getWorld() != null){
+			BlockState below = blockEntity.getWorld().getBlockState(entity.getPos().down());
+			if(below.isIn(SCANNABLE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
+				return blockEntity.move(below.get(HorizontalFacingBlock.FACING));
+			if(below.isIn(SCANNABLE_REVERSE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
+				return blockEntity.move(below.get(HorizontalFacingBlock.FACING).getOpposite());
+		}
+		return false;
 	});
+	
 	public static Item SCAN_AND_ROTATE_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.getWorld() != null){
 			BlockState below = entity.getWorld().getBlockState(entity.getPos().down());
@@ -123,7 +138,23 @@ public class AutomotonsRegistry{
 				return entity.turnTo(below.get(HorizontalFacingBlock.FACING).getOpposite());
 		}
 		return false;
+	}).withBroadcastExecution((blockEntity, broadcast) -> {
+		AutomotonBlockEntity entity = broadcast.getSource();
+		if(blockEntity.getWorld() != null){
+			BlockState below = blockEntity.getWorld().getBlockState(entity.getPos().down());
+			if(below.isIn(SCANNABLE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
+				return blockEntity.turnTo(below.get(HorizontalFacingBlock.FACING));
+			if(below.isIn(SCANNABLE_REVERSE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
+				return blockEntity.turnTo(below.get(HorizontalFacingBlock.FACING).getOpposite());
+		}
+		return false;
 	});
+	
+	// Broadcasts
+	public static Item START_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, AutomotonBlockEntity::generateBroadcast);
+	public static Item END_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> entity.setBroadcast(null));
+	public static Item KILL_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(Broadcast::kill));
+	public static Item RECEIVE_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> broadcast.getInstruction().executeFromBroadcast(entity, broadcast)));
 	
 	// Block Entity Types
 	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder
@@ -158,6 +189,7 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("dispenser_on_a_stick"), DISPENSER_ON_A_STICK);
 		register(Registry.ITEM, autoId("note_block_on_a_stick"), NOTE_BLOCK_ON_A_STICK);
 		register(Registry.ITEM, autoId("steel_hammer"), STEEL_HAMMER);
+		register(Registry.ITEM, autoId("broadcast_antennae"), BROADCAST_ANTENNAE);
 		
 		register(Registry.ITEM, autoId("blank_module"), BLANK_MODULE);
 		register(Registry.ITEM, autoId("iron_gear"), IRON_GEAR);
@@ -178,6 +210,10 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("move_back_module"), MOVE_BACK_MODULE);
 		register(Registry.ITEM, autoId("scan_and_move_module"), SCAN_AND_MOVE_MODULE);
 		register(Registry.ITEM, autoId("scan_and_rotate_module"), SCAN_AND_ROTATE_MODULE);
+		register(Registry.ITEM, autoId("start_broadcast_module"), START_BROADCAST_MODULE);
+		register(Registry.ITEM, autoId("end_broadcast_module"), END_BROADCAST_MODULE);
+		register(Registry.ITEM, autoId("kill_broadcast_module"), KILL_BROADCAST_MODULE);
+		register(Registry.ITEM, autoId("receive_broadcast_module"), RECEIVE_BROADCAST_MODULE);
 		
 		// Block Entity Types
 		register(Registry.BLOCK_ENTITY_TYPE, autoId("automoton"), AUTOMOTON_BE);

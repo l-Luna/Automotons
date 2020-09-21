@@ -1,6 +1,7 @@
 package net.automotons.blocks;
 
 import net.automotons.AutomotonsRegistry;
+import net.automotons.broadcast.Broadcast;
 import net.automotons.items.Head;
 import net.automotons.items.Module;
 import net.automotons.screens.AutomotonScreenHandler;
@@ -43,6 +44,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public int moduleTime = 0;
 	// Modules (n -> 0 to n-1), head (n), and store slot (n + 1) inventory
 	private DefaultedList<ItemStack> inventory;
+	// The current broadcast (for a broadcast antennae holder only)
+	private Broadcast broadcast;
 	// Used for animations and errors
 	public Direction lastFacing = Direction.NORTH;
 	public boolean lastEngaged = false;
@@ -145,11 +148,21 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 					moved.lastPos = pos;
 					for(AutomotonScreenHandler handler : notifying)
 						handler.switchAutomoton(moved);
+					if(broadcast != null){
+						broadcast.setPosition(to);
+						broadcast.setSource(moved);
+						moved.setBroadcast(broadcast);
+					}
 					moved.notifying = notifying;
 					if(!world.isClient())
 						moved.sync();
 				}
 			}
+		}
+		if(broadcast != null){
+			broadcast.setInstruction(atIndex(module));
+			if(broadcast.isKilled())
+				setBroadcast(null);
 		}
 	}
 	
@@ -183,28 +196,10 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	}
 	
 	public boolean turnCw(){
-		/*if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYClockwise()), pos.offset(facing), data)){
-			lastFacing = facing;
-			facing = facing.rotateYClockwise();
-			// start rotate into (happens before)
-			if(getHead() != null)
-				getHead().startRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
-			return true;
-		}else
-			return false;*/
 		return turnTo(facing.rotateYClockwise());
 	}
 	
 	public boolean turnCcw(){
-		/*if(getHead() == null || getHead().canRotateInto(this, pos.offset(facing.rotateYCounterclockwise()), pos.offset(facing), data)){
-			lastFacing = facing;
-			facing = facing.rotateYCounterclockwise();
-			// start rotate into (happens before)
-			if(getHead() != null)
-				getHead().startRotationInto(this, pos.offset(facing), pos.offset(lastFacing), data);
-			return true;
-		}else
-			return false;*/
 		return turnTo(facing.rotateYCounterclockwise());
 	}
 	
@@ -279,6 +274,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			nbt.putInt("lastY", lastPos.getY());
 			nbt.putInt("lastZ", lastPos.getZ());
 		}
+		nbt.putBoolean("hadBroadcast", broadcast != null);
 		return nbt;
 	}
 	
@@ -294,6 +290,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		stopOnError = tag.getBoolean("stopOnError");
 		if(tag.getBoolean("hasLastPos"))
 			lastPos = new BlockPos(tag.getInt("lastX"), tag.getInt("lastY"), tag.getInt("lastZ"));
+		if(tag.getBoolean("hadBroadcast"))
+			generateBroadcast();
 		
 		inventory.clear();
 		Inventories.fromTag(tag, inventory);
@@ -364,6 +362,19 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public void setStopOnError(boolean stopOnError){
 		this.stopOnError = stopOnError;
+	}
+	
+	public Broadcast getSendingBroadcast(){
+		return broadcast;
+	}
+	
+	public void setBroadcast(Broadcast broadcast){
+		this.broadcast = broadcast;
+	}
+	
+	public void generateBroadcast(){
+		if(getHead() != null && getHead().canGenerateBroadcast(this, data))
+			setBroadcast(new Broadcast(pos, this, atIndex(module)));
 	}
 	
 	public boolean canPlayerUse(PlayerEntity player){

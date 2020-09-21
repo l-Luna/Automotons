@@ -11,6 +11,7 @@
   "item.automotons.dispenser_on_a_stick": "Dispenser on a Stick",
   "item.automotons.note_block_on_a_stick": "Note Block on a Stick",
   "item.automotons.steel_hammer": "Steel Hammer",
+  "item.automotons.broadcast_antennae": "Broadcast Antennae",
 
   "item.automotons.blank_module": "Empty Module",
   "item.automotons.iron_gear": "Iron Gear",
@@ -31,6 +32,10 @@
   "item.automotons.move_back_module": "Move Back Module",
   "item.automotons.scan_and_move_module": "Scan & Move Module",
   "item.automotons.scan_and_rotate_module": "Scan & Rotate Module",
+  "item.automotons.start_broadcast_module": "Start Broadcast Module",
+  "item.automotons.end_broadcast_module": "End Broadcast Module",
+  "item.automotons.kill_broadcast_module": "Kill Broadcast Module",
+  "item.automotons.receive_broadcast_module": "Receive Broadcast Module",
 
   "block.automotons.automoton": "Automoton",
   "block.automotons.pointer": "Pointer",

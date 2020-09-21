@@ -56,4 +56,8 @@ public interface Head<Data>{
 	default int getWeakPowerTo(AutomotonBlockEntity automoton, Direction direction, Data data){
 		return 0;
 	}
+	
+	default boolean canGenerateBroadcast(AutomotonBlockEntity automoton, Data data){
+		return false;
+	}
 }
