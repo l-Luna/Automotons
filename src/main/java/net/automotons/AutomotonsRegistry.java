@@ -39,6 +39,7 @@ public class AutomotonsRegistry{
 	private static final List<Pair<Identifier, Block>> WITH_ITEMS = new ArrayList<>();
 	// For scanning module
 	private static final Tag<Block> SCANNABLE = TagRegistry.block(autoId("automoton_scannable"));
+	private static final Tag<Block> SCANNABLE_REVERSE = TagRegistry.block(autoId("automoton_scannable_reverse"));
 	
 	// Blocks
 	public static Block AUTOMOTON = new AutomotonBlock(FabricBlockSettings.of(Material.METAL).breakByHand(true).strength(6f).nonOpaque().solidBlock((state, world, pos) -> false));
@@ -104,9 +105,13 @@ public class AutomotonsRegistry{
 	public static Item MOVE_RIGHT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveRight);
 	public static Item MOVE_BACK_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveBack);
 	public static Item SCAN_MODULE = new ModuleItem(TABBED, entity -> {
-		BlockState below = entity.getWorld().getBlockState(entity.getPos().down());
-		if(below.isIn(SCANNABLE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
-			return entity.move(below.get(HorizontalFacingBlock.FACING));
+		if(entity.getWorld() != null){
+			BlockState below = entity.getWorld().getBlockState(entity.getPos().down());
+			if(below.isIn(SCANNABLE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
+				return entity.move(below.get(HorizontalFacingBlock.FACING));
+			if(below.isIn(SCANNABLE_REVERSE) && below.getProperties().contains(HorizontalFacingBlock.FACING))
+				return entity.move(below.get(HorizontalFacingBlock.FACING).getOpposite());
+		}
 		return false;
 	});
 	
