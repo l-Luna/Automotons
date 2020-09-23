@@ -3,6 +3,8 @@ package net.automotons.client;
 import net.automotons.Automotons;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.Head;
+import net.automotons.skins.AutomotonSkin;
+import net.automotons.skins.AutomotonSkins;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
@@ -15,7 +17,9 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
@@ -47,12 +51,32 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 			matrices.translate(xProgress, yProgress, zProgress);
 		}
 		
-		BlockState state = entity.getWorld().getBlockState(entity.getPos());
+		// render base
+		BakedModelManager modelManager = MinecraftClient.getInstance().getBakedModelManager();
+		AutomotonSkin skin = AutomotonSkins.SKINS.get(entity.getSkin());
+		BakedModel base = modelManager.getModel(new ModelIdentifier(skin.getBase(), ""));
+		BakedModel body = modelManager.getModel(new ModelIdentifier(skin.getBody(), ""));
+		
 		BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
-		BakedModel model = manager.getModel(state);
+		BlockState state = entity.getWorld().getBlockState(entity.getPos());
 		VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
-		manager.getModelRenderer().render(entity.getWorld(), model, state, entity.getPos(), matrices, buffer, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
-		BlockModelRenderer.disableBrightnessCache();
+		manager.getModelRenderer().render(entity.getWorld(), base, state, entity.getPos(), matrices, buffer, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+		
+		float rotationOffset = 0f;
+		if(entity.lastFacing != null && entity.lastFacing != entity.facing){
+			if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing))
+				rotationOffset = min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1) - 1;
+			else
+				rotationOffset = 1 - min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1);
+		}
+		
+		matrices.push();
+		matrices.translate(.5, 0, .5);
+		matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
+		matrices.translate(-.5, 0, -.5);
+		// render main body with rotation
+		manager.getModelRenderer().render(entity.getWorld(), body, state, entity.getPos(), matrices, buffer, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+		matrices.pop();
 		
 		ItemStack headStack = entity.getStack(12);
 		if(!headStack.isEmpty() && headStack.getItem() instanceof Head){
@@ -70,13 +94,6 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 				// move to proper position (on automoton)
 				matrices.translate(.5, 14 / 16f, .5);
 				// rotate to facing
-				float rotationOffset = 0f;
-				if(entity.lastFacing != null && entity.lastFacing != entity.facing){
-					if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing))
-						rotationOffset = min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1) - 1;
-					else
-						rotationOffset = 1 - min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1);
-				}
 				matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
 				// make the item flat
 				matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90));
@@ -92,5 +109,6 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 				renderer.render(entity, matrices, vertexConsumers, entity.data, light, overlay, tickDelta);
 		}
 		matrices.pop();
+		BlockModelRenderer.disableBrightnessCache();
 	}
 }

@@ -23,6 +23,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -30,6 +31,9 @@ import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import static net.automotons.Automotons.autoId;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable, ExtendedScreenHandlerFactory, SidedInventory{
@@ -63,12 +67,16 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	// Not serialized or saved (doesn't need to be).
 	public List<AutomotonScreenHandler> notifying = new ArrayList<>();
 	// Only slot that's exposed to hoppers.
-	private int[] STORE_SLOT;
+	private int[] storeSlot;
+	// The automoton's current skin.
+	private Identifier skin = autoId("regular");
+	// The player that set the automoton's skin.
+	private UUID skinSetter;
 	
 	public AutomotonBlockEntity(){
 		super(AutomotonsRegistry.AUTOMOTON_BE);
 		inventory = DefaultedList.ofSize(moduleNum() + 2, ItemStack.EMPTY);
-		STORE_SLOT = new int[]{moduleNum() + 1};
+		storeSlot = new int[]{moduleNum() + 1};
 	}
 	
 	@SuppressWarnings("ConstantConditions")
@@ -385,6 +393,19 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		return player.squaredDistanceTo(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5) <= 64;
 	}
 	
+	public Identifier getSkin(){
+		return skin;
+	}
+	
+	public void setSkin(Identifier skin, PlayerEntity player){
+		this.skin = skin;
+		this.skinSetter = player.getUuid();
+	}
+	
+	public UUID getSkinSetter(){
+		return skinSetter;
+	}
+	
 	public void clear(){
 		inventory.clear();
 		sync();
@@ -399,7 +420,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	}
 	
 	public int[] getAvailableSlots(Direction side){
-		return STORE_SLOT;
+		return storeSlot;
 	}
 	
 	public boolean canInsert(int slot, ItemStack stack, Direction dir){

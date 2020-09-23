@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
-@SuppressWarnings("unused")
 public class Automotons implements ModInitializer{
 	
 	public static final String MODID = "automotons";
