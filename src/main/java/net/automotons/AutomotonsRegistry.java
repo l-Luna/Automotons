@@ -35,6 +35,7 @@ import java.util.List;
 
 import static net.automotons.Automotons.autoId;
 import static net.automotons.items.ModuleItem.fromConsumer;
+import static net.minecraft.util.registry.Registry.BLOCK;
 import static net.minecraft.util.registry.Registry.register;
 
 public class AutomotonsRegistry{
@@ -66,6 +67,7 @@ public class AutomotonsRegistry{
 	public static HeadItem<?> NOTE_BLOCK_ON_A_STICK = new NoteBlockStickHeadItem(SINGLE_TABBED);
 	public static HeadItem<?> STEEL_HAMMER = new SteelHammerHeadItem(SINGLE_TABBED);
 	public static HeadItem<?> BROADCAST_ANTENNAE = new BroadcastAntennaeHead(SINGLE_TABBED);
+	public static HeadItem<?> BLOCKLAYER = new BlocklayerHeadItem(SINGLE_TABBED);
 	
 	// Materials
 	public static Item BLANK_MODULE = new Item(TABBED);
@@ -195,6 +197,7 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("note_block_on_a_stick"), NOTE_BLOCK_ON_A_STICK);
 		register(Registry.ITEM, autoId("steel_hammer"), STEEL_HAMMER);
 		register(Registry.ITEM, autoId("broadcast_antennae"), BROADCAST_ANTENNAE);
+		register(Registry.ITEM, autoId("blocklayer_head"), BLOCKLAYER);
 		
 		register(Registry.ITEM, autoId("blank_module"), BLANK_MODULE);
 		register(Registry.ITEM, autoId("iron_gear"), IRON_GEAR);
