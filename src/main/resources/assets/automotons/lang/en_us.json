@@ -37,6 +37,9 @@
   "item.automotons.kill_broadcast_module": "Kill Broadcast Module",
   "item.automotons.receive_broadcast_module": "Receive Broadcast Module",
 
+  "item.automotons.regular_skin": "Automoton Skin",
+  "item.automotons.charcoal_skin": "Automoton Skin",
+
   "block.automotons.automoton": "Automoton",
   "block.automotons.pointer": "Pointer",
 
@@ -48,5 +51,8 @@
   "gui.automoton.north": "North",
   "gui.automoton.south": "South",
   "gui.automoton.east": "East",
-  "gui.automoton.west": "West"
+  "gui.automoton.west": "West",
+
+  "skin.automotons.regular": "Regular",
+  "skin.automotons.charcoal": "Charcoal"
 }

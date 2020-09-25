@@ -11,7 +11,14 @@ public class AutomotonSkins{
 	
 	public static final Map<Identifier, AutomotonSkin> SKINS = new HashMap<>();
 	
+	public static final AutomotonSkin REGULAR = new AutomotonSkin(autoId("automotons/regular_body"), autoId("automotons/regular_base"));
+	
 	static{
-		SKINS.put(autoId("regular"), new AutomotonSkin(autoId("automotons/regular_body"), autoId("automotons/regular_base")));
+		SKINS.put(autoId("regular"), REGULAR);
+		SKINS.put(autoId("charcoal"), new AutomotonSkin(autoId("automotons/charcoal_body"), autoId("automotons/charcoal_base")));
+	}
+	
+	public static AutomotonSkin getSkin(Identifier id){
+		return SKINS.getOrDefault(id, REGULAR);
 	}
 }

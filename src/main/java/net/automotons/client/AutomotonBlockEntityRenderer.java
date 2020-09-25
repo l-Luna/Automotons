@@ -53,7 +53,7 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 		
 		// render base
 		BakedModelManager modelManager = MinecraftClient.getInstance().getBakedModelManager();
-		AutomotonSkin skin = AutomotonSkins.SKINS.get(entity.getSkin());
+		AutomotonSkin skin = AutomotonSkins.getSkin(entity.getSkin());
 		BakedModel base = modelManager.getModel(new ModelIdentifier(skin.getBase(), ""));
 		BakedModel body = modelManager.getModel(new ModelIdentifier(skin.getBody(), ""));
 		

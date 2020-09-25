@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ibi"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "b": {
+      "item": "minecraft:black_dye"
+    }
+  },
+  "result": {
+    "item": "automotons:regular_skin"
+  }
+}

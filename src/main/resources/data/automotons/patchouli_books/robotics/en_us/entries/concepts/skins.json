@@ -1,0 +1,20 @@
+{
+  "name": "Skins",
+  "icon": "automotons:charcoal_skin",
+  "category": "automotons:concepts",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The appearance of automotons can be modified using skins. The \"regular\" skin resets the appearance of the automoton, and can be crafted into other skins by combining it with another item. Skins are applied by sneak-right-clicking on an automoton with the skin."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:automoton_skin"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:regular_skin",
+      "recipe2": "automotons:charcoal_skin"
+    }
+  ]
+}

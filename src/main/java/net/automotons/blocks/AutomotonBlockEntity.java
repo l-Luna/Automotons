@@ -272,6 +272,9 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		nbt.putInt("instructionTime", moduleTime);
 		nbt.putBoolean("errored", errored);
 		nbt.putBoolean("stopOnError", stopOnError);
+		nbt.putString("skin", skin.toString());
+		if(skinSetter != null)
+			nbt.putUuid("skinSetter", skinSetter);
 		Inventories.toTag(nbt, inventory);
 		if(getHead() != null)
 			nbt.put("headData", getHead().getExtraData(data));
@@ -296,6 +299,9 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		moduleTime = tag.getInt("instructionTime");
 		errored = tag.getBoolean("errored");
 		stopOnError = tag.getBoolean("stopOnError");
+		skin = new Identifier(tag.getString("skin"));
+		if(tag.containsUuid("skinSetter"))
+			skinSetter = tag.getUuid("skinSetter");
 		if(tag.getBoolean("hasLastPos"))
 			lastPos = new BlockPos(tag.getInt("lastX"), tag.getInt("lastY"), tag.getInt("lastZ"));
 		if(tag.getBoolean("hadBroadcast"))

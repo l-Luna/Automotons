@@ -8,6 +8,7 @@ import net.automotons.broadcast.Broadcasts;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
 import net.automotons.items.RoboticsBookItem;
+import net.automotons.items.SkinItem;
 import net.automotons.items.heads.*;
 import net.automotons.loot.BlockEntityInventoryEntry;
 import net.automotons.screens.AutomotonScreenHandler;
@@ -40,7 +41,7 @@ public class AutomotonsRegistry{
 	
 	// For BlockItems
 	private static final List<Pair<Identifier, Block>> WITH_ITEMS = new ArrayList<>();
-	// For scanning module
+	// For scanning modules
 	private static final Tag<Block> SCANNABLE = TagRegistry.block(autoId("automoton_scannable"));
 	private static final Tag<Block> SCANNABLE_REVERSE = TagRegistry.block(autoId("automoton_scannable_reverse"));
 	
@@ -156,6 +157,10 @@ public class AutomotonsRegistry{
 	public static Item KILL_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(Broadcast::kill));
 	public static Item RECEIVE_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> broadcast.getInstruction().executeFromBroadcast(entity, broadcast)));
 	
+	// Skins
+	public static Item REGULAR_SKIN = new SkinItem(TABBED, autoId("regular"));
+	public static Item CHARCOAL_SKIN = new SkinItem(TABBED, autoId("charcoal"));
+	
 	// Block Entity Types
 	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder
 			.create(AutomotonBlockEntity::new, AUTOMOTON)
@@ -214,6 +219,9 @@ public class AutomotonsRegistry{
 		register(Registry.ITEM, autoId("end_broadcast_module"), END_BROADCAST_MODULE);
 		register(Registry.ITEM, autoId("kill_broadcast_module"), KILL_BROADCAST_MODULE);
 		register(Registry.ITEM, autoId("receive_broadcast_module"), RECEIVE_BROADCAST_MODULE);
+		
+		register(Registry.ITEM, autoId("regular_skin"), REGULAR_SKIN);
+		register(Registry.ITEM, autoId("charcoal_skin"), CHARCOAL_SKIN);
 		
 		// Block Entity Types
 		register(Registry.BLOCK_ENTITY_TYPE, autoId("automoton"), AUTOMOTON_BE);

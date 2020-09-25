@@ -1,10 +1,10 @@
 {
   "parent": "block/block",
   "textures": {
-    "particle": "automotons:blocks/automoton_top",
-    "top": "automotons:blocks/automoton_top",
-    "bottom": "automotons:blocks/automoton_bottom",
-    "side": "automotons:blocks/automoton_side"
+    "particle": "automotons:blocks/charcoal_automoton_top",
+    "top": "automotons:blocks/charcoal_automoton_top",
+    "bottom": "automotons:blocks/charcoal_automoton_bottom",
+    "side": "automotons:blocks/charcoal_automoton_side"
   },
   "elements": [
     {
