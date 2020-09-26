@@ -89,7 +89,9 @@ public class SteelHammerHeadItem extends HeadItem<Object>{
 					for(ItemEntity entity : itemEntities){
 						ItemStack item = entity.getStack();
 						String s = item.getName().asString();
-						item.setCustomName(new LiteralText(s.substring(1, Math.max(0, s.length() - Integer.decode(text.substring(2))))));
+						int endIndex = Math.max(0, s.length() - Integer.decode(text.substring(2)));
+						if(endIndex >= 1)
+							item.setCustomName(new LiteralText(s.substring(1, endIndex)));
 					}
 				}else
 					for(ItemEntity entity : itemEntities)
