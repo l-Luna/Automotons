@@ -1,0 +1,15 @@
+{
+  "name": "Blocklayer Head",
+  "icon": "automotons:blocklayer_head",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "An engaged automoton holding a Blocklayer Head will place blocks in front of it, consuming held blocks. It can place blocks into empty space or a replaceable block (e.g. tall grass), but will not replace preexisting solid blocks, and can only place blocks where they would be valid to place."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:blocklayer_head"
+    }
+  ]
+}

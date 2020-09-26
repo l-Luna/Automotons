@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PdP",
+    " g ",
+    " i "
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:gold_ingot"
+    },
+    "g": {
+      "item": "automotons:iron_gear"
+    },
+    "d": {
+      "item": "minecraft:dispenser"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    }
+  },
+  "result": {
+    "item": "automotons:blocklayer_head"
+  }
+}

@@ -17,14 +17,11 @@ public class BlocklayerHeadRenderer implements HeadRenderer<Object>{
 	public void render(AutomotonBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Object o, int light, int overlay, float tickDelta){
 		float rotationOffset = 0;
 		matrices.push();
-		if(entity.lastFacing != null && entity.lastFacing != entity.facing){
-			// FIXME: state rotation
+		if(entity.lastFacing != null && entity.lastFacing != entity.facing)
 			if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing))
 				rotationOffset = min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1) - 1;
 			else
 				rotationOffset = 1 - min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1);
-		}
-		// only display if rotating
 		// point of rotation
 		matrices.translate(.5, 0, .5);
 		matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset + 1)));
@@ -33,8 +30,8 @@ public class BlocklayerHeadRenderer implements HeadRenderer<Object>{
 		VertexConsumer outline = vertexConsumers.getBuffer(RenderLayer.getLines());
 		Matrix4f matrix4f = matrices.peek().getModel();
 		VoxelShapes.fullCube().forEachEdge((minX, minY, minZ, maxX, maxY, maxZ) -> {
-			outline.vertex(matrix4f, (float)(minX), (float)(minY), (float)(minZ)).color(0, 0, 0, 0.4f).next();
-			outline.vertex(matrix4f, (float)(maxX), (float)(maxY), (float)(maxZ)).color(0, 0, 0, 0.4f).next();
+			outline.vertex(matrix4f, (float)(minX), (float)(minY), (float)(minZ)).color(.4f, 0, .4f, 0.5f).next();
+			outline.vertex(matrix4f, (float)(maxX), (float)(maxY), (float)(maxZ)).color(.4f, 0, .4f, 0.5f).next();
 		});
 		matrices.pop();
 	}
