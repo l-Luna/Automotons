@@ -6,8 +6,9 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+def ENV = System.getenv()
 archivesBaseName = project.archives_base_name
-version = project.mod_version
+version = ENV.BUILD_VERSION ?: project.mod_version
 group = project.maven_group
 
 repositories {
