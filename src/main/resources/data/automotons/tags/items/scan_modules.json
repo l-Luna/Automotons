@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "automotons:scan_and_move_module",
+    "automotons:scan_and_rotate_module"
+  ]
+}

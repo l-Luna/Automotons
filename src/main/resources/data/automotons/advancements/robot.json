@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "automotons:automoton"
+    },
+    "title": {
+      "translate": "advancements.automotons.robot.title"
+    },
+    "description": {
+      "translate": "advancements.automotons.robot.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "automotons:root",
+  "criteria": {
+    "automoton": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "automotons:automoton"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "automoton"
+    ]
+  ]
+}

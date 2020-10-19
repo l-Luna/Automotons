@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "automotons:sticky_head",
+    "automotons:blade_head",
+    "automotons:drill_head",
+    "automotons:redstone_head",
+    "automotons:electromagnet_head",
+    "automotons:dispenser_on_a_stick",
+    "automotons:note_block_on_a_stick",
+    "automotons:steel_hammer",
+    "automotons:broadcast_antennae",
+    "automotons:blocklayer_head"
+  ]
+}

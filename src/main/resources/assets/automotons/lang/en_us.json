@@ -55,5 +55,22 @@
   "gui.automoton.west": "West",
 
   "skin.automotons.regular": "Regular",
-  "skin.automotons.charcoal": "Charcoal"
+  "skin.automotons.charcoal": "Charcoal",
+
+  "advancements.automotons.root.title": "Automotons",
+  "advancements.automotons.root.description": "Obtain a book on robotics, to guide you.",
+  "advancements.automotons.robot.title": "Infinity Mechanism",
+  "advancements.automotons.robot.description": "Construct an automoton.",
+  "advancements.automotons.movement.title": "The World Revolving",
+  "advancements.automotons.movement.description": "Solder a rotation, engagement, or movement module to put your robots to work.",
+  "advancements.automotons.head.title": "Good for Nothing",
+  "advancements.automotons.head.description": "Build a head to attach to an automoton.",
+  "advancements.automotons.scanner.title": "Feel (Alive)",
+  "advancements.automotons.scanner.description": "Solder a scan module, to provide your automotons with perception.",
+  "advancements.automotons.broadcast.title": "Cascade",
+  "advancements.automotons.broadcast.description": "Build a broadcast antennae, to allow automotons to act in sync.",
+  "advancements.automotons.note_block.title": "It's Raining Somewhere Else",
+  "advancements.automotons.note_block.description": "Attach a note block to a stick, to play music on demand.",
+  "advancements.automotons.reskin.title": "Death by Glamour",
+  "advancements.automotons.reskin.description": "Change the skin of an automoton."
 }

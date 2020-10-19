@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "automotons:cw_module",
+    "automotons:ccw_module",
+    "automotons:rand_turn_module",
+    "automotons:engage_module",
+    "automotons:disengage_module",
+    "automotons:move_forward_module",
+    "automotons:move_back_module",
+    "automotons:move_left_module",
+    "automotons:move_right_module"
+  ]
+}

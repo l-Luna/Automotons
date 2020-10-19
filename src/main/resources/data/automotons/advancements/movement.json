@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "automotons:move_forward_module"
+    },
+    "title": {
+      "translate": "advancements.automotons.movement.title"
+    },
+    "description": {
+      "translate": "advancements.automotons.movement.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "automotons:robot",
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "automotons:movement_modules"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item"
+    ]
+  ]
+}
