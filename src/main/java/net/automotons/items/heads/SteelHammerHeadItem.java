@@ -56,66 +56,72 @@ public class SteelHammerHeadItem extends HeadItem<Object>{
 	
 	public void startRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Object unused){
 		// if there are exactly two items in front of the automoton that can be combined, pull nearby XP orbs.
-		List<ItemEntity> itemEntities = automoton.getWorld().getEntitiesByType(EntityType.ITEM, new Box(to), __ -> true);
-		if(itemEntities.size() == 2)
-			if(getCombinationOf(itemEntities.get(0).getStack(), itemEntities.get(1).getStack(), automoton.getWorld()).isPresent())
-				for(ExperienceOrbEntity entity : automoton.getWorld().getEntitiesByType(EntityType.EXPERIENCE_ORB, new Box(to).expand(4), __ -> true)){
-					// add momentum towards the block in front of the automoton
-					Vec3d dist = Vec3d.ofCenter(to).subtract(entity.getPos());
-					// it should end up there after 10? ticks
-					entity.getVelocity().add(dist.multiply(1d / automoton.moduleSpeed()));
-				}
+		World world = automoton.getWorld();
+		if(world != null){
+			List<ItemEntity> itemEntities = world.getEntitiesByType(EntityType.ITEM, new Box(to), __ -> true);
+			if(itemEntities.size() == 2)
+				if(getCombinationOf(itemEntities.get(0).getStack(), itemEntities.get(1).getStack(), world).isPresent())
+					for(ExperienceOrbEntity entity : world.getEntitiesByType(EntityType.EXPERIENCE_ORB, new Box(to).expand(4), __ -> true)){
+						// add momentum towards the block in front of the automoton
+						Vec3d dist = Vec3d.ofCenter(to).subtract(entity.getPos());
+						// it should end up there after 10? ticks
+						entity.getVelocity().add(dist.multiply(1d / automoton.moduleSpeed()));
+					}
+		}
 	}
 	
 	public void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Object unused){
 		World world = automoton.getWorld();
-		List<ItemEntity> itemEntities = world.getEntitiesByType(EntityType.ITEM, new Box(to), __ -> true);
 		
-		if(itemEntities.size() > 0){
-			// if holding any `automotons:text_holder`, rename items in front
-			ItemStack stack = automoton.getStoreStack();
-			if(stack.getItem().isIn(TEXT_HOLDERS) && stack.hasCustomName()){
-				// RIP formatting
-				String text = stack.getName().asString();
-				if(text.startsWith("++")){
-					for(ItemEntity entity : itemEntities){
-						ItemStack item = entity.getStack();
-						String name = item.getName().asString() + text.substring(2);
-						if(name.length() > 40)
-							name = name.substring(0, 40);
-						item.setCustomName(new LiteralText(name));
-					}
-				}else if(text.startsWith("~~") && text.substring(2).matches("[0-9]+")){
-					for(ItemEntity entity : itemEntities){
-						ItemStack item = entity.getStack();
-						String s = item.getName().asString();
-						int endIndex = Math.max(0, s.length() - Integer.decode(text.substring(2)));
-						if(endIndex >= 1)
-							item.setCustomName(new LiteralText(s.substring(1, endIndex)));
-					}
-				}else
-					for(ItemEntity entity : itemEntities)
-						entity.getStack().setCustomName(stack.getName());
-				world.syncWorldEvent(1030, automoton.getPos(), 0);
-			}
-			// 1030 = anvil sound
-			// 1044 = smithing sound
+		if(world != null){
+			List<ItemEntity> itemEntities = world.getEntitiesByType(EntityType.ITEM, new Box(to), __ -> true);
 			
-			// if there are exactly two items, attempt to combine them.
-			if(itemEntities.size() == 2){
-				Optional<Supplier<Pair<ItemStack, Integer>>> comboGetter = getCombinationOf(itemEntities.get(0).getStack(), itemEntities.get(1).getStack(), world);
-				if(comboGetter.isPresent()){
-					// get XP orbs
-					List<ExperienceOrbEntity> xpEntities = world.getEntitiesByType(EntityType.EXPERIENCE_ORB, new Box(to), __ -> true);
-					int totalXP = 0;
-					for(ExperienceOrbEntity xpEntity : xpEntities)
-						totalXP += ((ExperienceOrbEntityAccessor)xpEntity).getAmount();
-					if(comboGetter.get().get().getRight() <= totalXP){
-						itemEntities.forEach(Entity::kill);
-						ItemEntity entity = new ItemEntity(world, to.getX() + .5, to.getY() + .5, to.getZ() + .5, comboGetter.get().get().getLeft());
-						entity.setVelocity(0, 0, 0);
-						world.spawnEntity(entity);
-						world.syncWorldEvent(1044, automoton.getPos(), 0);
+			if(itemEntities.size() > 0){
+				// if holding any `automotons:text_holder`, rename items in front
+				ItemStack stack = automoton.getStoreStack();
+				if(stack.getItem().isIn(TEXT_HOLDERS) && stack.hasCustomName()){
+					// RIP formatting
+					String text = stack.getName().asString();
+					if(text.startsWith("++")){
+						for(ItemEntity entity : itemEntities){
+							ItemStack item = entity.getStack();
+							String name = item.getName().asString() + text.substring(2);
+							if(name.length() > 40)
+								name = name.substring(0, 40);
+							item.setCustomName(new LiteralText(name));
+						}
+					}else if(text.startsWith("~~") && text.substring(2).matches("[0-9]+")){
+						for(ItemEntity entity : itemEntities){
+							ItemStack item = entity.getStack();
+							String s = item.getName().asString();
+							int endIndex = Math.max(0, s.length() - Integer.decode(text.substring(2)));
+							if(endIndex >= 1)
+								item.setCustomName(new LiteralText(s.substring(1, endIndex)));
+						}
+					}else
+						for(ItemEntity entity : itemEntities)
+							entity.getStack().setCustomName(stack.getName());
+					world.syncWorldEvent(1030, automoton.getPos(), 0);
+				}
+				// 1030 = anvil sound
+				// 1044 = smithing sound
+				
+				// if there are exactly two items, attempt to combine them.
+				if(itemEntities.size() == 2){
+					Optional<Supplier<Pair<ItemStack, Integer>>> comboGetter = getCombinationOf(itemEntities.get(0).getStack(), itemEntities.get(1).getStack(), world);
+					if(comboGetter.isPresent()){
+						// get XP orbs
+						List<ExperienceOrbEntity> xpEntities = world.getEntitiesByType(EntityType.EXPERIENCE_ORB, new Box(to), __ -> true);
+						int totalXP = 0;
+						for(ExperienceOrbEntity xpEntity : xpEntities)
+							totalXP += ((ExperienceOrbEntityAccessor)xpEntity).getAmount();
+						if(comboGetter.get().get().getRight() <= totalXP){
+							itemEntities.forEach(Entity::kill);
+							ItemEntity entity = new ItemEntity(world, to.getX() + .5, to.getY() + .5, to.getZ() + .5, comboGetter.get().get().getLeft());
+							entity.setVelocity(0, 0, 0);
+							world.spawnEntity(entity);
+							world.syncWorldEvent(1044, automoton.getPos(), 0);
+						}
 					}
 				}
 			}
@@ -221,7 +227,7 @@ public class SteelHammerHeadItem extends HeadItem<Object>{
 				int cost = 0;
 				ItemStack out = left.copy();
 				int o = Math.min(left.getDamage(), left.getMaxDamage() / 4);
-				for(int p = 0; o > 0 && p < right.getCount(); ++p) {
+				for(int p = 0; o > 0 && p < right.getCount(); ++p){
 					int q = out.getDamage() - o;
 					out.setDamage(q);
 					++cost;

@@ -2,15 +2,12 @@ package net.automotons.items.heads;
 
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -29,7 +26,7 @@ public class ElectromagnetHeadItem extends HeadItem<Object>{
 	}
 	
 	public void tick(AutomotonBlockEntity automoton, BlockPos facing, Object o){
-		if(automoton.engaged && !automoton.getWorld().isReceivingRedstonePower(automoton.getPos())){
+		if(automoton.engaged && automoton.getWorld() != null && !automoton.getWorld().isReceivingRedstonePower(automoton.getPos())){
 			ItemStack stack = automoton.getStoreStack();
 			int dist = Math.min(stack.getCount(), 16);
 			boolean push;

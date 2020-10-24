@@ -241,7 +241,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public boolean move(Direction direction){
 		BlockPos to = pos.offset(direction);
-		if(getHead() == null || getHead().canAutomotonMoveInto(this, to, getPos(), data)){
+		if(world != null && getHead() == null || getHead().canAutomotonMoveInto(this, to, getPos(), data)){
 			BlockState state = world.getBlockState(to);
 			if(state.isAir() || state.getPistonBehavior() == PistonBehavior.DESTROY){
 				scheduledMove = direction;
@@ -405,7 +405,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public void setSkin(Identifier skin, PlayerEntity player){
 		this.skin = skin;
-		this.skinSetter = player.getUuid();
+		this.skinSetter = player != null ? player.getUuid() : null;
 	}
 	
 	public UUID getSkinSetter(){

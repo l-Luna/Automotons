@@ -7,7 +7,6 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundCategory;
@@ -23,10 +22,12 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	}
 	
 	public boolean canRotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
-		BlockState fromState = automoton.getWorld().getBlockState(from);
-		if(automoton.engaged && canMove(fromState, automoton.getWorld(), from)){
-			PistonBehavior behavior = automoton.getWorld().getBlockState(to).getPistonBehavior();
-			return automoton.getWorld().getBlockState(to).isAir() || behavior == PistonBehavior.DESTROY;
+		if(automoton.getWorld() != null){
+			BlockState fromState = automoton.getWorld().getBlockState(from);
+			if(automoton.engaged && canMove(fromState, automoton.getWorld(), from)){
+				PistonBehavior behavior = automoton.getWorld().getBlockState(to).getPistonBehavior();
+				return automoton.getWorld().getBlockState(to).isAir() || behavior == PistonBehavior.DESTROY;
+			}
 		}
 		return true;
 	}
@@ -43,8 +44,8 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	}
 	
 	public void startRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
-		if(automoton.engaged){
-			World world = automoton.getWorld();
+		World world = automoton.getWorld();
+		if(automoton.engaged && world != null){
 			BlockState fromState = world.getBlockState(from);
 			// cut block
 			if(canMove(fromState, world, from)){
@@ -57,8 +58,8 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	}
 	
 	public void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
-		BlockState toState = automoton.getWorld().getBlockState(to);
-		if(automoton.engaged && state != null && !state.isAir() && (toState.isAir() || toState.getPistonBehavior() == PistonBehavior.DESTROY)){
+		BlockState toState = automoton.getWorld() == null ? null : automoton.getWorld().getBlockState(to);
+		if(automoton.engaged && state != null && toState != null && !state.isAir() && (toState.isAir() || toState.getPistonBehavior() == PistonBehavior.DESTROY)){
 			// paste block
 			World world = automoton.getWorld();
 			BlockRotation rotation = BlockRotation.COUNTERCLOCKWISE_90;
@@ -77,8 +78,8 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	}
 	
 	public void startAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockPos prevFacing, BlockPos facing, BlockState state){
-		if(automoton.engaged){
-			World world = automoton.getWorld();
+		World world = automoton.getWorld();
+		if(automoton.engaged && world != null){
 			BlockState fromState = world.getBlockState(prevFacing);
 			// cut block
 			if(canMove(fromState, world, prevFacing)){
@@ -91,13 +92,12 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	}
 	
 	public void endAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockPos prevFacing, BlockPos facing, BlockState state){
-		BlockState toState = automoton.getWorld().getBlockState(facing);
-		if(automoton.engaged && state != null && !state.isAir() && (toState.isAir() || toState.getPistonBehavior() == PistonBehavior.DESTROY)){
+		BlockState toState = automoton.getWorld() == null ? null : automoton.getWorld().getBlockState(facing);
+		if(automoton.engaged && state != null && toState != null && !state.isAir() && (toState.isAir() || toState.getPistonBehavior() == PistonBehavior.DESTROY)){
 			// paste block
 			World world = automoton.getWorld();
 			if(!toState.isAir())
 				world.breakBlock(facing, true);
-			
 			world.setBlockState(facing, state);
 			// stop storing it
 			automoton.setData(null);
@@ -108,12 +108,14 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	
 	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, BlockState state){
 		super.engageInto(automoton, to, state);
-		automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, .5f, automoton.getWorld().random.nextFloat() * .25f + .6f);
+		if(automoton.getWorld() != null)
+			automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, .5f, automoton.getWorld().random.nextFloat() * .25f + .6f);
 	}
 	
 	public void retractFrom(AutomotonBlockEntity automoton, BlockPos from, BlockState state){
 		super.retractFrom(automoton, from, state);
-		automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, .5f, automoton.getWorld().random.nextFloat() * .15f + .6f);
+		if(automoton.getWorld() != null)
+			automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, .5f, automoton.getWorld().random.nextFloat() * .15f + .6f);
 	}
 	
 	public static boolean canMove(BlockState state, World world, BlockPos pos){

@@ -18,10 +18,11 @@ public class BlocklayerHeadItem extends HeadItem<Object>{
 		super(settings);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void tick(AutomotonBlockEntity automoton, BlockPos facing, Object o){
 		World world = automoton.getWorld();
-		BlockState state = world.getBlockState(facing);
-		if(automoton.engaged && automoton.moduleTime == automoton.moduleSpeed() - 1 && (state.isAir() || state.getPistonBehavior() == PistonBehavior.DESTROY)){
+		BlockState state = world == null ? null : world.getBlockState(facing);
+		if(automoton.engaged && state != null && automoton.moduleTime == automoton.moduleSpeed() - 1 && (state.isAir() || state.getPistonBehavior() == PistonBehavior.DESTROY)){
 			Item item = automoton.getStoreStack().getItem();
 			if(item instanceof BlockItem){
 				Block block = ((BlockItem)item).getBlock();
