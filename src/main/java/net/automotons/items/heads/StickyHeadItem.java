@@ -7,8 +7,11 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtHelper;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -101,6 +104,16 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 			if(!world.isClient())
 				automoton.sync();
 		}
+	}
+	
+	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, BlockState state){
+		super.engageInto(automoton, to, state);
+		automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, .5f, automoton.getWorld().random.nextFloat() * .25f + .6f);
+	}
+	
+	public void retractFrom(AutomotonBlockEntity automoton, BlockPos from, BlockState state){
+		super.retractFrom(automoton, from, state);
+		automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, .5f, automoton.getWorld().random.nextFloat() * .15f + .6f);
 	}
 	
 	public static boolean canMove(BlockState state, World world, BlockPos pos){

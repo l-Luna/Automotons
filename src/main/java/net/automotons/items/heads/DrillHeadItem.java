@@ -7,6 +7,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -24,15 +27,20 @@ public class DrillHeadItem extends HeadItem<Float>{
 		if(automoton.engaged && world != null && !world.isReceivingRedstonePower(automoton.getPos())){
 			BlockState state = world.getBlockState(facing);
 			float hardness = state.getHardness(world, facing);
+			BlockSoundGroup soundGroup = state.getSoundGroup();
 			if(!state.isAir() && hardness != -1 && (!state.isToolRequired() || ToolManager.handleIsEffectiveOn(state, DIAMOND_PICK_REF, null))){
 				if(breakingTime == null)
 					breakingTime = 0f;
 				if(breakingTime < 9){
-					// Is -1 possible for a player to have?
+					// Is -1 a possible ID for a player to have?
 					world.setBlockBreakingInfo(-1, facing, (int)Math.ceil(breakingTime));
+					if(world.getTime() % 4 == 0 && !world.isClient())
+						world.playSound(null, facing, soundGroup.getHitSound(), SoundCategory.BLOCKS, (soundGroup.getVolume() + 1) / 8, soundGroup.getPitch() * .5f);
 				}else{
-					if(!world.isClient())
+					if(!world.isClient()){
 						world.breakBlock(facing, true);
+						world.playSound(null, facing, soundGroup.getBreakSound(), SoundCategory.BLOCKS, (soundGroup.getVolume() + 1) / 2, soundGroup.getPitch() * .8f);
+					}
 					world.setBlockBreakingInfo(-1, facing, 10);
 				}
 				automoton.setData(breakingTime + 1.5f / hardness);
