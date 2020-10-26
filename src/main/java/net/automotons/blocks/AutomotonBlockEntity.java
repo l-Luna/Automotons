@@ -2,6 +2,7 @@ package net.automotons.blocks;
 
 import net.automotons.AutomotonsRegistry;
 import net.automotons.broadcast.Broadcast;
+import net.automotons.client.OptionalColour;
 import net.automotons.items.Head;
 import net.automotons.items.Module;
 import net.automotons.screens.AutomotonScreenHandler;
@@ -31,6 +32,7 @@ import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.UUID;
 
 import static net.automotons.Automotons.autoId;
@@ -38,40 +40,44 @@ import static net.automotons.Automotons.autoId;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable, ExtendedScreenHandlerFactory, SidedInventory{
 	
-	// Facing a specific direction
+	// Direction the automoton is currently facing.
 	public Direction facing = Direction.NORTH;
-	// Whether the head is forward
+	// If the automoton is engaged, the head should be displayed forward, and heads should act.
 	public boolean engaged = false;
-	// The module currently being processed
+	// Module currently being processed.
 	public int module = 0;
-	// The number of ticks already spent processing the module
+	// Number of ticks already spent processing the current module.
 	public int moduleTime = 0;
-	// Modules (n -> 0 to n-1), head (n), and store slot (n + 1) inventory
+	// Modules (n -> 0 to n-1), head (n), and store slot (n + 1) inventory.
 	private DefaultedList<ItemStack> inventory;
 	// The current broadcast (for a broadcast antennae holder only)
 	private Broadcast broadcast;
-	// Used for animations and errors
+	// Direction that the automoton was last facing, if it is rotating.
 	public Direction lastFacing = Direction.NORTH;
+	// If the automoton was last engaged or disengaged, if it is engaging or disengaging.
 	public boolean lastEngaged = false;
+	// Position the automoton was at before moving, if it is moving.
 	public BlockPos lastPos = null;
-	// Extra data for head
+	// Extra data for head.
 	public Object data;
-	// Whether the current module threw an error
-	// Updated after the next module executes, allowing them to act on it
+	// If the current module threw an error.
+	// Updated after the next module executes, allowing modules to take this into account.
 	public boolean errored = false;
-	// Whether execution should be paused when an error is thrown
+	// If execution should be paused when an error is thrown.
 	public boolean stopOnError = false;
-	// Which direction to move at the end of this tick (if any)
+	// Direction to move at the end of this tick (if any).
 	public Direction scheduledMove = null;
 	// When moving, screens start following the wrong automoton. All screen handlers in this list are corrected.
-	// Not serialized or saved (doesn't need to be).
+	// Not serialized or saved.
 	public List<AutomotonScreenHandler> notifying = new ArrayList<>();
 	// Only slot that's exposed to hoppers.
 	private int[] storeSlot;
-	// The automoton's current skin.
+	// Current skin.
 	private Identifier skin = autoId("regular");
-	// The player that set the automoton's skin.
+	// Player that set the automoton's skin.
 	private UUID skinSetter;
+	// Outline colour. No outline is displayed if not present.
+	OptionalColour outlineColour = new OptionalColour();
 	
 	public AutomotonBlockEntity(){
 		super(AutomotonsRegistry.AUTOMOTON_BE);
@@ -111,6 +117,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 					getHead().endAutomotonMoveInto(this, pos, lastPos, lastPos.offset(facing), pos.offset(facing), data);
 				lastPos = pos;
 			}
+			outlineColour.empty();
 			// run instruction
 			if(toExecute != null && !world.isClient()){
 				errored = !toExecute.execute(this);
@@ -168,9 +175,12 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			}
 		}
 		if(broadcast != null){
-			broadcast.setInstruction(atIndex(module));
 			if(broadcast.isKilled())
 				setBroadcast(null);
+			else{
+				broadcast.setInstruction(atIndex(module));
+				setOutlineColour(255, 20, 147);
+			}
 		}
 	}
 	
@@ -285,6 +295,12 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			nbt.putInt("lastY", lastPos.getY());
 			nbt.putInt("lastZ", lastPos.getZ());
 		}
+		nbt.putBoolean("hasOutline", outlineColour.isPresent());
+		outlineColour.ifPresent((red, green, blue) -> {
+			nbt.putInt("outlineRed", red);
+			nbt.putInt("outlineGreen", green);
+			nbt.putInt("outlineBlue", blue);
+		});
 		nbt.putBoolean("hadBroadcast", broadcast != null);
 		return nbt;
 	}
@@ -306,6 +322,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			lastPos = new BlockPos(tag.getInt("lastX"), tag.getInt("lastY"), tag.getInt("lastZ"));
 		if(tag.getBoolean("hadBroadcast"))
 			generateBroadcast();
+		if(tag.getBoolean("hasOutline"))
+			setOutlineColour(tag.getInt("outlineRed"), tag.getInt("outlineGreen"), tag.getInt("outlineBlue"));
 		
 		inventory.clear();
 		Inventories.fromTag(tag, inventory);
@@ -410,6 +428,14 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public UUID getSkinSetter(){
 		return skinSetter;
+	}
+	
+	public OptionalColour getOutlineColour(){
+		return outlineColour;
+	}
+	
+	public void setOutlineColour(int red, int green, int blue){
+		outlineColour.setColour(red, green, blue);
 	}
 	
 	public void clear(){

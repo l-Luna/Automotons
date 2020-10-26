@@ -35,7 +35,6 @@ import java.util.List;
 
 import static net.automotons.Automotons.autoId;
 import static net.automotons.items.ModuleItem.fromConsumer;
-import static net.minecraft.util.registry.Registry.BLOCK;
 import static net.minecraft.util.registry.Registry.register;
 
 public class AutomotonsRegistry{
@@ -157,7 +156,10 @@ public class AutomotonsRegistry{
 	public static Item START_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, AutomotonBlockEntity::generateBroadcast);
 	public static Item END_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> entity.setBroadcast(null));
 	public static Item KILL_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(Broadcast::kill));
-	public static Item RECEIVE_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> broadcast.getInstruction().executeFromBroadcast(entity, broadcast)));
+	public static Item RECEIVE_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
+		broadcast.getInstruction().executeFromBroadcast(entity, broadcast);
+		entity.setOutlineColour(135, 206, 250);
+	}));
 	
 	// Skins
 	public static Item REGULAR_SKIN = new SkinItem(TABBED, autoId("regular"));

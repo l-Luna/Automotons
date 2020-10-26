@@ -10,6 +10,7 @@
     "StateAccessor"
   ],
   "client": [
+    "RenderPhaseAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

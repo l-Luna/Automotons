@@ -3,14 +3,12 @@ package net.automotons.client;
 import net.automotons.Automotons;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.Head;
+import net.automotons.mixin.RenderPhaseAccessor;
 import net.automotons.skins.AutomotonSkin;
 import net.automotons.skins.AutomotonSkins;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
@@ -23,6 +21,7 @@ import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Random;
 
@@ -59,8 +58,19 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 		
 		BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
 		BlockState state = entity.getWorld().getBlockState(entity.getPos());
-		VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
+		// TODO: translucency doesn't work with the coloured indicator. find a better indicator?
+		VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntitySolid());
 		manager.getModelRenderer().render(entity.getWorld(), base, state, entity.getPos(), matrices, buffer, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+		// if the automoton has a colour indicator, add a coloured outline
+		ColourVertexConsumer ovc = new ColourVertexConsumer(vertexConsumers.getBuffer(getColourOverlay()), matrices.peek().getModel(), matrices.peek().getNormal());
+		entity.getOutlineColour().ifPresent((red, green, blue) -> {
+			matrices.push();
+			ovc.fixedColor(red, green, blue, MathHelper.abs((int)(MathHelper.sin((float)(Math.PI * min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1))) * 200)));
+			matrices.translate(-0.02, -0.02, -0.02);
+			matrices.scale(1.04f, 1.04f, 1.04f);
+			manager.getModelRenderer().render(entity.getWorld(), base, state, entity.getPos(), matrices, ovc, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+			matrices.pop();
+		});
 		
 		float rotationOffset = 0f;
 		if(entity.lastFacing != null && entity.lastFacing != entity.facing){
@@ -76,6 +86,14 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 		matrices.translate(-.5, 0, -.5);
 		// render main body with rotation
 		manager.getModelRenderer().render(entity.getWorld(), body, state, entity.getPos(), matrices, buffer, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+		// colour indicator again
+		if(entity.getOutlineColour().isPresent()){
+			matrices.push();
+			matrices.translate(-0.02, -0.02, -0.02);
+			matrices.scale(1.04f, 1.04f, 1.04f);
+			manager.getModelRenderer().render(entity.getWorld(), body, state, entity.getPos(), matrices, ovc, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+			matrices.pop();
+		}
 		matrices.pop();
 		
 		ItemStack headStack = entity.getStack(12);
@@ -110,5 +128,13 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 		}
 		matrices.pop();
 		BlockModelRenderer.disableBrightnessCache();
+	}
+	
+	private static RenderLayer COLOUR_OVERLAY = null;
+	
+	private static RenderLayer getColourOverlay(){
+		if(COLOUR_OVERLAY == null)
+			COLOUR_OVERLAY = RenderLayer.of("automotons:colour_overlay", VertexFormats.POSITION_COLOR_LIGHT, 7, 256, false, true, RenderLayer.MultiPhaseParameters.builder().writeMaskState(RenderPhaseAccessor.getCOLOR_MASK()).transparency(RenderPhaseAccessor.getTRANSLUCENT_TRANSPARENCY()).texture(RenderPhaseAccessor.getNO_TEXTURE()).cull(RenderPhaseAccessor.getDISABLE_CULLING()).lightmap(RenderPhaseAccessor.getENABLE_LIGHTMAP()).build(false));
+		return COLOUR_OVERLAY;
 	}
 }
