@@ -55,5 +55,22 @@
   "gui.automoton.west": "Länsi",
 
   "skin.automotons.regular": "Tavallinen",
-  "skin.automotons.charcoal": "Puuhiili"
+  "skin.automotons.charcoal": "Puuhiili",
+
+  "advancements.automotons.root.title": "Automotons",
+  "advancements.automotons.root.description": "Hanki kirja robotiikasta.",
+  "advancements.automotons.robot.title": "Infinity Mechanism",
+  "advancements.automotons.robot.description": "Valmista automoton.",
+  "advancements.automotons.movement.title": "The World Revolving",
+  "advancements.automotons.movement.description": "Juota käännös-, käyttöönotto-, tai liikemoduuli laittaaksesi robottisi töihin.",
+  "advancements.automotons.head.title": "Good for Nothing",
+  "advancements.automotons.head.description": "Valmista pää jonka voi liittää automotoniin.",
+  "advancements.automotons.scanner.title": "Feel (Alive)",
+  "advancements.automotons.scanner.description": "Juota skannausmoduuli antaaksesi automotonillesi näön.",
+  "advancements.automotons.broadcast.title": "Cascade",
+  "advancements.automotons.broadcast.description": "Valmista lähetysantenni salliaksesi automotonien toimia yhdessä.",
+  "advancements.automotons.note_block.title": "It's Raining Somewhere Else",
+  "advancements.automotons.note_block.description": "Kiinnitä sointukuutiokeppi soittaaksesi musiikkia kun haluat.",
+  "advancements.automotons.reskin.title": "Death by Glamour",
+  "advancements.automotons.reskin.description": "Vaihda automotonin skini."
 }
