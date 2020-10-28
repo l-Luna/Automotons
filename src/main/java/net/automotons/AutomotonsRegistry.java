@@ -157,10 +157,6 @@ public class AutomotonsRegistry{
 	public static Item KILL_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
 		broadcast.kill();
 		entity.setOutlineColour(250, 0, 0);
-		broadcast.getSource().setOutlineColour(0, 0, 0);
-		// update outline
-		// maybe make a dedicated packet?
-		broadcast.getSource().sync();
 	}));
 	public static Item RECEIVE_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
 		broadcast.getInstruction().executeFromBroadcast(entity, broadcast);
