@@ -3,7 +3,6 @@ package net.automotons;
 import net.automotons.blocks.AutomotonBlock;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.blocks.PointerBlock;
-import net.automotons.broadcast.Broadcast;
 import net.automotons.broadcast.Broadcasts;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
@@ -155,7 +154,14 @@ public class AutomotonsRegistry{
 	// Broadcasts
 	public static Item START_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, AutomotonBlockEntity::generateBroadcast);
 	public static Item END_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> entity.setBroadcast(null));
-	public static Item KILL_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(Broadcast::kill));
+	public static Item KILL_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
+		broadcast.kill();
+		entity.setOutlineColour(250, 0, 0);
+		broadcast.getSource().setOutlineColour(0, 0, 0);
+		// update outline
+		// maybe make a dedicated packet?
+		broadcast.getSource().sync();
+	}));
 	public static Item RECEIVE_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
 		broadcast.getInstruction().executeFromBroadcast(entity, broadcast);
 		entity.setOutlineColour(135, 206, 250);
@@ -171,7 +177,7 @@ public class AutomotonsRegistry{
 			.build(null);
 	
 	// Screens and Screen Handler Types
-	public static final ScreenHandlerType<AutomotonScreenHandler> AUTOMOTON_SCREEN_HANDLER =ScreenHandlerRegistry
+	public static final ScreenHandlerType<AutomotonScreenHandler> AUTOMOTON_SCREEN_HANDLER = ScreenHandlerRegistry
 			.registerExtended(autoId("automoton"), AutomotonScreenHandler::new);
 	
 	// Loot Pool Entry Types
