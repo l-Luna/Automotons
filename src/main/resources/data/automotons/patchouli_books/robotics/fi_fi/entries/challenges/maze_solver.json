@@ -1,0 +1,12 @@
+{
+  "name": "Sokkelon Ratkaisija",
+  "icon": "minecraft:magenta_glazed_terracotta",
+  "category": "automotons:challenges",
+  "pages": [
+    {
+      "type": "quest",
+      "title": "Sokkelon Ratkaisija",
+      "text": "Ohjelmoi automoton ratkaisemaan sokkelo. Suljetussa tilassa yhden kuution levyisillä käytävillä, Automotonin täytyy löytää mihin tahansa mielivaltaiseen päätepisteeseen mistä tahansa mielivaltaisesta alkupisteestä. Saatat haluta asettaa Punakivikuution päätepisteen alle merkataksesi sen."
+    }
+  ]
+}

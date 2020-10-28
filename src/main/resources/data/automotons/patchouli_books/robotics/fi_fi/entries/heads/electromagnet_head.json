@@ -1,0 +1,15 @@
+{
+  "name": "Elektromagneettipää",
+  "icon": "automotons:electromagnet_head",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Virraton automoton käyttöönotetulla Elektromagneettipäällä siirtää esineitä tai kokemuspalloja sen edessä. Etäisyys palikoissa jolla se vaikuttaa näihin vastaa sen pitelemän pinon kokoa kuuteentoista asti. Se vetää esineitä ja palloja puoleensa jos pidelty esine on rautaharkko, ja työntää pois päin jos pidelty esine on punakivipöly. Jos se pitelee mitään muuta esinettä, mitään ei tapahdu."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:electromagnet_head"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Rautaterä",
+  "icon": "automotons:blade_head",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Automoton käyttöön otetulla Rautaterällä varustettuna tekee 4.5 vahinkoa mille tahansa olennolle sen edessä liikkuessaan tai kääntyessään. Olento joka kävelee rautaterällisen automotonin eteen *ei* ota passiivisesti vahinkoa; automotonin on liikuttava sen tilaan tehdäkseen vahinkoa."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:blade_head"
+    }
+  ]
+}

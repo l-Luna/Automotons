@@ -1,0 +1,16 @@
+{
+  "name": "Päiden käyttö",
+  "icon": "automotons:redstone_head",
+  "category": "automotons:concepts",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Päät antavat lisätoiminnalisuutta aiheuttaen erilaisia vaikutuksia automotonin liikkuessa, kääntyessä, tai käyttöön ottaessa. Yleensä päät eivät tee mitään kun ne eivät ole käytössä. Ota käyttöön- ja poista käytöstä-moduulit ottavat tai poistavat pään käytöstä. Pään vaihto tai poisto ei vaikuta käyttöönoton tilaan."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:engage_module",
+      "recipe2": "automotons:disengage_module"
+    }
+  ]
+}

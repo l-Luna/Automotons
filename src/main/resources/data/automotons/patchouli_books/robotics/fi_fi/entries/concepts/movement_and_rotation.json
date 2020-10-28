@@ -1,0 +1,47 @@
+{
+  "name": "Liike ja Kääntyminen",
+  "icon": "automotons:move_forward_module",
+  "category": "automotons:concepts",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Automotonit voivat liikkua neljään vaakasuoraan suuntaan suhteessa suuntaan johon ne osoittavat käyttäen liiku eteenpäin-, liiku vasemmmalle-, liiku oikealle-, ja liiku taaksepäin-moduuleja."
+    },
+    {
+      "type": "text",
+      "text": "Automotonit voivat kääntyä oikealle tai vasemmalle käyttäen käänny myötäpäivään- tai käänny vastapäivään-moduuleja. Automoton voi myös kääntyä satunnaisesti käyttäen käänny satunnaisesti-moduulia.$(br2)Lopuksi, automotonit voivat seurata niiden alla olevaa kuutiota. Skannaa ja liiku-moduuli ohjeistaa automotonin liikkumaan sen alla olevan kuution - tavallisesti osoitinkuution (mutta mikä tahansa tägätty suunnallinen kuutio käy) - osoittamaan suuntaan."
+    },
+    {
+      "type": "text",
+      "text": "Skannaa ja käänny-moduuli muistuttaa skannaa ja liiku-moduulia, mutta se kääntää automotonin alla olevan kuution osoittamaan suuntaan liikkumisen sijaan."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:move_forward_module",
+      "recipe2": "automotons:move_left_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:move_back_module",
+      "recipe2": "automotons:move_right_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:cw_module",
+      "recipe2": "automotons:ccw_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:rand_turn_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:scan_and_move_module",
+      "recipe2": "automotons:pointer"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:scan_and_rotate_module"
+    }
+  ]
+}

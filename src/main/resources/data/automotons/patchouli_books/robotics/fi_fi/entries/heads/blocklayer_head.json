@@ -1,0 +1,15 @@
+{
+  "name": "Kuutionasetuspää",
+  "icon": "automotons:blocklayer_head",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Käyttöön otettu automaton jolla on kuutionasetuspää asettaa eteensä kuutioita, kuluttaen pideltyjä kuutioita. Se voi asettaa kuutioita tyhjään tilaan tai korvattaviin kuutioihin (esim. pitkä ruoho), mutta ei korvaa olemassaolevia kiinteitä kuutioita, ja voi asettaa kuutioita vain paikkoihin joihin se on sallittua."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:blocklayer_head"
+    }
+  ]
+}

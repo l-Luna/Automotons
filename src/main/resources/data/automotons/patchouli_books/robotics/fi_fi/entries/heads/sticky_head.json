@@ -1,0 +1,19 @@
+{
+  "name": "Tahmea Pää",
+  "icon": "automotons:sticky_head",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Automoton käytössä olevalla Tahmealla Päällä siirtää edessään olevaa kuutiota kääntyessään tai liikkuessaan. Jos kokonainen kuutio on siinä mihin kuutio siirtyisi, liikkumis- tai käännösmoduuli nostaa virheen."
+    },
+    {
+      "type": "text",
+      "text": "Jos kuutio asetetaan automotonin liikkuessa tai kääntyessä, pidelty kuutio siirretään asetetun kuution ohitse takaisin kääntymisen tai pysähtymisen sijaan."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:sticky_head"
+    }
+  ]
+}

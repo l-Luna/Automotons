@@ -1,0 +1,20 @@
+{
+  "name": "Skinit",
+  "icon": "automotons:charcoal_skin",
+  "category": "automotons:concepts",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Automotonien ulkonäköä voidaan muokata skineillä. \"Tavallinen\" skini plauttaa automotonin vakioulkoasun, ja voidaan muuttaa muiksi ulkoasuiksi yhdistämällä se jonkin esineen kanssa. Skini voidaan asettaa automatoniin klikkaamalla sitä hiiren oikealla painikkeella hiipiessä."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:automoton_skin"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:regular_skin",
+      "recipe2": "automotons:charcoal_skin"
+    }
+  ]
+}

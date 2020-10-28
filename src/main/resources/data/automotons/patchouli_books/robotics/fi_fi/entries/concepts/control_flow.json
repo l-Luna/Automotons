@@ -1,0 +1,37 @@
+{
+  "name": "Ohjelman Kulun Ohjaus",
+  "icon": "automotons:repeat_on_success_module",
+  "category": "automotons:concepts",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Automotoniin voidaan laittaa kaksitoista ohjetta jotka suoritetaan silmukassa. Tyhjät paikat ohitetaan täysin; jos vain yksi ohje on paikallaan, se suoritetaan toistuvasti. Jokaisen ohjeen suorittamiseen kuluu 10 tickiä."
+    },
+    {
+      "type": "text",
+      "text": "Jos ohjetta ei voida suorittaa mistä tahansa syystä, se voi heittää virheen. Esimerkiksi liikemoduulin suoritus epäonnistuu yritettäessä liikkua kiinteään kuutioon. Normaalisti automotonit hyppäävät virheellisten ohjeiden yli, mutta tämä voidaan muuttaa käyttäen Vaimenna Virhe- ja Heitä Virhe-Moduuleja. Vaimenna Virhe-Moduuli jättää virheet huomiotta, kuten normaalisti. Heitä Virhe-Moduuli keskeyttää suorituksen kokonaan virheen sattuessa."
+    },
+    {
+      "type": "text",
+      "text": "Automoton voi suorittaa ehdollisesti minkä tahansa kohdan toistuvasti käyttäen Toista Onnistuessa- ja Toista Toinen Rivi-Moduuleja. Jos edellinen moduuli onnistui, Automaton aloittaa heti suorituksen uudelleen, joko ensimmäiseltä tai toiselta riviltä."
+    },
+    {
+      "type": "text",
+      "text": "Punakivisignaali estää automotonia jatkamasta suoritusta. Tosin, jos ensimmäinen ohje poistetaan, tai alkuun lisätään uusi ohje, ne suoritetaan heti.$(br2)Odota-Moduuli ei tee mitään. Voit laittaa alkuun odota-moduulin muokataksesi automotonia turvallisesti, tai ajoittaaksesi toimintoja."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:suppress_errors_module",
+      "recipe2": "automotons:throw_errors_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:noop_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:repeat_on_success_module",
+      "recipe2": "automotons:repeat_second_row_module"
+    }
+  ]
+}
