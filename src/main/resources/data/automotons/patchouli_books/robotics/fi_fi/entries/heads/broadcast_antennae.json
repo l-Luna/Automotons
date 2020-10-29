@@ -1,0 +1,29 @@
+{
+  "name": "Lähetysantenni",
+  "icon": "automotons:broadcast_antennae",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Lähetysantenni sallii viestien lähettämisen muille automotoneille. Käyttöön otetulla lähetysantennilla varustettu automoton lähettää ohjeensa kun lähetys on aktiivinen. Lähetykset aloitetaan Aloita Lähetys-moduulilla ja lopetetaan Lopeta Lähetys-moduulilla. Toinen automoton voi katkaista lähimmän lähetyksen Katkaise Lähetys-moduulilla."
+    },
+    {
+      "type": "text",
+      "text": "Vastaanota Lähetys-moduuli suorittaa lähimmän lähettävän automotonin ohjeen. Yleensä ohje suoritetaan vastaanottimessa, mutta Skannausmoduulit ottavat huomioon lähettimen alla olevan palikan. Lisäksi toistomoduulit voivat häiritä synkronointia."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:broadcast_antennae"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:start_broadcast_module",
+      "recipe2": "automotons:end_broadcast_module"
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:receive_broadcast_module",
+      "recipe2": "automotons:kill_broadcast_module"
+    }
+  ]
+}

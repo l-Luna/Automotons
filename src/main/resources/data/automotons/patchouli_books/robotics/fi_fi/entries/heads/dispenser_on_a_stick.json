@@ -1,0 +1,15 @@
+{
+  "name": "Jakelulaitekeppi",
+  "icon": "automotons:dispenser_on_a_stick",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Automoton jolla on jakelulaitekeppi pudottaa sen pitelemän esineen käyttöön otettaessa, aivan kuten jakelulaite."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:dispenser_on_a_stick"
+    }
+  ]
+}

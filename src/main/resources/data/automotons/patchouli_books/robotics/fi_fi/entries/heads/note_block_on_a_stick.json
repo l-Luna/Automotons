@@ -1,0 +1,19 @@
+{
+  "name": "Sointukuutiokeppi",
+  "icon": "automotons:note_block_on_a_stick",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Sointukuutiokepillä varustettu automoton tuottaa äänen käyttöön otettaessa. Jos automotonin esinepaikkaan asetetaan musiikkilevy, se toistaa kappaleen käyttöön otettaessa, ja pysäyttää toiston käytöstä poistettaessa."
+    },
+    {
+      "type": "text",
+      "text": "Muutoin automoton toimii kuten sointukuutio. Soinnun korkeus riippuu automotonin pitelemien esineiden määrästä, 23:n asti. Jos esine on jokin joka muuttaisi sointukuution soitinta, sen soitinta käytetään."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:note_block_on_a_stick"
+    }
+  ]
+}

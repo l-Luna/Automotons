@@ -1,0 +1,19 @@
+{
+  "name": "Timanttipora",
+  "icon": "automotons:drill_head",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Virraton automoton käyttöön otetulla Timattiporalla varustettuna rikkoo sen edessä olevan kuution. Se pudottaa esineen, mutta automoton ei poimi sitä. Ei vaikuta rikkoutumattomiin ja timanttihakulla rikkoutumattomiin kuutioihin."
+    },
+    {
+      "type": "text",
+      "text": "Pora ei ota vahinkoa, mutta sitä ei voida myöskään lumota onnella tai silkkikosketuksella."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:drill_head"
+    }
+  ]
+}

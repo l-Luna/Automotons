@@ -1,0 +1,25 @@
+{
+  "name": "Automotonit",
+  "icon": "automotons:automoton",
+  "category": "automotons:concepts",
+  "priority": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Automoton on eräänlainen robotti, joka kykenee suorittamaan ohjeita, kantamaan päätä, pitelemään esineitä, kääntymään, ja liikkumaan.$(br2)Kaksitoista paikkaa on varattu ohjeille moduuliksi kutsutuiden esineiden muodossa, jotka suoritetaan silmukassa."
+    },
+    {
+      "type": "text",
+      "text": "Niihin voidaan myös laittaa pää joka muuttaa sen toimintaa, kuten on selitetty niiden kohdissa. Suppilot ja pelaajat voivat käsitellä niiden lisäpaikkaa."
+    },
+    {
+      "type": "text",
+      "text": "Automotonin käyttöliittymä näyttää mihin suuntaan se osoittaa, onko sen pää tällä hetkellä käytössä, ja miten se käsittelee virheet. Päiden käyttöönotto ja virheiden käsittely on kuvattu tämän kategorian muissa kohdissa."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:automoton",
+      "recipe2": "automotons:iron_gear"
+    }
+  ]
+}

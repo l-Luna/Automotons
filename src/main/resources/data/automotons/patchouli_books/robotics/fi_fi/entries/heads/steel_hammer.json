@@ -1,0 +1,23 @@
+{
+  "name": "Teräsvasara",
+  "icon": "automotons:steel_hammer",
+  "category": "automotons:heads",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Teräsvasara sallii alasimen ja takomispöydän automatisoinnin, ja voi nimetä, korjata, ja lumota esineitä. Kun automoton käyttöön otetulla teräsvasaralla kääntyy kaksi esinettä sisältävään tilaa, se yrittää yhdistää ne tarkistaen ensin takomisreseptit ja sitten yrittäen yhdistää ne kuten alasimessa."
+    },
+    {
+      "type": "text",
+      "text": "Alasinreseptit tarvitsevat kokemuspisteitä, jotka kulutetaan kokemuspallojen muodossa; kaikki läheiset kokemuspallot vedetään puoleen kun automoton alkaa kääntyä, ja sen edessä reseptiä suoritettaessa olevat pallot kulutetaan."
+    },
+    {
+      "type": "text",
+      "text": "Jos automoton pitelee nimettyä paperiarkkia tai nimilappua se myös nimeää edessään olevat esineet, ilmaiseksi. Jos pidellyn esineen nimi alkaa '++', se lisää nimen loppuun. Jos nimi alka '~~' positiivisen kokonaisluvun seuraamana, se poistaa tämän määrän merkkejä nimen lopusta. Muutoin se asettaa esineiden nimeksi pidellyn esineen nimen. Tällä tavoin nimettyjen esineiden nimen minimipituus on yksi merkki ja maksimi 40 merkkiä."
+    },
+    {
+      "type": "crafting",
+      "recipe": "automotons:steel_hammer"
+    }
+  ]
+}
