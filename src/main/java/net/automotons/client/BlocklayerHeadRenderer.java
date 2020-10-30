@@ -12,7 +12,6 @@ import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 
 import java.util.Optional;
 
@@ -20,6 +19,7 @@ import static java.lang.Math.min;
 
 public class BlocklayerHeadRenderer implements HeadRenderer<Object>{
 	
+	@SuppressWarnings("deprecation")
 	public void render(AutomotonBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Object o, int light, int overlay, float tickDelta){
 		float rotationOffset = 0;
 		matrices.push();
@@ -32,7 +32,11 @@ public class BlocklayerHeadRenderer implements HeadRenderer<Object>{
 		matrices.translate(.5, 0, .5);
 		matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset + 1)));
 		// offset
-		matrices.translate(.5, 0, -.5);
+		matrices.translate(1, 0, 0);
+		// un-rotate
+		matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset + 1)));
+		// offset again
+		matrices.translate(-.5, 0, -.5);
 		VertexConsumer outline = vertexConsumers.getBuffer(RenderLayer.getLines());
 		// get shape
 		Optional<VoxelShape> shape;
