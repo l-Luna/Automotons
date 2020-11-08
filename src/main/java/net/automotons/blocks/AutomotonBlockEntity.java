@@ -32,7 +32,6 @@ import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.UUID;
 
 import static net.automotons.Automotons.autoId;
@@ -287,7 +286,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			nbt.putUuid("skinSetter", skinSetter);
 		Inventories.toTag(nbt, inventory);
 		if(getHead() != null)
-			nbt.put("headData", getHead().getExtraData(data));
+			nbt.put("headData", getHead().writeExtraData(data));
 		boolean hasLastPos = lastPos != null;
 		nbt.putBoolean("hasLastPos", hasLastPos);
 		if(hasLastPos){

@@ -32,7 +32,7 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 		return true;
 	}
 	
-	public CompoundTag getExtraData(BlockState state){
+	public CompoundTag writeExtraData(BlockState state){
 		CompoundTag tag = new CompoundTag();
 		if(state != null)
 			tag.put("blockstate", NbtHelper.fromBlockState(state));

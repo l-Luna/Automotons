@@ -19,7 +19,7 @@ public class RedstoneHeadItem extends HeadItem<Boolean>{
 		return tag.getBoolean("muted");
 	}
 	
-	public CompoundTag getExtraData(Boolean muted){
+	public CompoundTag writeExtraData(Boolean muted){
 		CompoundTag tag = new CompoundTag();
 		tag.putBoolean("muted", muted != null && muted);
 		return tag;

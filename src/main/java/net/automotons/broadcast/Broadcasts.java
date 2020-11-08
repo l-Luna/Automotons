@@ -10,14 +10,25 @@ import java.util.Optional;
 
 public final class Broadcasts{
 	
+	/** The radius, in blocks, that broadcasts can be received by an automoton, by manhattan distance. */
 	public static final int BROADCAST_RECEIVE_RADIUS = 24;
 	
-	private Broadcasts(){}
+	private Broadcasts(){
+	}
 	
-	// I did consider doing it the other way around, where the broadcaster sets the broadcast of nearby automotons
-	// but I couldn't figure how to make that work :shrug:
-	
+	/**
+	 * Returns the nearest broadcast within range to a location.
+	 * Returns <code>Optional.empty()</code> if <code>world</code> or <code>position</code> is <code>null</code>.
+	 *
+	 * @param world
+	 * 		The world of the location.
+	 * @param position
+	 * 		The position of the location.
+	 * @return The nearest broadcast to that location.
+	 */
 	public static Optional<Broadcast> getNearestBroadcast(World world, BlockPos position){
+		if(world == null || position == null)
+			return Optional.empty();
 		// get all tile entities
 		return world.tickingBlockEntities.parallelStream()
 				// filter by distance
@@ -32,7 +43,15 @@ public final class Broadcasts{
 				.map(AutomotonBlockEntity::getSendingBroadcast);
 	}
 	
+	/**
+	 * Returns the nearest broadcast within range to an automoton.
+	 * Returns <code>Optional.empty()</code> if <code>entity</code> is <code>null</code>.
+	 *
+	 * @param entity
+	 * 		The automoton around which broadcasts are being fetched.
+	 * @return The nearest broadcast.
+	 */
 	public static Optional<Broadcast> getNearestBroadcast(BlockEntity entity){
-		return getNearestBroadcast(entity.getWorld(), entity.getPos());
+		return entity == null ? Optional.empty() : getNearestBroadcast(entity.getWorld(), entity.getPos());
 	}
 }

@@ -48,7 +48,7 @@ public class DrillHeadItem extends HeadItem<Float>{
 		}
 	}
 	
-	public CompoundTag getExtraData(Float breakingTime){
+	public CompoundTag writeExtraData(Float breakingTime){
 		CompoundTag tag = new CompoundTag();
 		tag.putFloat("breakingTime", breakingTime != null ? breakingTime : 0);
 		return tag;
