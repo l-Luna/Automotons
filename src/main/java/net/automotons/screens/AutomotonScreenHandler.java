@@ -58,7 +58,7 @@ public class AutomotonScreenHandler extends ScreenHandler{
 						return super.canInsert(stack) && stack.getItem() instanceof ModuleItem;
 					}
 					
-					public int getMaxStackAmount() {
+					public int getMaxItemCount() {
 						return 1;
 					}
 				});
