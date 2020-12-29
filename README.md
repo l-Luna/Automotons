@@ -3,9 +3,8 @@ Come talk on [Discord](https://www.discord.gg/n3JFkVk "Automotons Discord")!
 ### Automotons
 Small robots that run instructions (in the form of items called modules), and carry heads that provide functionality.
 
-Currently, seven heads (diamond drill, sticky head, iron blade, redstone panel, dispenser on a stick, note block on a stick, electromagnet head) and fourteen modules (move, rotate, engage, handle errors, repetition) exist.
-More are planned.
+Currently, ten heads and nineteen modules exist, with more to be added in the future.
 
-Automotons is still in a buggy state. Testing (and PRs!) are appreciated. Expect to encounter issues.
+Automotons should be free of major bugs, but you may still find bugs hiding about. Testing (and PRs!) are appreciated.
 
-This mod depends on Patchouli for the documentation. All items have documentation.
+This mod runs on *Fabric*, and requires Fabric API. This also depends on, and includes, Patchouli.
