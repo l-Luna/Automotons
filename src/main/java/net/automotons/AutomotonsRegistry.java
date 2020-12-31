@@ -159,8 +159,11 @@ public class AutomotonsRegistry{
 		entity.setOutlineColour(250, 0, 0);
 	}));
 	public static Item RECEIVE_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
-		broadcast.getInstruction().executeFromBroadcast(entity, broadcast);
-		entity.setOutlineColour(135, 206, 250);
+		if(broadcast.getInstruction() != null){
+			broadcast.getInstruction().executeFromBroadcast(entity, broadcast);
+			entity.setOutlineColour(135, 206, 250);
+		}else
+			entity.setOutlineColour(250, 250, 0);
 	}));
 	
 	// Skins
