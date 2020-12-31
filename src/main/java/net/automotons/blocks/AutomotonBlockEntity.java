@@ -174,9 +174,9 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			}
 		}
 		if(broadcast != null){
-			if(broadcast.isKilled())
+			if(broadcast.isKilled() || getHead() == null || !getHead().canGenerateBroadcast(this, data))
 				setBroadcast(null);
-			else{
+			else if(!hasNoModules()){
 				broadcast.setInstruction(atIndex(module));
 				setOutlineColour(255, 20, 147);
 			}
@@ -396,7 +396,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	}
 	
 	public Broadcast getSendingBroadcast(){
-		return broadcast;
+		return hasNoModules() ? null : broadcast;
 	}
 	
 	public void setBroadcast(Broadcast broadcast){

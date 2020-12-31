@@ -87,7 +87,7 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 		// render main body with rotation
 		manager.getModelRenderer().render(entity.getWorld(), body, state, entity.getPos(), matrices, buffer, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
 		// colour indicator again
-		if(entity.getOutlineColour().isPresent()){
+		if(entity.getOutlineColour().isPresent() && !entity.hasNoModules()){
 			matrices.push();
 			matrices.translate(-0.02, -0.02, -0.02);
 			matrices.scale(1.04f, 1.04f, 1.04f);
