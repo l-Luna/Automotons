@@ -87,6 +87,11 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	@SuppressWarnings("ConstantConditions")
 	public void tick(){
 		Module toExecute = atIndex(module);
+		// run next instruction
+		if(moduleTime == 0 && toExecute != null && !world.isClient()){
+			errored = !toExecute.execute(this);
+			sync();
+		}
 		if(!stopOnError || !errored)
 			moduleTime++;
 		if(moduleTime >= moduleSpeed() && !(getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null))){
@@ -117,11 +122,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				lastPos = pos;
 			}
 			outlineColour.empty();
-			// run instruction
-			if(toExecute != null && !world.isClient()){
-				errored = !toExecute.execute(this);
-				sync();
-			}
 			getWorld().updateNeighbors(pos, getWorld().getBlockState(pos).getBlock());
 		}
 		toExecute = atIndex(module);

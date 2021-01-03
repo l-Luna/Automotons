@@ -4,6 +4,7 @@ import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
 import net.fabricmc.fabric.api.tool.attribute.v1.ToolManager;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +28,7 @@ public class DrillHeadItem extends HeadItem<Float>{
 			BlockState state = world.getBlockState(facing);
 			float hardness = state.getHardness(world, facing);
 			BlockSoundGroup soundGroup = state.getSoundGroup();
-			if(!state.isAir() && hardness != -1 && (!state.isToolRequired() || ToolManager.handleIsEffectiveOn(state, DIAMOND_PICK_REF, null))){
+			if(!state.isAir() && !(state.getBlock() instanceof FluidBlock) && hardness != -1 && (!state.isToolRequired() || ToolManager.handleIsEffectiveOn(state, DIAMOND_PICK_REF, null))){
 				if(breakingTime == null)
 					breakingTime = 0f;
 				if(breakingTime < 9){
