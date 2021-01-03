@@ -319,13 +319,15 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			skinSetter = tag.getUuid("skinSetter");
 		if(tag.getBoolean("hasLastPos"))
 			lastPos = new BlockPos(tag.getInt("lastX"), tag.getInt("lastY"), tag.getInt("lastZ"));
-		if(tag.getBoolean("hadBroadcast"))
-			generateBroadcast();
 		if(tag.getBoolean("hasOutline"))
 			setOutlineColour(tag.getInt("outlineRed"), tag.getInt("outlineGreen"), tag.getInt("outlineBlue"));
 		
 		inventory.clear();
 		Inventories.fromTag(tag, inventory);
+		
+		// have to parse inventory first, otherwise generateBroadcast always does nothing
+		if(tag.getBoolean("hadBroadcast"))
+			generateBroadcast();
 		
 		data = null;
 		if(getHead() != null)
