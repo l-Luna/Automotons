@@ -145,6 +145,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			module = 0;
 		if(getHead() != null)
 			getHead().tick(this, pos.offset(facing), data);
+		// FIXME: move all this logic elsewhere, where it can all happen server-side and at once
 		if(scheduledMove != null){
 			// we should move now
 			BlockPos to = pos.offset(scheduledMove);
@@ -156,7 +157,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				// we've already been removed, and a new one already exists
 				// set all our data (w/ serialization methods), but set scheduledMove to null and set lastPos
 				AutomotonBlockEntity moved = (AutomotonBlockEntity)world.getBlockEntity(to);
-				// FIXME: this shouldn't happen... and it causes item loss?
 				if(moved != null){
 					moved.fromTag(state, addSharedData(moved.toTag(new CompoundTag())));
 					moved.lastPos = pos;
