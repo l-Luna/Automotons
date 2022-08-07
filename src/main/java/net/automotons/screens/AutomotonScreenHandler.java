@@ -84,7 +84,7 @@ public class AutomotonScreenHandler extends ScreenHandler{
 	public ItemStack transferSlot(PlayerEntity player, int index){
 		ItemStack itemStack = ItemStack.EMPTY;
 		Slot slot = slots.get(index);
-		if(slot != null && slot.hasStack()){
+		if(slot.hasStack()){
 			ItemStack itemStack2 = slot.getStack();
 			itemStack = itemStack2.copy();
 			int num = automoton.moduleNum() + 2;

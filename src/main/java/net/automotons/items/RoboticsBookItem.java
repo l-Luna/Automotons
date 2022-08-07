@@ -14,7 +14,7 @@ import static net.automotons.Automotons.autoId;
 
 public class RoboticsBookItem extends Item{
 	
-	private static Identifier BOOK_ID = autoId("robotics");
+	private static final Identifier BOOK_ID = autoId("robotics");
 	
 	public RoboticsBookItem(Settings settings){
 		super(settings);
@@ -22,7 +22,7 @@ public class RoboticsBookItem extends Item{
 	
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand){
 		if(!world.isClient)
-			PatchouliAPI.instance.openBookGUI((ServerPlayerEntity)user, BOOK_ID);
+			PatchouliAPI.get().openBookGUI((ServerPlayerEntity)user, BOOK_ID);
 		return TypedActionResult.success(user.getStackInHand(hand));
 	}
 }

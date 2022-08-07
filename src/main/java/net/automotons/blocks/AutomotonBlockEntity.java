@@ -6,10 +6,8 @@ import net.automotons.client.OptionalColour;
 import net.automotons.items.Head;
 import net.automotons.items.Module;
 import net.automotons.screens.AutomotonScreenHandler;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,14 +16,14 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.*;
+import net.minecraft.network.listener.*;
+import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -37,7 +35,7 @@ import java.util.UUID;
 import static net.automotons.Automotons.autoId;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class AutomotonBlockEntity extends LockableContainerBlockEntity implements Tickable, BlockEntityClientSerializable, ExtendedScreenHandlerFactory, SidedInventory{
+public class AutomotonBlockEntity extends LockableContainerBlockEntity implements ExtendedScreenHandlerFactory, SidedInventory{
 	
 	// Direction the automoton is currently facing.
 	public Direction facing = Direction.NORTH;
@@ -78,8 +76,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	// Outline colour. No outline is displayed if not present.
 	OptionalColour outlineColour = new OptionalColour();
 	
-	public AutomotonBlockEntity(){
-		super(AutomotonsRegistry.AUTOMOTON_BE);
+	public AutomotonBlockEntity(BlockPos pos, BlockState bs){
+		super(AutomotonsRegistry.AUTOMOTON_BE, pos, bs);
 		inventory = DefaultedList.ofSize(moduleNum() + 2, ItemStack.EMPTY);
 		storeSlot = new int[]{moduleNum() + 1};
 	}
@@ -158,7 +156,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 				// set all our data (w/ serialization methods), but set scheduledMove to null and set lastPos
 				AutomotonBlockEntity moved = (AutomotonBlockEntity)world.getBlockEntity(to);
 				if(moved != null){
-					moved.fromTag(state, addSharedData(moved.toTag(new CompoundTag())));
+					moved.readNbt(addSharedData(moved.toTag()));
 					moved.lastPos = pos;
 					for(AutomotonScreenHandler handler : notifying)
 						handler.switchAutomoton(moved);
@@ -267,12 +265,18 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		this.engaged = engaged;
 	}
 	
-	public CompoundTag toTag(CompoundTag tag){
-		CompoundTag nbt = super.toTag(tag);
-		return addSharedData(nbt);
+	protected NbtCompound toTag(){
+		NbtCompound c = new NbtCompound();
+		writeNbt(c);
+		return c;
 	}
 	
-	public CompoundTag addSharedData(CompoundTag nbt){
+	protected void writeNbt(NbtCompound nbt){
+		super.writeNbt(nbt);
+		addSharedData(nbt);
+	}
+	
+	public NbtCompound addSharedData(NbtCompound nbt){
 		nbt.putInt("facing", facing.getId());
 		nbt.putInt("lastFacing", lastFacing.getId());
 		nbt.putBoolean("engaged", engaged);
@@ -284,7 +288,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		nbt.putString("skin", skin.toString());
 		if(skinSetter != null)
 			nbt.putUuid("skinSetter", skinSetter);
-		Inventories.toTag(nbt, inventory);
+		Inventories.writeNbt(nbt, inventory);
 		if(getHead() != null)
 			nbt.put("headData", getHead().writeExtraData(data));
 		boolean hasLastPos = lastPos != null;
@@ -304,8 +308,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		return nbt;
 	}
 	
-	public void fromTag(BlockState state, CompoundTag tag){
-		super.fromTag(state, tag);
+	public void readNbt(NbtCompound tag){
+		super.readNbt(tag);
 		facing = Direction.byId(tag.getInt("facing"));
 		lastFacing = Direction.byId(tag.getInt("lastFacing"));
 		engaged = tag.getBoolean("engaged");
@@ -323,7 +327,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			setOutlineColour(tag.getInt("outlineRed"), tag.getInt("outlineGreen"), tag.getInt("outlineBlue"));
 		
 		inventory.clear();
-		Inventories.fromTag(tag, inventory);
+		Inventories.readNbt(tag, inventory);
 		
 		// have to parse inventory first, otherwise generateBroadcast always does nothing
 		if(tag.getBoolean("hadBroadcast"))
@@ -348,7 +352,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	}
 	
 	protected Text getContainerName(){
-		return new TranslatableText("container.automoton");
+		return Text.translatable("container.automoton");
 	}
 	
 	public int size(){
@@ -444,14 +448,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		sync();
 	}
 	
-	public void fromClientTag(CompoundTag tag){
-		fromTag(world != null ? world.getBlockState(pos) : null, tag);
-	}
-	
-	public CompoundTag toClientTag(CompoundTag tag){
-		return toTag(tag);
-	}
-	
 	public int[] getAvailableSlots(Direction side){
 		return storeSlot;
 	}
@@ -470,5 +466,21 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public int moduleSpeed(){
 		return 10;
+	}
+	
+	@Override
+	public Packet<ClientPlayPacketListener> toUpdatePacket(){
+		return BlockEntityUpdateS2CPacket.create(this);
+	}
+	
+	@Override
+	public NbtCompound toInitialChunkDataNbt(){
+		return createNbt();
+	}
+	
+	public void sync(){
+		assert world != null;
+		var state = world.getBlockState(pos);
+		world.updateListeners(pos, state, state, Block.NOTIFY_LISTENERS);
 	}
 }

@@ -1,7 +1,10 @@
 package net.automotons.blocks;
 
+import net.automotons.AutomotonsRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -14,9 +17,10 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
-public class AutomotonBlock extends Block implements BlockEntityProvider{
+public class AutomotonBlock extends BlockWithEntity{
 	
 	public static VoxelShape SHAPE = VoxelShapes.union(
 			Block.createCuboidShape(0, 2, 0, 16, 12, 16),
@@ -32,8 +36,13 @@ public class AutomotonBlock extends Block implements BlockEntityProvider{
 		return SHAPE;
 	}
 	
-	public BlockEntity createBlockEntity(BlockView world){
-		return new AutomotonBlockEntity();
+	public BlockEntity createBlockEntity(BlockPos pos,  BlockState state){
+		return new AutomotonBlockEntity(pos, state);
+	}
+	
+	@Nullable
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World _world, BlockState _state, BlockEntityType<T> type){
+		return checkType(type, AutomotonsRegistry.AUTOMOTON_BE, (world, pos, state, entity) -> entity.tick());
 	}
 	
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit){
@@ -53,22 +62,18 @@ public class AutomotonBlock extends Block implements BlockEntityProvider{
 	@SuppressWarnings("unchecked")
 	public int getStrongRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction){
 		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if(blockEntity instanceof AutomotonBlockEntity){
-			AutomotonBlockEntity entity = (AutomotonBlockEntity)blockEntity;
+		if(blockEntity instanceof AutomotonBlockEntity entity)
 			if(entity.getHead() != null)
 				return entity.getHead().getStrongPowerTo(entity, direction, entity.data);
-		}
 		return super.getStrongRedstonePower(state, world, pos, direction);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction){
 		BlockEntity blockEntity = world.getBlockEntity(pos);
-		if(blockEntity instanceof AutomotonBlockEntity){
-			AutomotonBlockEntity entity = (AutomotonBlockEntity)blockEntity;
+		if(blockEntity instanceof AutomotonBlockEntity entity)
 			if(entity.getHead() != null)
 				return entity.getHead().getWeakPowerTo(entity, direction, entity.data);
-		}
 		return super.getStrongRedstonePower(state, world, pos, direction);
 	}
 	
@@ -82,8 +87,7 @@ public class AutomotonBlock extends Block implements BlockEntityProvider{
 	
 	public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
 		BlockEntity entity = world.getBlockEntity(pos);
-		if(entity instanceof AutomotonBlockEntity){
-			AutomotonBlockEntity te = (AutomotonBlockEntity)entity;
+		if(entity instanceof AutomotonBlockEntity te){
 			ItemStack stack = te.getStack(13);
 			return MathHelper.floor((float)stack.getCount() / (float)Math.min(te.getMaxCountPerStack(), stack.getMaxCount()) * 14.0F) + (stack.isEmpty() ? 1 : 0);
 		}

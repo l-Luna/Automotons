@@ -3,7 +3,6 @@ package net.automotons.items.heads;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
 import net.automotons.mixin.ExperienceOrbEntityAccessor;
-import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -18,12 +17,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmithingRecipe;
-import net.minecraft.tag.Tag;
-import net.minecraft.text.LiteralText;
+import net.minecraft.tag.TagKey;
+import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class SteelHammerHeadItem extends HeadItem<Object>{
 		super(settings);
 	}
 	
-	protected static final Tag<Item> TEXT_HOLDERS = TagRegistry.item(autoId("text_holder"));
+	protected static final TagKey<Item> TEXT_HOLDERS = TagKey.of(Registry.ITEM_KEY, autoId("text_holder"));
 	
 	// the head acts when the automoton rotates while engaged
 	
@@ -79,24 +79,24 @@ public class SteelHammerHeadItem extends HeadItem<Object>{
 			if(itemEntities.size() > 0){
 				// if holding any `automotons:text_holder`, rename items in front
 				ItemStack stack = automoton.getStoreStack();
-				if(stack.getItem().isIn(TEXT_HOLDERS) && stack.hasCustomName()){
+				if(stack.isIn(TEXT_HOLDERS) && stack.hasCustomName()){
 					// RIP formatting
-					String text = stack.getName().asString();
+					String text = stack.getName().getString();
 					if(text.startsWith("++")){
 						for(ItemEntity entity : itemEntities){
 							ItemStack item = entity.getStack();
-							String name = item.getName().asString() + text.substring(2);
+							String name = item.getName().getString() + text.substring(2);
 							if(name.length() > 40)
 								name = name.substring(0, 40);
-							item.setCustomName(new LiteralText(name));
+							item.setCustomName(Text.literal(name));
 						}
 					}else if(text.startsWith("~~") && text.substring(2).matches("[0-9]+")){
 						for(ItemEntity entity : itemEntities){
 							ItemStack item = entity.getStack();
-							String s = item.getName().asString();
+							String s = item.getName().getString();
 							int endIndex = Math.max(0, s.length() - Integer.decode(text.substring(2)));
 							if(endIndex >= 1)
-								item.setCustomName(new LiteralText(s.substring(1, endIndex)));
+								item.setCustomName(Text.literal(s.substring(1, endIndex)));
 						}
 					}else
 						for(ItemEntity entity : itemEntities)
@@ -152,7 +152,7 @@ public class SteelHammerHeadItem extends HeadItem<Object>{
 	
 	protected Optional<Supplier<Pair<ItemStack, Integer>>> getEnchantingCombo(ItemStack left, ItemStack right){
 		// if right is an enchanted book
-		if(right.getItem() == Items.ENCHANTED_BOOK && !EnchantedBookItem.getEnchantmentTag(right).isEmpty()){
+		if(right.getItem() == Items.ENCHANTED_BOOK && !EnchantedBookItem.getEnchantmentNbt(right).isEmpty()){
 			return Optional.of(() -> {
 				int i = 0;
 				Map<Enchantment, Integer> original = EnchantmentHelper.get(left);
@@ -171,20 +171,12 @@ public class SteelHammerHeadItem extends HeadItem<Object>{
 						}
 					if(acceptable){
 						original.put(enchantment, newLevel);
-						int v = 0;
-						switch(enchantment.getRarity()){
-							case COMMON:
-								v = 1;
-								break;
-							case UNCOMMON:
-								v = 2;
-								break;
-							case RARE:
-								v = 4;
-								break;
-							case VERY_RARE:
-								v = 8;
-						}
+						int v = switch(enchantment.getRarity()){
+							case COMMON -> 1;
+							case UNCOMMON -> 2;
+							case RARE -> 4;
+							case VERY_RARE -> 8;
+						};
 						
 						v = Math.max(1, v / 2);
 						i += v * newLevel;

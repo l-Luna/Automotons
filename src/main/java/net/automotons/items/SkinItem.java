@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -27,8 +26,7 @@ public class SkinItem extends Item{
 	public ActionResult useOnBlock(ItemUsageContext context){
 		World world = context.getWorld();
 		BlockEntity entity = world.getBlockEntity(context.getBlockPos());
-		if(entity instanceof AutomotonBlockEntity){
-			AutomotonBlockEntity automoton = (AutomotonBlockEntity)entity;
+		if(entity instanceof AutomotonBlockEntity automoton){
 			automoton.setSkin(skin, context.getPlayer());
 			if(!world.isClient())
 				automoton.sync();
@@ -39,6 +37,6 @@ public class SkinItem extends Item{
 	
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context){
 		super.appendTooltip(stack, world, tooltip, context);
-		tooltip.add(new TranslatableText("skin." + skin.getNamespace() + "." + skin.getPath()).styled(style -> style.withColor(Formatting.AQUA)));
+		tooltip.add(Text.translatable("skin." + skin.getNamespace() + "." + skin.getPath()).styled(style -> style.withColor(Formatting.AQUA)));
 	}
 }

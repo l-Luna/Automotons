@@ -23,8 +23,7 @@ public class BlockEntityInventoryEntry extends LeafEntry{
 	
 	protected void generateLoot(Consumer<ItemStack> lootConsumer, LootContext context){
 		BlockEntity entity = context.get(LootContextParameters.BLOCK_ENTITY);
-		if(entity instanceof Inventory){
-			Inventory inventory = (Inventory)entity;
+		if(entity instanceof Inventory inventory){
 			for(int i = 0; i < inventory.size(); i++)
 				lootConsumer.accept(inventory.getStack(i));
 		}

@@ -30,9 +30,11 @@ public final class Broadcasts{
 		if(world == null || position == null)
 			return Optional.empty();
 		// get all tile entities
-		return world.tickingBlockEntities.parallelStream()
+		return world.blockEntityTickers.parallelStream()
 				// filter by distance
-				.filter(entity -> entity.getPos().getManhattanDistance(position) <= BROADCAST_RECEIVE_RADIUS)
+				.filter(ticker -> ticker.getPos().getManhattanDistance(position) <= BROADCAST_RECEIVE_RADIUS)
+                // map to the relevant block entity
+                .map(ticker -> world.getBlockEntity(ticker.getPos()))
 				// filter to automotons
 				.filter(AutomotonBlockEntity.class::isInstance)
 				.map(AutomotonBlockEntity.class::cast)

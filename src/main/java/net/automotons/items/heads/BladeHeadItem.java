@@ -34,10 +34,8 @@ public class BladeHeadItem extends HeadItem<Object>{
 		if(world != null){
 			List<Entity> entities = world.getOtherEntities(null, new Box(pos));
 			for(Entity entity : entities)
-				if(entity instanceof LivingEntity){
-					LivingEntity living = (LivingEntity)entity;
+				if(entity instanceof LivingEntity living)
 					living.damage(DamageSource.GENERIC, BLADE_DAMAGE);
-				}
 			if(entities.size() > 0)
 				world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.BLOCKS, .5f, 1);
 		}

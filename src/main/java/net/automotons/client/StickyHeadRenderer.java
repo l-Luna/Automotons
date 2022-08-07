@@ -11,10 +11,9 @@ import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.BlockRotation;
-
-import java.util.Random;
+import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.random.Random;
 
 import static java.lang.Math.min;
 
@@ -43,13 +42,13 @@ public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 				// only display if rotating
 				// point of rotation
 				matrices.translate(.5, 0, .5);
-				matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset + 1)));
+				matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset + 1)));
 				// offset
 				matrices.translate(.5, 0, -.5);
 				BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
 				BakedModel model = manager.getModel(rotated);
 				VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
-				manager.getModelRenderer().render(entity.getWorld(), model, rotated, entity.getPos(), matrices, buffer, false, new Random(), rotated.getRenderingSeed(entity.getPos()), overlay);
+				manager.getModelRenderer().render(entity.getWorld(), model, rotated, entity.getPos(), matrices, buffer, false, Random.create(), rotated.getRenderingSeed(entity.getPos()), overlay);
 				matrices.pop();
 				BlockModelRenderer.disableBrightnessCache();
 			}

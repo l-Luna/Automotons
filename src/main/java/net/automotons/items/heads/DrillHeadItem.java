@@ -2,12 +2,10 @@ package net.automotons.items.heads;
 
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.items.HeadItem;
-import net.fabricmc.fabric.api.tool.attribute.v1.ToolManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -15,8 +13,6 @@ import net.minecraft.world.World;
 
 // Extra data is breaking progress
 public class DrillHeadItem extends HeadItem<Float>{
-	
-	private static final ItemStack DIAMOND_PICK_REF = new ItemStack(Items.DIAMOND_PICKAXE);
 	
 	public DrillHeadItem(Settings settings){
 		super(settings);
@@ -28,7 +24,7 @@ public class DrillHeadItem extends HeadItem<Float>{
 			BlockState state = world.getBlockState(facing);
 			float hardness = state.getHardness(world, facing);
 			BlockSoundGroup soundGroup = state.getSoundGroup();
-			if(!state.isAir() && !(state.getBlock() instanceof FluidBlock) && hardness != -1 && (!state.isToolRequired() || ToolManager.handleIsEffectiveOn(state, DIAMOND_PICK_REF, null))){
+			if(!state.isAir() && !(state.getBlock() instanceof FluidBlock) && hardness != -1 && (!state.isToolRequired() || Items.DIAMOND_PICKAXE.isSuitableFor(state))){
 				if(breakingTime == null)
 					breakingTime = 0f;
 				if(breakingTime < 9){
@@ -49,13 +45,13 @@ public class DrillHeadItem extends HeadItem<Float>{
 		}
 	}
 	
-	public CompoundTag writeExtraData(Float breakingTime){
-		CompoundTag tag = new CompoundTag();
+	public NbtCompound writeExtraData(Float breakingTime){
+		NbtCompound tag = new NbtCompound();
 		tag.putFloat("breakingTime", breakingTime != null ? breakingTime : 0);
 		return tag;
 	}
 	
-	public Float readExtraData(CompoundTag tag){
+	public Float readExtraData(NbtCompound tag){
 		return tag.getFloat("breakingTime");
 	}
 }

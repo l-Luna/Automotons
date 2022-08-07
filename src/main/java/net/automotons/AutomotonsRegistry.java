@@ -12,8 +12,8 @@ import net.automotons.items.heads.*;
 import net.automotons.loot.BlockEntityInventoryEntry;
 import net.automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
-import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -24,7 +24,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.loot.entry.LootPoolEntryType;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
@@ -34,6 +34,7 @@ import java.util.List;
 
 import static net.automotons.Automotons.autoId;
 import static net.automotons.items.ModuleItem.fromConsumer;
+import static net.minecraft.util.registry.Registry.BLOCK;
 import static net.minecraft.util.registry.Registry.register;
 
 public class AutomotonsRegistry{
@@ -41,12 +42,12 @@ public class AutomotonsRegistry{
 	// For BlockItems
 	private static final List<Pair<Identifier, Block>> WITH_ITEMS = new ArrayList<>();
 	// For scanning modules
-	private static final Tag<Block> SCANNABLE = TagRegistry.block(autoId("automoton_scannable"));
-	private static final Tag<Block> SCANNABLE_REVERSE = TagRegistry.block(autoId("automoton_scannable_reverse"));
+	private static final TagKey<Block> SCANNABLE = TagKey.of(BLOCK.getKey(), autoId("automoton_scannable"));
+	private static final TagKey<Block> SCANNABLE_REVERSE = TagKey.of(BLOCK.getKey(), autoId("automoton_scannable_reverse"));
 	
 	// Blocks
-	public static Block AUTOMOTON = new AutomotonBlock(FabricBlockSettings.of(Material.METAL).breakByHand(true).strength(6f).nonOpaque().solidBlock((state, world, pos) -> false));
-	public static Block POINTER = new PointerBlock(FabricBlockSettings.of(Material.METAL).breakByHand(true).breakInstantly());
+	public static Block AUTOMOTON = new AutomotonBlock(FabricBlockSettings.of(Material.METAL)/*.breakByHand(true)*/.strength(6f).nonOpaque().solidBlock((state, world, pos) -> false));
+	public static Block POINTER = new PointerBlock(FabricBlockSettings.of(Material.METAL)/*.breakByHand(true)*/.breakInstantly());
 	
 	// Item Settings
 	private static final Item.Settings TABBED = new Item.Settings().group(Automotons.ITEMS);
@@ -171,7 +172,7 @@ public class AutomotonsRegistry{
 	public static Item CHARCOAL_SKIN = new SkinItem(TABBED, autoId("charcoal"));
 	
 	// Block Entity Types
-	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = BlockEntityType.Builder
+	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = FabricBlockEntityTypeBuilder
 			.create(AutomotonBlockEntity::new, AUTOMOTON)
 			.build(null);
 	

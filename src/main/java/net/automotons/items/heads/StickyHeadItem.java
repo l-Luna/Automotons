@@ -7,7 +7,7 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -32,29 +32,19 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 		return true;
 	}
 	
-	public CompoundTag writeExtraData(BlockState state){
-		CompoundTag tag = new CompoundTag();
+	public NbtCompound writeExtraData(BlockState state){
+		NbtCompound tag = new NbtCompound();
 		if(state != null)
 			tag.put("blockstate", NbtHelper.fromBlockState(state));
 		return tag;
 	}
 	
-	public BlockState readExtraData(CompoundTag tag){
+	public BlockState readExtraData(NbtCompound tag){
 		return NbtHelper.toBlockState(tag.getCompound("blockstate"));
 	}
 	
 	public void startRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
-		World world = automoton.getWorld();
-		if(automoton.engaged && world != null){
-			BlockState fromState = world.getBlockState(from);
-			// cut block
-			if(canMove(fromState, world, from)){
-				automoton.setData(fromState);
-				world.setBlockState(from, Blocks.AIR.getDefaultState());
-				if(!world.isClient())
-					automoton.sync();
-			}
-		}
+		doMove(automoton, from);
 	}
 	
 	public void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
@@ -78,17 +68,7 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	}
 	
 	public void startAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockPos prevFacing, BlockPos facing, BlockState state){
-		World world = automoton.getWorld();
-		if(automoton.engaged && world != null){
-			BlockState fromState = world.getBlockState(prevFacing);
-			// cut block
-			if(canMove(fromState, world, prevFacing)){
-				automoton.setData(fromState);
-				world.setBlockState(prevFacing, Blocks.AIR.getDefaultState());
-				if(!world.isClient())
-					automoton.sync();
-			}
-		}
+		doMove(automoton, prevFacing);
 	}
 	
 	public void endAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockPos prevFacing, BlockPos facing, BlockState state){
@@ -103,6 +83,20 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 			automoton.setData(null);
 			if(!world.isClient())
 				automoton.sync();
+		}
+	}
+	
+	private static void doMove(AutomotonBlockEntity automoton, BlockPos from){
+		World world = automoton.getWorld();
+		if(automoton.engaged && world != null){
+			BlockState fromState = world.getBlockState(from);
+			// cut block
+			if(canMove(fromState, world, from)){
+				automoton.setData(fromState);
+				world.setBlockState(from, Blocks.AIR.getDefaultState());
+				if(!world.isClient())
+					automoton.sync();
+			}
 		}
 	}
 	

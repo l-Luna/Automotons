@@ -1,7 +1,7 @@
 package net.automotons.items;
 
 import net.automotons.blocks.AutomotonBlockEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -27,8 +27,8 @@ public interface Head<Data>{
 	 * 		The extra data stored for the head. May be null.
 	 * @return The extra data in serialized form.
 	 */
-	default CompoundTag writeExtraData(Data data){
-		return new CompoundTag();
+	default NbtCompound writeExtraData(Data data){
+		return new NbtCompound();
 	}
 	
 	/**
@@ -38,7 +38,7 @@ public interface Head<Data>{
 	 * 		The extra data in serialized form.
 	 * @return The extra data stored for the head. May be null.
 	 */
-	default Data readExtraData(CompoundTag tag){
+	default Data readExtraData(NbtCompound tag){
 		return null;
 	}
 	

@@ -8,18 +8,18 @@ import net.minecraft.entity.MovementType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.random.Random;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ElectromagnetHeadItem extends HeadItem<Object>{
 	
-	public static final DustParticleEffect IRON = new DustParticleEffect(.7f, .7f, .7f, .5f);
-	public static final DustParticleEffect REDSTONE = new DustParticleEffect(1, 0, 0, .5f);
+	public static final DustParticleEffect IRON = new DustParticleEffect(new Vec3f(.7f, .7f, .7f), .5f);
+	public static final DustParticleEffect REDSTONE = new DustParticleEffect(new Vec3f(1, 0, 0), .5f);
+	
+	private static final Random RANDOM = Random.create();
 	
 	public ElectromagnetHeadItem(Settings settings){
 		super(settings);

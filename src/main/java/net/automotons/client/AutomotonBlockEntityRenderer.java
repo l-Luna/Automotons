@@ -1,38 +1,31 @@
 package net.automotons.client;
 
-import net.automotons.Automotons;
-import net.automotons.blocks.AutomotonBlockEntity;
-import net.automotons.items.Head;
-import net.automotons.mixin.RenderPhaseAccessor;
-import net.automotons.skins.AutomotonSkin;
-import net.automotons.skins.AutomotonSkins;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
+import net.automotons.*;
+import net.automotons.blocks.*;
+import net.automotons.items.*;
+import net.automotons.skins.*;
+import net.minecraft.block.*;
+import net.minecraft.client.*;
 import net.minecraft.client.render.*;
-import net.minecraft.client.render.block.BlockModelRenderer;
-import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.BakedModelManager;
-import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
-
-import java.util.Random;
+import net.minecraft.client.render.VertexFormat.*;
+import net.minecraft.client.render.block.*;
+import net.minecraft.client.render.block.entity.*;
+import net.minecraft.client.render.item.*;
+import net.minecraft.client.render.model.*;
+import net.minecraft.client.render.model.json.*;
+import net.minecraft.client.util.*;
+import net.minecraft.client.util.math.*;
+import net.minecraft.item.*;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.random.*;
 
 import static java.lang.Math.min;
 
-public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonBlockEntity>{
+public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<AutomotonBlockEntity>{
 	
 	private final ItemRenderer itemRenderer;
 	
-	public AutomotonBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher, ItemRenderer renderer){
-		super(dispatcher);
+	public AutomotonBlockEntityRenderer(ItemRenderer renderer){
 		itemRenderer = renderer;
 	}
 	
@@ -53,45 +46,44 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 		// render base
 		BakedModelManager modelManager = MinecraftClient.getInstance().getBakedModelManager();
 		AutomotonSkin skin = AutomotonSkins.getSkin(entity.getSkin());
-		BakedModel base = modelManager.getModel(new ModelIdentifier(skin.getBase(), ""));
-		BakedModel body = modelManager.getModel(new ModelIdentifier(skin.getBody(), ""));
+		BakedModel base = modelManager.getModel(new ModelIdentifier(skin.base(), ""));
+		BakedModel body = modelManager.getModel(new ModelIdentifier(skin.body(), ""));
 		
 		BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
 		BlockState state = entity.getWorld().getBlockState(entity.getPos());
 		// TODO: translucency doesn't work with the coloured indicator. find a better indicator?
 		VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntitySolid());
-		manager.getModelRenderer().render(entity.getWorld(), base, state, entity.getPos(), matrices, buffer, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+		manager.getModelRenderer().render(entity.getWorld(), base, state, entity.getPos(), matrices, buffer, false, Random.create(), state.getRenderingSeed(entity.getPos()), overlay);
 		// if the automoton has a colour indicator, add a coloured outline
-		ColourVertexConsumer ovc = new ColourVertexConsumer(vertexConsumers.getBuffer(getColourOverlay()), matrices.peek().getModel(), matrices.peek().getNormal());
+		ColourVertexConsumer ovc = new ColourVertexConsumer(vertexConsumers.getBuffer(getColourOverlay()), matrices.peek().getPositionMatrix(), matrices.peek().getNormalMatrix());
 		entity.getOutlineColour().ifPresent((red, green, blue) -> {
 			matrices.push();
 			ovc.fixedColor(red, green, blue, MathHelper.abs((int)(MathHelper.sin((float)(Math.PI * min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1))) * 200)));
 			matrices.translate(-0.02, -0.02, -0.02);
 			matrices.scale(1.04f, 1.04f, 1.04f);
-			manager.getModelRenderer().render(entity.getWorld(), base, state, entity.getPos(), matrices, ovc, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+			manager.getModelRenderer().render(entity.getWorld(), base, state, entity.getPos(), matrices, ovc, false, Random.create(), state.getRenderingSeed(entity.getPos()), overlay);
 			matrices.pop();
 		});
 		
 		float rotationOffset = 0f;
-		if(entity.lastFacing != null && entity.lastFacing != entity.facing){
+		if(entity.lastFacing != null && entity.lastFacing != entity.facing)
 			if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing))
 				rotationOffset = min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1) - 1;
 			else
 				rotationOffset = 1 - min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1);
-		}
 		
 		matrices.push();
 		matrices.translate(.5, 0, .5);
-		matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
+		matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
 		matrices.translate(-.5, 0, -.5);
 		// render main body with rotation
-		manager.getModelRenderer().render(entity.getWorld(), body, state, entity.getPos(), matrices, buffer, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+		manager.getModelRenderer().render(entity.getWorld(), body, state, entity.getPos(), matrices, buffer, false, Random.create(), state.getRenderingSeed(entity.getPos()), overlay);
 		// colour indicator again
 		if(entity.getOutlineColour().isPresent() && !entity.hasNoModules()){
 			matrices.push();
 			matrices.translate(-0.02, -0.02, -0.02);
 			matrices.scale(1.04f, 1.04f, 1.04f);
-			manager.getModelRenderer().render(entity.getWorld(), body, state, entity.getPos(), matrices, ovc, false, new Random(), state.getRenderingSeed(entity.getPos()), overlay);
+			manager.getModelRenderer().render(entity.getWorld(), body, state, entity.getPos(), matrices, ovc, false, Random.create(), state.getRenderingSeed(entity.getPos()), overlay);
 			matrices.pop();
 		}
 		matrices.pop();
@@ -112,15 +104,15 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 				// move to proper position (on automoton)
 				matrices.translate(.5, 14 / 16f, .5);
 				// rotate to facing
-				matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
+				matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(90 * (entity.facing.getHorizontal() + rotationOffset - 1)));
 				// make the item flat
-				matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90));
+				matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90));
 				// apply engaged/disengaged transformation
 				matrices.translate(-offset * 2, 0, 0);
 				// more facing
-				matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(45));
+				matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(45));
 				// render item
-				itemRenderer.renderItem(headStack, ModelTransformation.Mode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers);
+				itemRenderer.renderItem(headStack, ModelTransformation.Mode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, 0);
 				matrices.pop();
 			}
 			if(renderer != null)
@@ -134,7 +126,7 @@ public class AutomotonBlockEntityRenderer extends BlockEntityRenderer<AutomotonB
 	
 	private static RenderLayer getColourOverlay(){
 		if(COLOUR_OVERLAY == null)
-			COLOUR_OVERLAY = RenderLayer.of("automotons:colour_overlay", VertexFormats.POSITION_COLOR_LIGHT, 7, 256, false, true, RenderLayer.MultiPhaseParameters.builder().writeMaskState(RenderPhaseAccessor.getCOLOR_MASK()).transparency(RenderPhaseAccessor.getTRANSLUCENT_TRANSPARENCY()).texture(RenderPhaseAccessor.getNO_TEXTURE()).cull(RenderPhaseAccessor.getDISABLE_CULLING()).lightmap(RenderPhaseAccessor.getENABLE_LIGHTMAP()).build(false));
+			COLOUR_OVERLAY = new RenderLayer.MultiPhase("automotons:colour_overlay", VertexFormats.POSITION_COLOR_LIGHT, DrawMode.QUADS, 256, false, true, RenderLayer.MultiPhaseParameters.builder().writeMaskState(RenderPhase.COLOR_MASK).transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY).texture(RenderPhase.NO_TEXTURE).cull(RenderPhase.DISABLE_CULLING).lightmap(RenderPhase.ENABLE_LIGHTMAP).build(false));
 		return COLOUR_OVERLAY;
 	}
 }
