@@ -90,8 +90,7 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 		matrices.pop();
 		
 		ItemStack headStack = entity.getStack(12);
-		if(!headStack.isEmpty() && headStack.getItem() instanceof Head){
-			Head head = (Head)headStack.getItem();
+		if(!headStack.isEmpty() && headStack.getItem() instanceof Head head){
 			HeadRenderer renderer = HeadRenderer.RENDERERS.get(head);
 			if(renderer == null || renderer.doNormalRender(entity, entity.data)){
 				matrices.push();

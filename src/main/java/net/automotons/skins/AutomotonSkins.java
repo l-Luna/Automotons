@@ -16,6 +16,7 @@ public class AutomotonSkins{
 	static{
 		SKINS.put(autoId("regular"), REGULAR);
 		SKINS.put(autoId("charcoal"), new AutomotonSkin(autoId("automotons/charcoal_body"), autoId("automotons/charcoal_base")));
+		SKINS.put(autoId("wood"), new AutomotonSkin(autoId("automotons/wood_body"), autoId("automotons/wood_base")));
 	}
 	
 	public static AutomotonSkin getSkin(Identifier id){

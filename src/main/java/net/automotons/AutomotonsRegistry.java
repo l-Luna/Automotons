@@ -185,6 +185,7 @@ public class AutomotonsRegistry{
 	// Skins
 	public static Item REGULAR_SKIN = new SkinItem(TABBED, autoId("regular"));
 	public static Item CHARCOAL_SKIN = new SkinItem(TABBED, autoId("charcoal"));
+	public static Item WOOD_SKIN = new SkinItem(TABBED, autoId("wood"));
 	
 	// Block Entity Types
 	public static BlockEntityType<AutomotonBlockEntity> AUTOMOTON_BE = FabricBlockEntityTypeBuilder
@@ -248,6 +249,7 @@ public class AutomotonsRegistry{
 		
 		register(Registry.ITEM, autoId("regular_skin"), REGULAR_SKIN);
 		register(Registry.ITEM, autoId("charcoal_skin"), CHARCOAL_SKIN);
+		register(Registry.ITEM, autoId("wood_skin"), WOOD_SKIN);
 		
 		// Block Entity Types
 		register(Registry.BLOCK_ENTITY_TYPE, autoId("automoton"), AUTOMOTON_BE);
