@@ -21,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "item": "automotons:note_block_on_a_stick"
+            "items": ["automotons:note_block_on_a_stick"]
           }
         ]
       }
