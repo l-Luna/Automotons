@@ -3,6 +3,7 @@ package net.automotons;
 import net.automotons.blocks.AutomotonBlock;
 import net.automotons.blocks.AutomotonBlockEntity;
 import net.automotons.blocks.PointerBlock;
+import net.automotons.broadcast.Broadcast;
 import net.automotons.broadcast.Broadcasts;
 import net.automotons.items.HeadItem;
 import net.automotons.items.ModuleItem;
@@ -31,6 +32,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static net.automotons.Automotons.autoId;
 import static net.automotons.items.ModuleItem.fromConsumer;
@@ -159,13 +161,26 @@ public class AutomotonsRegistry{
 		broadcast.kill();
 		entity.setOutlineColour(250, 0, 0);
 	})).withClientExec();
-	public static Item RECEIVE_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
-		if(broadcast.getInstruction() != null){
-			broadcast.getInstruction().executeFromBroadcast(entity, broadcast);
-			entity.setOutlineColour(135, 206, 250);
-		}else
-			entity.setOutlineColour(250, 250, 0);
-	}));
+	public static Item RECEIVE_BROADCAST_MODULE = new ModuleItem(TABBED, entity -> {
+		Optional<Broadcast> nearest = Broadcasts.getNearestBroadcast(entity);
+		if(nearest.isPresent()){
+			var broadcast = nearest.get();
+			if(broadcast.getInstruction() != null){
+				entity.setOutlineColour(135, 206, 250);
+				return broadcast.getInstruction().executeFromBroadcast(entity, broadcast);
+			}else{
+				entity.setOutlineColour(250, 250, 0);
+				return false; // what triggers this?
+			}
+		}
+		entity.setOutlineColour(250, 100, 100);
+		return false;
+	}).withBroadcastExecution((entity, broadcast) -> {
+		// a broadcasting automoton will always receive its own broadcast
+		// so a Receive Broadcast instruction will execute itself, leading to SOE
+		// instead we no-op and error
+		return false;
+	});
 	
 	// Skins
 	public static Item REGULAR_SKIN = new SkinItem(TABBED, autoId("regular"));
