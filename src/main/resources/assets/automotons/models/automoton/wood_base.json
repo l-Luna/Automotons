@@ -3,7 +3,7 @@
   "textures": {
     "particle": "automotons:blocks/wood_automoton_top",
     "top": "automotons:blocks/wood_automoton_top",
-    "bottom": "automotons:blocks/wood_automoton_bottom",
+    "bottom": "automotons:blocks/automoton_bottom",
     "side": "automotons:blocks/wood_automoton_side"
   },
   "elements": [

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "automotons:automoton_skins"
+    },
+    {
+      "item": "automotons:pointer"
+    }
+  ],
+  "result": {
+    "item": "automotons:factory_skin"
+  }
+}

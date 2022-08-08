@@ -41,6 +41,7 @@
   "item.automotons.regular_skin": "Automoton Skin",
   "item.automotons.charcoal_skin": "Automoton Skin",
   "item.automotons.wood_skin": "Automoton Skin",
+  "item.automotons.factory_skin": "Automoton Skin",
 
   "block.automotons.automoton": "Automoton",
   "block.automotons.pointer": "Pointer",
@@ -58,6 +59,7 @@
   "skin.automotons.regular": "Regular",
   "skin.automotons.charcoal": "Charcoal",
   "skin.automotons.wood": "Wood",
+  "skin.automotons.factory": "Factory",
 
   "advancements.automotons.root.title": "Automotons",
   "advancements.automotons.root.description": "Obtain a book on robotics.",

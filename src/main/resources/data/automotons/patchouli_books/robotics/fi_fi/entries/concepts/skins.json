@@ -18,7 +18,8 @@
     },
     {
       "type": "crafting",
-      "recipe": "automotons:wood_skin"
+      "recipe": "automotons:wood_skin",
+      "recipe2": "automotons:factory_skin"
     }
   ]
 }

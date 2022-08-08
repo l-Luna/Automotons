@@ -3,7 +3,7 @@
   "textures": {
     "particle": "automotons:blocks/charcoal_automoton_top",
     "top": "automotons:blocks/charcoal_automoton_top",
-    "bottom": "automotons:blocks/charcoal_automoton_bottom",
+    "bottom": "automotons:blocks/automoton_bottom",
     "side": "automotons:blocks/charcoal_automoton_side"
   },
   "elements": [
