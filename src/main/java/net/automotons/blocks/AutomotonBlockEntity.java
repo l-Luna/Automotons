@@ -86,7 +86,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public void tick(){
 		Module toExecute = atIndex(module);
 		// run next instruction
-		if(moduleTime == 0 && toExecute != null && !world.isClient()){
+		if(moduleTime == 0 && toExecute != null && (!getWorld().isClient() || toExecute.shouldExecuteOnClient())){
 			errored = !toExecute.execute(this);
 			sync();
 		}

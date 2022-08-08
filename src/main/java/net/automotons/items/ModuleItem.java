@@ -12,6 +12,7 @@ public class ModuleItem extends Item implements Module{
 	
 	private Predicate<AutomotonBlockEntity> execution;
 	private BiPredicate<AutomotonBlockEntity, Broadcast> executionFromBroadcast;
+	private boolean clientExec = false;
 	
 	public ModuleItem(Settings settings, Predicate<AutomotonBlockEntity> execution){
 		super(settings);
@@ -36,5 +37,14 @@ public class ModuleItem extends Item implements Module{
 	
 	public boolean executeFromBroadcast(AutomotonBlockEntity block, Broadcast broadcast){
 		return executionFromBroadcast != null ? executionFromBroadcast.test(block, broadcast) : execution.test(block);
+	}
+	
+	public ModuleItem withClientExec(){
+		clientExec = true;
+		return this;
+	}
+	
+	public boolean shouldExecuteOnClient(){
+		return clientExec;
 	}
 }

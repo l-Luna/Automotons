@@ -28,4 +28,8 @@ public interface Module{
 	default boolean executeFromBroadcast(AutomotonBlockEntity block, Broadcast broadcast){
 		return execute(block);
 	}
+	
+	default boolean shouldExecuteOnClient(){
+		return false;
+	}
 }

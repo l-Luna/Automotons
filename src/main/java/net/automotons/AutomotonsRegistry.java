@@ -158,7 +158,7 @@ public class AutomotonsRegistry{
 	public static Item KILL_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
 		broadcast.kill();
 		entity.setOutlineColour(250, 0, 0);
-	}));
+	})).withClientExec();
 	public static Item RECEIVE_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
 		if(broadcast.getInstruction() != null){
 			broadcast.getInstruction().executeFromBroadcast(entity, broadcast);
