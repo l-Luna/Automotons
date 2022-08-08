@@ -1,5 +1,6 @@
 package net.automotons.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.automotons.*;
 import net.automotons.blocks.*;
 import net.automotons.items.*;
@@ -36,10 +37,10 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 		// render block
 		BlockModelRenderer.enableBrightnessCache();
 		if(entity.lastPos != null && !entity.lastPos.equals(entity.getPos())){
-			float progress = 1 - min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1);
-			float xProgress = (entity.getPos().getX() - entity.lastPos.getX()) * progress * -1;
-			float yProgress = (entity.getPos().getY() - entity.lastPos.getY()) * progress * -1;
-			float zProgress = (entity.getPos().getZ() - entity.lastPos.getZ()) * progress * -1;
+			double progress = 1 - min((entity.moduleTime + tickDelta) / (double)entity.moduleSpeed(), 1);
+			double xProgress = (entity.getPos().getX() - entity.lastPos.getX()) * progress * -1;
+			double yProgress = (entity.getPos().getY() - entity.lastPos.getY()) * progress * -1;
+			double zProgress = (entity.getPos().getZ() - entity.lastPos.getZ()) * progress * -1;
 			matrices.translate(xProgress, yProgress, zProgress);
 		}
 		
@@ -112,7 +113,7 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 				// more facing
 				matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(45));
 				// render item
-				itemRenderer.renderItem(headStack, ModelTransformation.Mode.FIXED, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, 0);
+				itemRenderer.renderItem(headStack, ModelTransformation.Mode.FIXED, light, overlay, matrices, vertexConsumers, 0);
 				matrices.pop();
 			}
 			if(renderer != null)
@@ -126,7 +127,16 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 	
 	private static RenderLayer getColourOverlay(){
 		if(COLOUR_OVERLAY == null)
-			COLOUR_OVERLAY = new RenderLayer.MultiPhase("automotons:colour_overlay", VertexFormats.POSITION_COLOR_LIGHT, DrawMode.QUADS, 256, false, true, RenderLayer.MultiPhaseParameters.builder().writeMaskState(RenderPhase.COLOR_MASK).transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY).texture(RenderPhase.NO_TEXTURE).cull(RenderPhase.DISABLE_CULLING).lightmap(RenderPhase.ENABLE_LIGHTMAP).build(false));
+			COLOUR_OVERLAY = new RenderLayer.MultiPhase("automotons:colour_overlay",
+					VertexFormats.POSITION_COLOR_LIGHT, DrawMode.QUADS, 256, false, true,
+					RenderLayer.MultiPhaseParameters.builder()
+							.writeMaskState(RenderPhase.COLOR_MASK)
+							.transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
+							.texture(RenderPhase.NO_TEXTURE)
+							.cull(RenderPhase.DISABLE_CULLING)
+							.lightmap(RenderPhase.ENABLE_LIGHTMAP)
+							.shader(RenderPhase.COLOR_SHADER)
+							.build(false));
 		return COLOUR_OVERLAY;
 	}
 }

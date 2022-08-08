@@ -90,7 +90,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			errored = !toExecute.execute(this);
 			sync();
 		}
-		if(!stopOnError || !errored)
+		if(!(stopOnError && errored))
 			moduleTime++;
 		if(moduleTime >= moduleSpeed() && !(getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null))){
 			moduleTime = 0;
