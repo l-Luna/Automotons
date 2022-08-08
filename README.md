@@ -1,5 +1,3 @@
-Come talk on [Discord](https://www.discord.gg/n3JFkVk "Automotons Discord")!
-
 ### Automotons
 Small robots that run instructions (in the form of items called modules), and carry heads that provide functionality.
 
