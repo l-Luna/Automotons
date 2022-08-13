@@ -21,11 +21,7 @@ public class BladeHeadItem extends HeadItem<Object>{
 		super(settings);
 	}
 	
-	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, Object noop){
-		hurtAt(to, automoton.getWorld());
-	}
-	
-	public void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Object o){
+	public void moveInto(AutomotonBlockEntity automoton, BlockPos to, Object o){
 		if(automoton.engaged)
 			hurtAt(to, automoton.getWorld());
 	}
