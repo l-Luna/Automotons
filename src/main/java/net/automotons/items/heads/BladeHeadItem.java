@@ -31,13 +31,16 @@ public class BladeHeadItem extends HeadItem<Object>{
 	}
 	
 	private void hurtAt(BlockPos pos, World world){
-		// get all entities and  h u r t
+		// get all entities and deal damage
 		if(world != null){
 			List<Entity> entities = world.getOtherEntities(null, new Box(pos));
+			boolean didHurt = false;
 			for(Entity entity : entities)
-				if(entity instanceof LivingEntity living)
+				if(entity instanceof LivingEntity living){
+					didHurt = true;
 					living.damage(DamageSource.GENERIC, BLADE_DAMAGE);
-			if(entities.size() > 0)
+				}
+			if(didHurt)
 				world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.BLOCKS, .5f, 1);
 		}
 	}
