@@ -76,10 +76,10 @@ public class AutomotonsRegistry{
 	
 	// Turn & engage
 	public static Item NOOP_MODULE = new ModuleItem(TABBED, entity -> true);
-	public static Item CW_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::turnCw);
-	public static Item CCW_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::turnCcw);
-	public static Item ENGAGE_MODULE = fromConsumer(TABBED, entity -> entity.setEngaged(true));
-	public static Item DISENGAGE_MODULE = fromConsumer(TABBED, entity -> entity.setEngaged(false));
+	public static Item CW_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::turnCw).withClientExec();
+	public static Item CCW_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::turnCcw).withClientExec();
+	public static Item ENGAGE_MODULE = fromConsumer(TABBED, entity -> entity.setEngaged(true)).withClientExec();
+	public static Item DISENGAGE_MODULE = fromConsumer(TABBED, entity -> entity.setEngaged(false)).withClientExec();
 	public static Item RAND_TURN_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.getWorld() != null && entity.getWorld().random.nextBoolean())
 			return entity.turnCw();
@@ -108,10 +108,10 @@ public class AutomotonsRegistry{
 	});
 	
 	// Movement
-	public static Item MOVE_FORWARD_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveForward);
-	public static Item MOVE_LEFT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveLeft);
-	public static Item MOVE_RIGHT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveRight);
-	public static Item MOVE_BACK_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveBack);
+	public static Item MOVE_FORWARD_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveForward).withClientExec();
+	public static Item MOVE_LEFT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveLeft).withClientExec();
+	public static Item MOVE_RIGHT_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveRight).withClientExec();
+	public static Item MOVE_BACK_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveBack).withClientExec();
 	public static Item SCAN_AND_MOVE_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.getWorld() != null){
 			BlockState below = entity.getWorld().getBlockState(entity.getPos().down());

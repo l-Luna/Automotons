@@ -88,7 +88,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		// run next instruction
 		if(moduleTime == 0 && toExecute != null && (!getWorld().isClient() || toExecute.shouldExecuteOnClient())){
 			errored = !toExecute.execute(this);
-			sync();
+			if(!toExecute.shouldExecuteOnClient())
+				sync();
 		}
 		if(!(stopOnError && errored))
 			moduleTime++;
