@@ -13,7 +13,7 @@
     "show_toast": true,
     "announce_to_chat": false,
     "hidden": false,
-    "background": "automotons:textures/blocks/pointer_side.png"
+    "background": "automotons:textures/block/pointer_side.png"
   },
   "criteria": {
     "robotics_book": {
