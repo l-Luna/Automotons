@@ -6,7 +6,7 @@
   "name": "Automotons",
   "description": "Small programmable robots.",
   "authors": [
-    "Luna (AKA Leppa)",
+    "Luna",
     "Upcraft",
     "Sigma-One",
     "LemmaEOF"
@@ -18,10 +18,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.automotons.Automotons"
+      "automotons.Automotons"
     ],
     "client": [
-      "net.automotons.client.AutomotonsClient"
+      "automotons.client.AutomotonsClient"
     ]
   },
   "mixins": [

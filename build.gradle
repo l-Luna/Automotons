@@ -1,14 +1,13 @@
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
-    id 'io.github.juuxel.loom-quiltflower' version '1.7.1'
+	id 'fabric-loom' version '1.10.5'
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 def ENV = System.getenv()
-archivesBaseName = project.archives_base_name
+base.archivesName = project.archives_base_name
 version = ENV.BUILD_VERSION ?: project.mod_version
 group = project.maven_group
 
@@ -23,10 +22,8 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	// Patchouli - compile with and include
 	def patchouli = "vazkii.patchouli:Patchouli:${patchouli_version}"
 	modImplementation patchouli
 	include patchouli
@@ -36,15 +33,22 @@ dependencies {
 // ensure that the encoding is set to UTF-8, no matter what the system default is
 // this fixes some edge cases with special characters not displaying correctly
 // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
 	options.encoding = "UTF-8"
 }
 
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
+// strip comments from JSON files
+tasks.withType(ProcessResources).configureEach {
+	filesMatching("**/*.json") {
+		it.filter {
+			it.strip().startsWith("//") ? null : it
+		}
+	}
+}
+
+// generate sources jar
+tasks.register('sourcesJar', Jar) {
+	dependsOn classes
 	from sourceSets.main.allSource
 }
 
@@ -54,25 +58,4 @@ jar {
 
 loom {
     accessWidenerPath = file("src/main/resources/automotons.accesswidener")
-}
-
-// configure the maven publication
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			// add all the jars that should be included when publishing to maven
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
-
-	// select the repositories you want to publish to
-	repositories {
-		// uncomment to publish to the local maven
-		// mavenLocal()
-	}
 }
