@@ -20,7 +20,7 @@ public class Automotons implements ModInitializer{
 	public static final ItemGroup ITEMS = FabricItemGroup
 			.builder(autoId("items"))
 			.icon(() -> new ItemStack(AutomotonsRegistry.AUTOMOTON.asItem()))
-			.entries((features, entries, isOp) -> AutomotonsRegistry.ALL_ITEMS.forEach(entries::add))
+			.entries((ctx, entries) -> AutomotonsRegistry.ALL_ITEMS.forEach(entries::add))
 			.build();
 	
 	public void onInitialize(){

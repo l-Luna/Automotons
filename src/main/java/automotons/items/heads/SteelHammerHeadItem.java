@@ -141,7 +141,7 @@ public class SteelHammerHeadItem extends HeadItem<Object>{
 		smithingInventory.setStack(0, left);
 		smithingInventory.setStack(1, right);
 		Optional<SmithingRecipe> match = world.getRecipeManager().getFirstMatch(RecipeType.SMITHING, smithingInventory, world);
-		return match.map(recipe -> new Pair<>(recipe.getOutput(), 0));
+		return match.map(recipe -> new Pair<>(recipe.getOutput(world.getRegistryManager()), 0));
 	}
 	
 	protected Optional<Pair<ItemStack, Integer>> getEnchantingCombo(ItemStack left, ItemStack right){

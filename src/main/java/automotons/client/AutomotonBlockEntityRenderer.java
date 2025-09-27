@@ -5,7 +5,6 @@ import automotons.blocks.AutomotonBlockEntity;
 import automotons.items.Head;
 import automotons.skins.AutomotonSkin;
 import automotons.skins.AutomotonSkins;
-import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
@@ -17,7 +16,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -59,8 +58,8 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 		// render base
 		BakedModelManager modelManager = MinecraftClient.getInstance().getBakedModelManager();
 		AutomotonSkin skin = AutomotonSkins.getSkin(entity.getSkin());
-		BakedModel base = BakedModelManagerHelper.getModel(modelManager, skin.base());
-		BakedModel body = BakedModelManagerHelper.getModel(modelManager, skin.body());
+		BakedModel base = modelManager.getModel(skin.base());
+		BakedModel body = modelManager.getModel(skin.body());
 		
 		BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
 		BlockState state = entity.getWorld().getBlockState(entity.getPos());
@@ -124,7 +123,7 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 				// more facing
 				matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(45));
 				// render item
-				itemRenderer.renderItem(headStack, ModelTransformation.Mode.FIXED, light, overlay, matrices, vertexConsumers, 0);
+				itemRenderer.renderItem(headStack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, entity.getWorld(), 0);
 				matrices.pop();
 			}
 			if(renderer != null)
@@ -219,7 +218,7 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 			if(bBlock < luminance)
 				bBlock = luminance;
 			
-			return ((int)MathHelper.lerp(progress, aSky, bSky)) << 20 | ((int)MathHelper.lerp(progress, aBlock, bBlock)) << 4;
+			return MathHelper.lerp(progress, aSky, bSky) << 20 | MathHelper.lerp(progress, aBlock, bBlock) << 4;
 		}
 	}
 	
