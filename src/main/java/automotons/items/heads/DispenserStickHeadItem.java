@@ -2,10 +2,7 @@ package automotons.items.heads;
 
 import automotons.blocks.AutomotonBlockEntity;
 import automotons.items.HeadItem;
-import automotons.mixin.DispenserBlockAccessor;
-import automotons.mixin.StateAccessor;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.item.ItemStack;
@@ -21,10 +18,9 @@ public class DispenserStickHeadItem extends HeadItem<Object>{
 		super(settings);
 	}
 	
-	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, Object unused){
-		// get the dispenser behaviour
+	public void endEngageInto(AutomotonBlockEntity automoton, BlockPos to, Object __){
 		ItemStack stack = automoton.getStack(13);
-		DispenserBehavior behavior = ((DispenserBlockAccessor)Blocks.DISPENSER).callGetBehaviorForItem(stack);
+		DispenserBehavior behavior = DispenserBlock.BEHAVIORS.get(stack.getItem());
 		World world = automoton.getWorld();
 		if(world instanceof ServerWorld && !world.isClient())
 			behavior.dispense(new DirectionReplacingBlockPointer((ServerWorld)world, automoton.getPos()), stack);
@@ -43,13 +39,10 @@ public class DispenserStickHeadItem extends HeadItem<Object>{
 	
 	protected static class DirectionReplacingBlockState extends BlockState{
 		
-		final BlockState deferred;
 		final AutomotonBlockEntity entity;
 		
-		@SuppressWarnings({"rawtypes", "unchecked"})
 		public DirectionReplacingBlockState(BlockState deferred, AutomotonBlockEntity entity){
-			super(deferred.getBlock(), deferred.getEntries(), ((StateAccessor)deferred).getCodec());
-			this.deferred = deferred;
+			super(deferred.getBlock(), deferred.getEntries(), deferred.codec);
 			this.entity = entity;
 		}
 		

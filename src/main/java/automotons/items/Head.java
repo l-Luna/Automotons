@@ -25,6 +25,7 @@ public interface Head<Data>{
 	 * Writes the automoton's extra data to an NBT tag for serialization.
 	 *
 	 * @param world
+	 *      The world the automoton is in.
 	 * @param data
 	 * 		The extra data stored for the head. May be null.
 	 * @return The extra data in serialized form.
@@ -37,6 +38,7 @@ public interface Head<Data>{
 	 * Reads extra data from the head from an NBT tag for deserialization.
 	 *
 	 * @param world
+	 *      The world the automoton is in.
 	 * @param tag
 	 * 		The extra data in serialized form.
 	 * @return The extra data stored for the head. May be null.
@@ -63,6 +65,32 @@ public interface Head<Data>{
 	}
 	
 	/**
+	 * Called when an automoton holding this head starts engaging into a block.
+	 *
+	 * @param automoton
+	 * 		The automoton holding this head that has engaged.
+	 * @param to
+	 * 		The block the automoton is facing.
+	 * @param data
+	 * 		The extra data stored for the head. May be null.
+	 */
+	default void startEngageInto(AutomotonBlockEntity automoton, BlockPos to, Data data){
+	}
+	
+	/**
+	 * Called when an automoton holding this head starts retracting from a block.
+	 *
+	 * @param automoton
+	 * 		The automoton holding this head that has disengaged.
+	 * @param from
+	 * 		The block the automoton is facing.
+	 * @param data
+	 * 		The extra data stored for the head. May be null.
+	 */
+	default void startRetractFrom(AutomotonBlockEntity automoton, BlockPos from, Data data){
+	}
+	
+	/**
 	 * Called when an automoton holding this head finishes engaging into a block.
 	 *
 	 * @param automoton
@@ -72,8 +100,8 @@ public interface Head<Data>{
 	 * @param data
 	 * 		The extra data stored for the head. May be null.
 	 */
-	default void engageInto(AutomotonBlockEntity automoton, BlockPos to, Data data){
-		moveInto(automoton, to, data);
+	default void endEngageInto(AutomotonBlockEntity automoton, BlockPos to, Data data){
+		endMoveInto(automoton, to, data);
 	}
 	
 	/**
@@ -86,7 +114,7 @@ public interface Head<Data>{
 	 * @param data
 	 * 		The extra data stored for the head. May be null.
 	 */
-	default void retractFrom(AutomotonBlockEntity automoton, BlockPos from, Data data){
+	default void endRetractFrom(AutomotonBlockEntity automoton, BlockPos from, Data data){
 	}
 	
 	/**
@@ -117,7 +145,7 @@ public interface Head<Data>{
 	 * 		The extra data stored for the head. May be null.
 	 */
 	default void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, Data data){
-		moveInto(automoton, to, data);
+		endMoveInto(automoton, to, data);
 	}
 	
 	/**
@@ -173,7 +201,7 @@ public interface Head<Data>{
 	 * 		The extra data stored for the head. May be null.
 	 */
 	default void endAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockPos prevFacing, BlockPos facing, Data data){
-		moveInto(automoton, facing, data);
+		endMoveInto(automoton, facing, data);
 	}
 	
 	/**
@@ -187,7 +215,7 @@ public interface Head<Data>{
 	 * @param data
 	 * 		The extra data stored for the head. May be null.
 	 */
-	default void moveInto(AutomotonBlockEntity automoton, BlockPos to, Data data){
+	default void endMoveInto(AutomotonBlockEntity automoton, BlockPos to, Data data){
 	}
 	
 	/**

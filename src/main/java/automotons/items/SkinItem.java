@@ -27,7 +27,7 @@ public class SkinItem extends Item{
 		World world = context.getWorld();
 		BlockEntity entity = world.getBlockEntity(context.getBlockPos());
 		if(entity instanceof AutomotonBlockEntity automoton){
-			automoton.setSkin(skin, context.getPlayer());
+			automoton.setSkin(skin);
 			if(!world.isClient())
 				automoton.sync();
 			return ActionResult.SUCCESS;

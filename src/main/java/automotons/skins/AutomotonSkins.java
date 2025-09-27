@@ -18,7 +18,7 @@ public class AutomotonSkins{
 		SKINS.put(autoId("charcoal"), new AutomotonSkin(autoId("automoton/charcoal_body"), autoId("automoton/charcoal_base")));
 		SKINS.put(autoId("wood"), new AutomotonSkin(autoId("automoton/wood_body"), autoId("automoton/wood_base")));
 		SKINS.put(autoId("factory"), new AutomotonSkin(autoId("automoton/factory_body"), autoId("automoton/factory_base")));
-	}/**/
+	}
 	
 	public static AutomotonSkin getSkin(Identifier id){
 		return SKINS.getOrDefault(id, REGULAR);

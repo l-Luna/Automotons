@@ -20,38 +20,37 @@ import static java.lang.Math.min;
 public class StickyHeadRenderer implements HeadRenderer<BlockState>{
 	
 	public void render(AutomotonBlockEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, BlockState state, int light, int overlay, float tickDelta){
-		// if we're rotating, display block
+		// display blocks that are moving in-flight
+		// we may need to render a block even when the automoton is static, in case the block target was invalidated after the automoton started moving and the automoton has stopped
 		if(state != null && !state.isAir()){
 			float rotationOffset = 0;
-			if(((entity.lastFacing != null && entity.lastFacing != entity.facing) || (entity.lastPos != null && !entity.lastPos.equals(entity.getPos())))){
-				BlockModelRenderer.enableBrightnessCache();
-				matrices.push();
-				BlockState rotated = state;
-				if(entity.lastFacing != null && entity.lastFacing != entity.facing){
-					BlockRotation rotation;
-					// FIXME: state rotation
-					if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing)){
-						rotationOffset = min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1) - 1;
-						rotation = BlockRotation.CLOCKWISE_90;
-					}else{
-						rotation = BlockRotation.COUNTERCLOCKWISE_90;
-						rotationOffset = 1 - min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1);
-					}
-					rotated = rotated.rotate(rotation);
+			BlockModelRenderer.enableBrightnessCache();
+			matrices.push();
+			BlockState rotated = state;
+			if(entity.lastFacing != null && entity.lastFacing != entity.facing){
+				BlockRotation rotation;
+				// FIXME: state rotation
+				if(Automotons.isClockwiseRotation(entity.lastFacing, entity.facing)){
+					rotationOffset = min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1) - 1;
+					rotation = BlockRotation.CLOCKWISE_90;
+				}else{
+					rotation = BlockRotation.COUNTERCLOCKWISE_90;
+					rotationOffset = 1 - min((entity.moduleTime + tickDelta) / (float)entity.moduleSpeed(), 1);
 				}
-				// only display if rotating
-				// point of rotation
-				matrices.translate(.5, 0, .5);
-				matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(90 * (entity.facing.getHorizontal() + rotationOffset + 1)));
-				// offset
-				matrices.translate(.5, 0, -.5);
-				BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
-				BakedModel model = manager.getModel(rotated);
-				VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
-				manager.getModelRenderer().render(entity.getWorld(), model, rotated, entity.getPos(), matrices, buffer, false, Random.create(), rotated.getRenderingSeed(entity.getPos()), overlay);
-				matrices.pop();
-				BlockModelRenderer.disableBrightnessCache();
+				rotated = rotated.rotate(rotation);
 			}
+			// only display if rotating
+			// point of rotation
+			matrices.translate(.5, 0, .5);
+			matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(90 * (entity.facing.getHorizontal() + rotationOffset + 1)));
+			// offset
+			matrices.translate(.5, 0, -.5);
+			BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
+			BakedModel model = manager.getModel(rotated);
+			VertexConsumer buffer = vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
+			manager.getModelRenderer().render(entity.getWorld(), model, rotated, entity.getPos(), matrices, buffer, false, Random.create(), rotated.getRenderingSeed(entity.getPos()), overlay);
+			matrices.pop();
+			BlockModelRenderer.disableBrightnessCache();
 		}
 	}
 }

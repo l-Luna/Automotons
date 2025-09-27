@@ -10,6 +10,6 @@ public class BroadcastAntennaeHead extends HeadItem<Object>{
 	}
 	
 	public boolean canGenerateBroadcast(AutomotonBlockEntity automoton, Object o){
-		return automoton.engaged;
+		return true;
 	}
 }

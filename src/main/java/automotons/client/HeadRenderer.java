@@ -52,7 +52,7 @@ public interface HeadRenderer<Data>{
 	
 	/**
 	 * Whether the automoton should render the head in the regular way i.e. rendering the item model with rotation and offset.
-	 * This does not affect whether <pre>render</pre> is called.
+	 * This does not affect whether <code>render</code> is called.
 	 *
 	 * @param automoton
 	 * 		The block entity being rendered.

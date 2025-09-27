@@ -3,12 +3,6 @@
   "minVersion": "0.8",
   "package": "automotons.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "DispenserBlockAccessor",
-    "ExperienceOrbEntityAccessor",
-    "SlotAccessor",
-    "StateAccessor"
-  ],
   "injectors": {
     "defaultRequire": 1
   }

@@ -6,7 +6,6 @@ import automotons.items.Head;
 import automotons.skins.AutomotonSkin;
 import automotons.skins.AutomotonSkins;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
@@ -48,11 +47,12 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 		
 		// render block
 		BlockModelRenderer.enableBrightnessCache();
+		float progress = (entity.moduleTime + tickDelta) / (float)entity.moduleSpeed();
 		if(entity.lastPos != null && !entity.lastPos.equals(entity.getPos())){
-			double progress = 1 - min((entity.moduleTime + tickDelta) / (double)entity.moduleSpeed(), 1);
-			double xProgress = (entity.getPos().getX() - entity.lastPos.getX()) * progress * -1;
-			double yProgress = (entity.getPos().getY() - entity.lastPos.getY()) * progress * -1;
-			double zProgress = (entity.getPos().getZ() - entity.lastPos.getZ()) * progress * -1;
+			double moveProgress = 1 - min(progress, 1);
+			double xProgress = (entity.getPos().getX() - entity.lastPos.getX()) * moveProgress * -1;
+			double yProgress = (entity.getPos().getY() - entity.lastPos.getY()) * moveProgress * -1;
+			double zProgress = (entity.getPos().getZ() - entity.lastPos.getZ()) * moveProgress * -1;
 			matrices.translate(xProgress, yProgress, zProgress);
 		}
 		
@@ -69,7 +69,6 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 		manager.getModelRenderer().render(entity.getWorld(), base, state, entity.getPos(), matrices, buffer, false, Random.create(), state.getRenderingSeed(entity.getPos()), overlay);
 		// if the automoton has a colour indicator, add a coloured outline
 		ColourVertexConsumer ovc = new ColourVertexConsumer(vertexConsumers.getBuffer(getColourOverlay()), matrices.peek().getPositionMatrix(), matrices.peek().getNormalMatrix());
-		float progress = (entity.moduleTime + tickDelta) / (float)entity.moduleSpeed();
 		entity.getOutlineColour().ifPresent((red, green, blue) -> {
 			matrices.push();
 			ovc.fixedColor(red, green, blue, MathHelper.abs((int)(MathHelper.sin((float)(Math.PI * min(progress, 1))) * 200)));

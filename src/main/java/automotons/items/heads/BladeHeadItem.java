@@ -21,7 +21,7 @@ public class BladeHeadItem extends HeadItem<Object>{
 		super(settings);
 	}
 	
-	public void moveInto(AutomotonBlockEntity automoton, BlockPos to, Object o){
+	public void endMoveInto(AutomotonBlockEntity automoton, BlockPos to, Object o){
 		if(automoton.engaged)
 			hurtAt(to, automoton.getWorld());
 	}

@@ -23,14 +23,15 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	}
 	
 	public boolean canRotateInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
-		if(automoton.getWorld() != null){
-			BlockState fromState = automoton.getWorld().getBlockState(from);
-			if(automoton.engaged && canMove(fromState, automoton.getWorld(), from)){
-				PistonBehavior behavior = automoton.getWorld().getBlockState(to).getPistonBehavior();
-				return automoton.getWorld().getBlockState(to).isAir() || behavior == PistonBehavior.DESTROY;
-			}
-		}
-		return true;
+		return automoton.getWorld() == null
+				|| !automoton.engaged
+				|| !canMove(automoton.getWorld().getBlockState(from), automoton.getWorld(), from)
+				|| automoton.getWorld().getBlockState(to).isAir()
+				|| automoton.getWorld().getBlockState(to).getPistonBehavior() == PistonBehavior.DESTROY;
+	}
+	
+	public boolean canAutomotonMoveInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
+		return canRotateInto(automoton, to.offset(automoton.facing), from.offset(automoton.facing), state);
 	}
 	
 	public NbtCompound writeExtraData(World world, BlockState state){
@@ -51,7 +52,6 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 	public void endRotationInto(AutomotonBlockEntity automoton, BlockPos to, BlockPos from, BlockState state){
 		BlockState toState = automoton.getWorld() == null ? null : automoton.getWorld().getBlockState(to);
 		if(automoton.engaged && state != null && toState != null && !state.isAir() && (toState.isAir() || toState.getPistonBehavior() == PistonBehavior.DESTROY)){
-			// paste block
 			World world = automoton.getWorld();
 			BlockRotation rotation = BlockRotation.COUNTERCLOCKWISE_90;
 			if(Automotons.isClockwiseRotation(automoton.lastFacing, automoton.facing))
@@ -61,7 +61,6 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 				world.breakBlock(to, true);
 			
 			world.setBlockState(to, state.rotate(rotation));
-			// stop storing it
 			automoton.setData(null);
 			if(!world.isClient())
 				automoton.sync();
@@ -101,20 +100,22 @@ public class StickyHeadItem extends HeadItem<BlockState>{
 		}
 	}
 	
-	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, BlockState state){
-		super.engageInto(automoton, to, state);
+	public void startEngageInto(AutomotonBlockEntity automoton, BlockPos to, BlockState state){
+		super.endEngageInto(automoton, to, state);
 		if(automoton.getWorld() != null)
-			automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, .5f, automoton.getWorld().random.nextFloat() * .25f + .6f);
+			automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, .2f, automoton.getWorld().random.nextFloat() * .25f + .6f);
 	}
 	
-	public void retractFrom(AutomotonBlockEntity automoton, BlockPos from, BlockState state){
-		super.retractFrom(automoton, from, state);
+	public void startRetractFrom(AutomotonBlockEntity automoton, BlockPos from, BlockState state){
+		super.endRetractFrom(automoton, from, state);
 		if(automoton.getWorld() != null)
-			automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, .5f, automoton.getWorld().random.nextFloat() * .15f + .6f);
+			automoton.getWorld().playSound(null, automoton.getPos(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, .2f, automoton.getWorld().random.nextFloat() * .15f + .6f);
 	}
 	
 	public static boolean canMove(BlockState state, World world, BlockPos pos){
-		return !state.isAir() && !(state.getBlock() instanceof BlockEntityProvider || state.getHardness(world, pos) == -1) && state.getPistonBehavior() == PistonBehavior.NORMAL;
+		return !state.isAir()
+				&& !(state.getBlock() instanceof BlockEntityProvider || state.getHardness(world, pos) == -1)
+				&& state.getPistonBehavior() == PistonBehavior.NORMAL;
 	}
 	
 	public float getEngageOffset(AutomotonBlockEntity automoton, BlockState state){

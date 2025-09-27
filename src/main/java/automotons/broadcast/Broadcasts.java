@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public final class Broadcasts{
 	
-	/** The radius, in blocks, that broadcasts can be received by an automoton, by manhattan distance. */
+	/** Radius in blocks that broadcasts can be received by an automoton, by manhattan distance. */
 	public static final int BROADCAST_RECEIVE_RADIUS = 24;
 	
 	private Broadcasts(){

@@ -18,3 +18,10 @@ accessible method net/minecraft/client/render/block/BlockModelRenderer renderQua
 
 # Broadcast ticking
 accessible field net/minecraft/world/World blockEntityTickers Ljava/util/List;
+
+# Dispenser on a Stick impl
+accessible field net/minecraft/block/DispenserBlock BEHAVIORS Ljava/util/Map;
+accessible field net/minecraft/state/State codec Lcom/mojang/serialization/MapCodec;
+
+# Automoton movement impl
+mutable field net/minecraft/screen/slot/Slot inventory Lnet/minecraft/inventory/Inventory;

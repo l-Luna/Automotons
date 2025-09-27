@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "The Broadcast Antennae head allows for sending instructions to other automotons. An engaged automoton holding a Broadcast Antennae will transmit its instructions while a broadcast is active. Broadcasts are started with the Start Broadcast module, and stopped by an End Broadcast module. Another automoton end the nearest broadcast using the Kill Broadcast module."
+      "text": "The Broadcast Antennae head allows for sending instructions to other automotons. An automoton holding a Broadcast Antennae will transmit its instructions while a broadcast is active. Broadcasts are started with the Start Broadcast module, and stopped by an End Broadcast module. Another automoton can end the nearest broadcast using the Kill Broadcast module."
     },
     {
       "type": "text",

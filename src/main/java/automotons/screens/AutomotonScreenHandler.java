@@ -4,7 +4,6 @@ import automotons.AutomotonsRegistry;
 import automotons.blocks.AutomotonBlockEntity;
 import automotons.items.HeadItem;
 import automotons.items.ModuleItem;
-import automotons.mixin.SlotAccessor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -120,6 +119,6 @@ public class AutomotonScreenHandler extends ScreenHandler{
 		inventory = automoton;
 		this.automoton = automoton;
 		for(int i = 0; i < 14; i++)
-			((SlotAccessor)getSlot(i)).setInventory(automoton);
+			getSlot(i).inventory = automoton;
 	}
 }

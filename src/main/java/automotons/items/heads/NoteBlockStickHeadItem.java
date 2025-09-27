@@ -18,7 +18,7 @@ public class NoteBlockStickHeadItem extends HeadItem<Object>{
 		super(settings);
 	}
 	
-	public void engageInto(AutomotonBlockEntity automoton, BlockPos to, Object unused){
+	public void endEngageInto(AutomotonBlockEntity automoton, BlockPos to, Object unused){
 		ItemStack stack = automoton.getStack(13);
 		World world = automoton.getWorld();
 		if(world != null)
@@ -36,7 +36,7 @@ public class NoteBlockStickHeadItem extends HeadItem<Object>{
 				world.syncWorldEvent(1010, automoton.getPos(), Registries.ITEM.getRawId(stack.getItem()));
 	}
 	
-	public void retractFrom(AutomotonBlockEntity automoton, BlockPos from, Object unused){
+	public void endRetractFrom(AutomotonBlockEntity automoton, BlockPos from, Object unused){
 		World world = automoton.getWorld();
 		if(world != null)
 			world.syncWorldEvent(1010, automoton.getPos(), 0);

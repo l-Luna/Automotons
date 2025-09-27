@@ -13,7 +13,7 @@ import static automotons.AutomotonsRegistry.AUTOMOTON_SCREEN_HANDLER;
 public class AutomotonsClient implements ClientModInitializer{
 	
 	public void onInitializeClient(){
-		// TERs
+		// BERs
 		BlockEntityRendererFactories.register(AutomotonsRegistry.AUTOMOTON_BE, context -> new AutomotonBlockEntityRenderer(context.getItemRenderer()));
 		HeadRenderer.init();
 		

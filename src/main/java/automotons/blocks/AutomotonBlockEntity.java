@@ -30,7 +30,6 @@ import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static automotons.Automotons.autoId;
 
@@ -71,8 +70,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	private int[] storeSlot;
 	// Current skin.
 	private Identifier skin = autoId("regular");
-	// Player that set the automoton's skin.
-	private UUID skinSetter;
 	// Outline colour. No outline is displayed if not present.
 	OptionalColour outlineColour = new OptionalColour();
 	
@@ -103,9 +100,9 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			if(lastEngaged != engaged){
 				// engage (happens after)
 				if(engaged && getHead() != null)
-					getHead().engageInto(this, pos.offset(facing), data);
+					getHead().endEngageInto(this, pos.offset(facing), data);
 				if(!engaged && getHead() != null)
-					getHead().retractFrom(this, pos.offset(facing), data);
+					getHead().endRetractFrom(this, pos.offset(facing), data);
 				lastEngaged = engaged;
 			}
 			if(lastFacing != null && lastFacing != facing){
@@ -264,6 +261,11 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	public void setEngaged(boolean engaged){
 		lastEngaged = this.engaged;
 		this.engaged = engaged;
+		if(getHead() != null)
+			if(engaged)
+				getHead().startEngageInto(this, pos.offset(facing), data);
+			else
+				getHead().startRetractFrom(this, pos.offset(facing), data);
 	}
 	
 	protected NbtCompound toTag(){
@@ -287,8 +289,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		nbt.putBoolean("errored", errored);
 		nbt.putBoolean("stopOnError", stopOnError);
 		nbt.putString("skin", skin.toString());
-		if(skinSetter != null)
-			nbt.putUuid("skinSetter", skinSetter);
 		Inventories.writeNbt(nbt, inventory);
 		if(getHead() != null)
 			nbt.put("headData", getHead().writeExtraData(world, data));
@@ -320,8 +320,6 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		errored = tag.getBoolean("errored");
 		stopOnError = tag.getBoolean("stopOnError");
 		skin = new Identifier(tag.getString("skin"));
-		if(tag.containsUuid("skinSetter"))
-			skinSetter = tag.getUuid("skinSetter");
 		if(tag.getBoolean("hasLastPos"))
 			lastPos = new BlockPos(tag.getInt("lastX"), tag.getInt("lastY"), tag.getInt("lastZ"));
 		if(tag.getBoolean("hasOutline"))
@@ -427,13 +425,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		return skin;
 	}
 	
-	public void setSkin(Identifier skin, PlayerEntity player){
+	public void setSkin(Identifier skin){
 		this.skin = skin;
-		this.skinSetter = player != null ? player.getUuid() : null;
-	}
-	
-	public UUID getSkinSetter(){
-		return skinSetter;
 	}
 	
 	public OptionalColour getOutlineColour(){

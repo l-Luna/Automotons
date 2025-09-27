@@ -14,7 +14,7 @@ import automotons.loot.BlockEntityInventoryEntry;
 import automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -195,8 +195,7 @@ public class AutomotonsRegistry{
 			.build(null);
 	
 	// Screens and Screen Handler Types
-	public static final ScreenHandlerType<AutomotonScreenHandler> AUTOMOTON_SCREEN_HANDLER = ScreenHandlerRegistry
-			.registerExtended(autoId("automoton"), AutomotonScreenHandler::new);
+	public static final ScreenHandlerType<AutomotonScreenHandler> AUTOMOTON_SCREEN_HANDLER = new ExtendedScreenHandlerType<>(AutomotonScreenHandler::new);
 	
 	// Loot Pool Entry Types
 	public static final LootPoolEntryType BLOCK_ENTITY_INVENTORY = new LootPoolEntryType(new BlockEntityInventoryEntry.Serializer());
@@ -255,16 +254,19 @@ public class AutomotonsRegistry{
 		register("wood_skin", WOOD_SKIN);
 		register("factory_skin", FACTORY_SKIN);
 		
-		// Block Entity Types
+		// Block entities
 		register("automoton", AUTOMOTON_BE);
 		
-		// Loot Pool Entry Types
+		// Screen handlers
+		register("automoton", AUTOMOTON_SCREEN_HANDLER);
+		
+		// Loot pool entries
 		register("block_entity_inventory", BLOCK_ENTITY_INVENTORY);
 	}
 	
 	@SuppressWarnings("unchecked")
 	private static void register(String id, @NotNull Object value){
-		Registry<?> r = null; // type switch would be useful here
+		Registry<?> r; // type switch would be useful here
 		if(value instanceof Item i){
 			r = Registries.ITEM;
 			ALL_ITEMS.add(i);
@@ -272,6 +274,8 @@ public class AutomotonsRegistry{
 			r = Registries.BLOCK;
 		else if(value instanceof BlockEntityType<?>)
 			r = Registries.BLOCK_ENTITY_TYPE;
+		else if(value instanceof ScreenHandlerType<?>)
+			r = Registries.SCREEN_HANDLER;
 		else if(value instanceof LootPoolEntryType)
 			r = Registries.LOOT_POOL_ENTRY_TYPE;
 		else
