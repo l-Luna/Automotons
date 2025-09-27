@@ -13,5 +13,8 @@ accessible field net/minecraft/client/render/RenderPhase COLOR_PROGRAM Lnet/mine
 
 accessible method net/minecraft/client/render/RenderLayer$MultiPhase <init> (Ljava/lang/String;Lnet/minecraft/client/render/VertexFormat;Lnet/minecraft/client/render/VertexFormat$DrawMode;IZZLnet/minecraft/client/render/RenderLayer$MultiPhaseParameters;)V
 
+# Lighting rotated objects
+accessible method net/minecraft/client/render/block/BlockModelRenderer renderQuadsFlat (Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;IIZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Ljava/util/List;Ljava/util/BitSet;)V
+
 # Broadcast ticking
 accessible field net/minecraft/world/World blockEntityTickers Ljava/util/List;

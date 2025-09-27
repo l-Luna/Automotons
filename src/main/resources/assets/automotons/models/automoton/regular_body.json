@@ -1,5 +1,5 @@
 {
-  "parent": "block/block",
+  "ambientocclusion": false,
   "textures": {
     "particle": "automotons:block/automoton_top",
     "top": "automotons:block/automoton_top",
