@@ -8,6 +8,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -18,7 +19,8 @@ public class Automotons implements ModInitializer{
 	public static final String MODID = "automotons";
 	
 	public static final ItemGroup ITEMS = FabricItemGroup
-			.builder(autoId("items"))
+			.builder()
+			.displayName(Text.translatable("itemGroup.automotons.items"))
 			.icon(() -> new ItemStack(AutomotonsRegistry.AUTOMOTON.asItem()))
 			.entries((ctx, entries) -> AutomotonsRegistry.ALL_ITEMS.forEach(entries::add))
 			.build();

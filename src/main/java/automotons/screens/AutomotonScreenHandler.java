@@ -34,7 +34,7 @@ public class AutomotonScreenHandler extends ScreenHandler{
 	public AutomotonScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf){
 		super(AutomotonsRegistry.AUTOMOTON_SCREEN_HANDLER, syncId);
 		BlockPos autoPosition = buf.readBlockPos();
-		BlockEntity entity = playerInventory.player.world.getBlockEntity(autoPosition);
+		BlockEntity entity = playerInventory.player.getWorld().getBlockEntity(autoPosition);
 		if(entity instanceof AutomotonBlockEntity){
 			automoton = (AutomotonBlockEntity)entity;
 			automoton.notifying.add(this);

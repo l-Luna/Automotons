@@ -18,11 +18,11 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.loot.entry.LootPoolEntryType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -49,8 +49,8 @@ public class AutomotonsRegistry{
 	private static final TagKey<Block> SCANNABLE_REVERSE = TagKey.of(RegistryKeys.BLOCK, autoId("automoton_scannable_reverse"));
 	
 	// Blocks
-	public static Block AUTOMOTON = new AutomotonBlock(FabricBlockSettings.of(Material.METAL)/*.breakByHand(true)*/.strength(6f).nonOpaque().solidBlock((state, world, pos) -> false));
-	public static Block POINTER = new PointerBlock(FabricBlockSettings.of(Material.METAL)/*.breakByHand(true)*/.breakInstantly());
+	public static Block AUTOMOTON = new AutomotonBlock(FabricBlockSettings.create().strength(6f).requiresTool().nonOpaque().solidBlock((_s, _v, _p) -> false));
+	public static Block POINTER = new PointerBlock(FabricBlockSettings.create().breakInstantly());
 	
 	// Item Settings
 	private static final Item.Settings TABBED = new Item.Settings();
@@ -201,6 +201,9 @@ public class AutomotonsRegistry{
 	public static final LootPoolEntryType BLOCK_ENTITY_INVENTORY = new LootPoolEntryType(new BlockEntityInventoryEntry.Serializer());
 	
 	public static void registerObjects(){
+		// Creative Ttab
+		register("automotons", Automotons.ITEMS);
+		
 		// Blocks
 		List<Pair<String, Block>> blocks = new ArrayList<>();
 		blocks.add(new Pair<>("automoton", AUTOMOTON));
@@ -278,6 +281,8 @@ public class AutomotonsRegistry{
 			r = Registries.SCREEN_HANDLER;
 		else if(value instanceof LootPoolEntryType)
 			r = Registries.LOOT_POOL_ENTRY_TYPE;
+		else if(value instanceof ItemGroup)
+			r = Registries.ITEM_GROUP;
 		else
 			throw new IllegalArgumentException("Don't know how to register " + value.getClass());
 		Registry.register((Registry<Object>)r, autoId(id), value);

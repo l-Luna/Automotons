@@ -23,7 +23,7 @@ public class NoteBlockStickHeadItem extends HeadItem<Object>{
 		World world = automoton.getWorld();
 		if(world != null)
 			if(stack.isEmpty() || !(stack.getItem() instanceof MusicDiscItem)){
-				Instrument instrument = (!stack.isEmpty() && stack.getItem() instanceof BlockItem bi) ? Instrument.fromBelowState(bi.getBlock().getDefaultState()) : Instrument.HARP;
+				Instrument instrument = (!stack.isEmpty() && stack.getItem() instanceof BlockItem bi) ? bi.getBlock().getDefaultState().getInstrument() : Instrument.HARP;
 				// 0-23
 				float pitchRaw = Math.min(23, stack.getCount());
 				float pitch = (float)Math.pow(2, (double)(pitchRaw - 12) / 12.0D);
