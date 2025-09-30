@@ -57,7 +57,7 @@ public class AutomotonScreenHandler extends ScreenHandler{
 						return super.canInsert(stack) && stack.getItem() instanceof ModuleItem;
 					}
 					
-					public int getMaxItemCount() {
+					public int getMaxItemCount(){
 						return 1;
 					}
 				});
@@ -81,28 +81,28 @@ public class AutomotonScreenHandler extends ScreenHandler{
 	}
 	
 	public ItemStack quickMove(PlayerEntity player, int index){
-		ItemStack itemStack = ItemStack.EMPTY;
+		ItemStack remaining = ItemStack.EMPTY;
 		Slot slot = slots.get(index);
 		if(slot.hasStack()){
-			ItemStack itemStack2 = slot.getStack();
-			itemStack = itemStack2.copy();
+			ItemStack inserting = slot.getStack();
+			remaining = inserting.copy();
 			int num = automoton.moduleNum() + 2;
 			if(index < num){
-				if(!this.insertItem(itemStack2, num, num + 36, true))
+				if(!insertItem(inserting, num, num + 36, true))
 					return ItemStack.EMPTY;
-			}else if(!this.insertItem(itemStack2, 0, num, false))
+			}else if(!insertItem(inserting, 0, num, false))
 				return ItemStack.EMPTY;
-			if(itemStack2.isEmpty())
+			if(inserting.isEmpty())
 				slot.setStack(ItemStack.EMPTY);
 			else
 				slot.markDirty();
-			if(itemStack2.getCount() == itemStack.getCount())
+			if(inserting.getCount() == remaining.getCount())
 				return ItemStack.EMPTY;
 			
-			slot.onTakeItem(player, itemStack2);
+			slot.onTakeItem(player, inserting);
 		}
 		
-		return itemStack;
+		return remaining;
 	}
 	
 	public void onContentChanged(Inventory inventory){
@@ -120,5 +120,69 @@ public class AutomotonScreenHandler extends ScreenHandler{
 		this.automoton = automoton;
 		for(int i = 0; i < 14; i++)
 			getSlot(i).inventory = automoton;
+	}
+	
+	// variant that respects max slot counts
+	protected boolean insertItem(ItemStack inserting, int startIdx, int endIdx, boolean fromLast){
+		boolean done = false;
+		int i = startIdx;
+		if(fromLast)
+			i = endIdx - 1;
+		
+		if(inserting.isStackable()){
+			while(!inserting.isEmpty() && (fromLast ? i >= startIdx : i < endIdx)){
+				Slot slot = slots.get(i);
+				int thisMaxCount = Math.min(slot.getMaxItemCount(), inserting.getMaxCount());
+				ItemStack existing = slot.getStack();
+				if(!existing.isEmpty() && ItemStack.canCombine(inserting, existing)){
+					int newCount = existing.getCount() + inserting.getCount();
+					if(newCount <= thisMaxCount){
+						inserting.setCount(0);
+						existing.setCount(newCount);
+						slot.markDirty();
+						done = true;
+					}else if(existing.getCount() < thisMaxCount){
+						inserting.decrement(thisMaxCount - existing.getCount());
+						existing.setCount(thisMaxCount);
+						slot.markDirty();
+						done = true;
+					}
+				}
+				
+				if(fromLast)
+					i--;
+				else
+					i++;
+			}
+		}
+		
+		if(!inserting.isEmpty()){
+			if(fromLast)
+				i = endIdx - 1;
+			else
+				i = startIdx;
+			
+			while(fromLast ? i >= startIdx : i < endIdx){
+				Slot slot = slots.get(i);
+				ItemStack existing = slot.getStack();
+				if(existing.isEmpty() && slot.canInsert(inserting)){
+					if(inserting.getCount() > slot.getMaxItemCount())
+						slot.setStack(inserting.split(slot.getMaxItemCount()));
+					else
+						slot.setStack(inserting.split(inserting.getCount()));
+					
+					slot.markDirty();
+					done = true;
+					break;
+				}
+				
+				if(fromLast)
+					i--;
+				else
+					i++;
+			}
+		}
+		
+		return done;
 	}
 }
