@@ -76,7 +76,7 @@ public class AutomotonsRegistry{
 	public static Item IRON_GEAR = new Item(TABBED);
 	
 	// Turn & engage
-	public static Item NOOP_MODULE = new ModuleItem(TABBED, entity -> true);
+	public static Item NOOP_MODULE = new ModuleItem(TABBED, entity -> true).withClientExec();
 	public static Item CW_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::turnCw).withClientExec();
 	public static Item CCW_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::turnCcw).withClientExec();
 	public static Item ENGAGE_MODULE = fromConsumer(TABBED, entity -> entity.setEngaged(true)).withClientExec();
@@ -89,8 +89,8 @@ public class AutomotonsRegistry{
 	});
 	
 	// Error handling
-	public static Item THROW_ERRORS_MODULE = fromConsumer(TABBED, entity -> entity.setStopOnError(true));
-	public static Item SUPPRESS_ERRORS_MODULE = fromConsumer(TABBED, entity -> entity.setStopOnError(false));
+	public static Item THROW_ERRORS_MODULE = fromConsumer(TABBED, entity -> entity.setStopOnError(true)).withClientExec();
+	public static Item SUPPRESS_ERRORS_MODULE = fromConsumer(TABBED, entity -> entity.setStopOnError(false)).withClientExec();
 	
 	// Repetition
 	public static Item REPEAT_ON_SUCCESS_MODULE = new ModuleItem(TABBED, entity -> {
@@ -99,14 +99,14 @@ public class AutomotonsRegistry{
 		entity.module = 0;
 		entity.moduleTime = -1;
 		return true;
-	});
+	}).withClientExec();
 	public static Item REPEAT_SECOND_ROW_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.errored)
 			return false;
 		entity.module = 6;
 		entity.moduleTime = -1;
 		return true;
-	});
+	}).withClientExec();
 	
 	// Movement
 	public static Item MOVE_FORWARD_MODULE = new ModuleItem(TABBED, AutomotonBlockEntity::moveForward).withClientExec();
@@ -132,7 +132,7 @@ public class AutomotonsRegistry{
 				return blockEntity.move(below.get(HorizontalFacingBlock.FACING).getOpposite());
 		}
 		return false;
-	});
+	}).withClientExec();
 	
 	public static Item SCAN_AND_ROTATE_MODULE = new ModuleItem(TABBED, entity -> {
 		if(entity.getWorld() != null){
@@ -153,11 +153,11 @@ public class AutomotonsRegistry{
 				return blockEntity.turnTo(below.get(HorizontalFacingBlock.FACING).getOpposite());
 		}
 		return false;
-	});
+	}).withClientExec();
 	
 	// Broadcasts
-	public static Item START_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, AutomotonBlockEntity::generateBroadcast);
-	public static Item END_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> entity.setBroadcast(null));
+	public static Item START_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, AutomotonBlockEntity::generateBroadcast).withClientExec();
+	public static Item END_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> entity.setBroadcast(null)).withClientExec();
 	public static Item KILL_BROADCAST_MODULE = ModuleItem.fromConsumer(TABBED, entity -> Broadcasts.getNearestBroadcast(entity).ifPresent(broadcast -> {
 		broadcast.kill();
 		entity.setOutlineColour(250, 0, 0);
@@ -181,7 +181,7 @@ public class AutomotonsRegistry{
 		// so a Receive Broadcast instruction will execute itself, leading to SOE
 		// instead we no-op and error
 		return false;
-	});
+	}).withClientExec();
 	
 	// Skins
 	public static Item REGULAR_SKIN = new SkinItem(TABBED, autoId("regular"));

@@ -83,15 +83,19 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	@SuppressWarnings("ConstantConditions")
 	public void tick(){
 		Module toExecute = atIndex(module);
+		// an automoton stopped by redstone is frozen at the start of an instruction
+		// i.e. reaches `moduleTime == 0` and then stays there without executing anything until power is lost
+		// (but has no effect on head ticking, only module execution)
+		boolean stoppedByRedstone = getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null);
 		// run next instruction
-		if(moduleTime == 0 && toExecute != null && (!getWorld().isClient() || toExecute.shouldExecuteOnClient())){
+		if(moduleTime == 0 && toExecute != null && !stoppedByRedstone && (!getWorld().isClient() || toExecute.shouldExecuteOnClient())){
 			errored = !toExecute.execute(this);
 			if(!toExecute.shouldExecuteOnClient())
 				sync();
 		}
-		if(!(stopOnError && errored))
+		if(!(stopOnError && errored) && (!stoppedByRedstone || moduleTime > 0))
 			moduleTime++;
-		if(moduleTime >= moduleSpeed() && !(getWorld().isReceivingRedstonePower(pos) && !getWorld().isEmittingRedstonePower(pos, null))){
+		if(moduleTime >= moduleSpeed()){
 			moduleTime = 0;
 			// move to next instruction
 			module++;
@@ -293,13 +297,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		Inventories.writeNbt(nbt, inventory);
 		if(getHead() != null)
 			nbt.put("headData", getHead().writeExtraData(world, data));
-		boolean hasLastPos = lastPos != null;
-		nbt.putBoolean("hasLastPos", hasLastPos);
-		if(hasLastPos){
-			nbt.putInt("lastX", lastPos.getX());
-			nbt.putInt("lastY", lastPos.getY());
-			nbt.putInt("lastZ", lastPos.getZ());
-		}
+		if(lastPos != null)
+			nbt.putLong("lastPos", lastPos.asLong());
 		nbt.putBoolean("hasOutline", outlineColour.isPresent());
 		outlineColour.ifPresent((red, green, blue) -> {
 			nbt.putInt("outlineRed", red);
@@ -321,8 +320,8 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		errored = tag.getBoolean("errored");
 		stopOnError = tag.getBoolean("stopOnError");
 		skin = new Identifier(tag.getString("skin"));
-		if(tag.getBoolean("hasLastPos"))
-			lastPos = new BlockPos(tag.getInt("lastX"), tag.getInt("lastY"), tag.getInt("lastZ"));
+		if(tag.contains("lastPos"))
+			lastPos = BlockPos.fromLong(tag.getLong("lastPos"));
 		if(tag.getBoolean("hasOutline"))
 			setOutlineColour(tag.getInt("outlineRed"), tag.getInt("outlineGreen"), tag.getInt("outlineBlue"));
 		
