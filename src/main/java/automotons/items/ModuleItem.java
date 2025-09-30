@@ -2,7 +2,12 @@ package automotons.items;
 
 import automotons.blocks.AutomotonBlockEntity;
 import automotons.broadcast.Broadcast;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -24,6 +29,20 @@ public class ModuleItem extends Item implements Module{
 			execution.accept(entity);
 			return true;
 		});
+	}
+	
+	public ActionResult useOnBlock(ItemUsageContext ctx){
+		World world = ctx.getWorld();
+		BlockPos pos = ctx.getBlockPos();
+		BlockEntity be = ctx.getWorld().getBlockEntity(pos);
+		if(be instanceof AutomotonBlockEntity automoton && automoton.hasNoModules()){
+			if(!world.isClient || clientExec)
+				execution.test(automoton);
+			if(!world.isClient && !clientExec)
+				automoton.sync();
+			return ActionResult.CONSUME;
+		}
+		return super.useOnBlock(ctx);
 	}
 	
 	public boolean execute(AutomotonBlockEntity block){
