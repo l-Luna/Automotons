@@ -169,6 +169,8 @@ public class AutomotonBlockEntityRenderer implements BlockEntityRenderer<Automot
 			float progress
 	){
 		BitSet bits = new BitSet(3);
+		if(posA == null)
+			posA = posB;
 		BlockPos.Mutable cursorA = posA.mutableCopy(), cursorB = posB.mutableCopy();
 		
 		// render edge quads
