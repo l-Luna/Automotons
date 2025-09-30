@@ -5,6 +5,7 @@ import automotons.broadcast.Broadcast;
 import automotons.client.OptionalColour;
 import automotons.items.Head;
 import automotons.items.Module;
+import automotons.items.ModuleItem;
 import automotons.screens.AutomotonScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.*;
@@ -82,7 +83,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	@SuppressWarnings("ConstantConditions")
 	public void tick(){
-		Module toExecute = atIndex(module);
+		Module toExecute = moduleAtIndex(module);
 		// an automoton stopped by redstone is frozen at the start of an instruction
 		// i.e. reaches `moduleTime == 0` and then stays there without executing anything until power is lost
 		// (but has no effect on head ticking, only module execution)
@@ -125,22 +126,22 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			outlineColour.empty();
 			getWorld().updateNeighbors(pos, getWorld().getBlockState(pos).getBlock());
 		}
-		toExecute = atIndex(module);
+		toExecute = moduleAtIndex(module);
 		if(toExecute == null){
 			moduleTime = 0;
-			// move to next instruction
-			// look for next module
+			// move to next instruction; look for next module
 			if(hasNoModules()){
 				module = 0;
 				lastEngaged = engaged;
 				lastFacing = facing;
 				lastPos = pos;
-			}else
-				while(atIndex(module) == null){
+			}else{
+				while(moduleAtIndex(module) == null){
 					module++;
 					if(module >= moduleNum())
 						module = 0;
 				}
+			}
 		}
 		if(module >= moduleNum())
 			module = 0;
@@ -178,14 +179,14 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 			if(broadcast.isKilled() || getHead() == null || !getHead().canGenerateBroadcast(this, data))
 				setBroadcast(null);
 			else if(!hasNoModules()){
-				broadcast.setInstruction(atIndex(module));
+				broadcast.setInstruction(moduleAtIndex(module));
 				setOutlineColour(255, 20, 147);
 			}
 		}
 	}
 	
 	public boolean hasNoModules(){
-		return inventory.subList(0, 12).stream().allMatch(ItemStack::isEmpty);
+		return inventory.subList(0, 12).stream().noneMatch(stack -> stack.getItem() instanceof ModuleItem);
 	}
 	
 	public ItemStack getHeadStack(){
@@ -201,14 +202,13 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 		return item instanceof Head ? (Head)item : null;
 	}
 	
-	public Module atIndex(int index){
+	public Module moduleAtIndex(int index){
 		if(index < moduleNum() / 2){
-			if(!getStack(index).isEmpty() && getStack(index).getItem() instanceof Module)
-				return (Module)getStack(index).getItem();
+			if(getStack(index).getItem() instanceof Module m)
+				return m;
 		}else if(index < moduleNum()){
-			int revIndex = (moduleNum() - 1) - (index - (moduleNum() / 2));
-			if(!getStack(revIndex).isEmpty() && getStack(revIndex).getItem() instanceof Module)
-				return (Module)getStack(revIndex).getItem();
+			if(getStack((moduleNum() - 1) - (index - (moduleNum() / 2))).getItem() instanceof Module m)
+				return m;
 		}
 		return null;
 	}
@@ -410,7 +410,7 @@ public class AutomotonBlockEntity extends LockableContainerBlockEntity implement
 	
 	public void generateBroadcast(){
 		if(getHead() != null && getHead().canGenerateBroadcast(this, data))
-			setBroadcast(new Broadcast(pos, this, atIndex(module)));
+			setBroadcast(new Broadcast(pos, this, moduleAtIndex(module)));
 	}
 	
 	public boolean canPlayerUse(PlayerEntity player){
